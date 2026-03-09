@@ -1,0 +1,42 @@
+﻿<Window x:Class="Motwane_UVSS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Motwane_UVSS"
+        mc:Ignorable="d"
+        Title="Motwane Under Vehical Scanning System-AreaScan" Height="1100" Width="1920" WindowState="Maximized" Icon="D:\logo-motwane-90x90.ico" Closed="Window_Closed" >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1561*"/>
+            <ColumnDefinition Width="359*"/>
+        </Grid.ColumnDefinitions>
+
+        <Image Source="C:\Users\ADMIN\Desktop\UVSS v01.1\Motwane UVSS\Motwane UVSS\bin\x64\Debug\MUVSS.png" Stretch="Fill" Grid.ColumnSpan="2"/>
+        <Border CornerRadius="20" Background="White" Padding="10" Width="430" Height="500" Margin="745,292,386,292">
+            <StackPanel VerticalAlignment="Center"  Background="White" HorizontalAlignment="Center" Width="430" Margin="10,10,10,10">
+                <TextBlock Foreground="#007ACC" Text="Login" FontSize="40" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+                <!-- User ID -->
+                <TextBlock Text="User ID" Margin="20,10,0,5" FontSize="18" Foreground="#007ACC" FontWeight="SemiBold"/>
+                <TextBox x:Name="txtUserID" Margin="20,0,20,0" Height="30" FontSize="18" />
+
+                <!-- Password -->
+                <TextBlock Text="Password" Margin="20,25,0,5" FontSize="18" Foreground="#007ACC" FontWeight="SemiBold"/>
+                <!--<PasswordBox x:Name="txtPassword" Height="30" FontSize="18" />-->
+                <PasswordBox x:Name="txtPassword" Margin="20,0,20,0" Height="30" FontSize="18"  />
+
+                <!-- User Type -->
+                <TextBlock Text="User Type" Margin="20,25,0,5" FontSize="18" Foreground="#007ACC" FontWeight="SemiBold"/>
+                <ComboBox x:Name="cmbUserType" Height="30" Margin="20,0,20,0" FontSize="18" SelectedIndex="1">
+                    <ComboBoxItem Content="Admin" FontSize="18" />
+                    <ComboBoxItem Content="Operator" FontSize="18"/>
+                    <ComboBoxItem Content="Maintenance" FontSize="18"/>
+                </ComboBox>
+
+                <!-- Login Button -->
+                <Button Content="Login" Height="35" Margin="100,45,100,10" Background="#007ACC" Foreground="White" FontWeight="Bold" x:Name="Login_btn" Click="Login_btn_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

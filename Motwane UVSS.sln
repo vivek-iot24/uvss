@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motwane UVSS", "Motwane UVSS\Motwane UVSS.csproj", "{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MUVSS Setup", "MUVSS Setup\MUVSS Setup.vdproj", "{05202B8C-0D64-2F02-AE78-48306CD3963C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}.Debug|x64.ActiveCfg = Debug|x64
+		{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}.Debug|x64.Build.0 = Debug|x64
+		{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}.Release|x64.ActiveCfg = Release|x64
+		{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}.Release|x64.Build.0 = Release|x64
+		{05202B8C-0D64-2F02-AE78-48306CD3963C}.Debug|Any CPU.ActiveCfg = Debug
+		{05202B8C-0D64-2F02-AE78-48306CD3963C}.Debug|x64.ActiveCfg = Debug
+		{05202B8C-0D64-2F02-AE78-48306CD3963C}.Release|Any CPU.ActiveCfg = Release
+		{05202B8C-0D64-2F02-AE78-48306CD3963C}.Release|x64.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE27823D-13F5-478E-A64A-BBF96D18800E}
+	EndGlobalSection
+EndGlobal

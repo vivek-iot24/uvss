@@ -1,0 +1,10 @@
+.vs/
+bin/
+obj/
+packages/
+Models/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
