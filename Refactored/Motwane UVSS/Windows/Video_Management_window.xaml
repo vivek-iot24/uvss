@@ -1,0 +1,89 @@
+﻿<Window x:Class="Motwane_UVSS.Presentation.Windows.Video_Management_window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Motwane_UVSS.Presentation.Windows"
+        mc:Ignorable="d"
+        Title="Motwane Under Vehical Scanning System-AreaScan"
+        Height="1100"
+        Width="1920"
+        WindowState="Maximized"
+        Icon="D:\Work_uvss\logo-motwane-90x90.ico">
+    <Grid>
+        <Image Source="D:\Work_uvss\MUVSS.png" Stretch="Fill"/>
+
+        <Border CornerRadius="20" 
+                Background="White" 
+                Padding="20"
+                VerticalAlignment="Center"
+                Margin="30,20" 
+                MaxHeight="950">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Foreground="#007ACC" Text="Video Management" FontSize="60" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+
+                <Grid x:Name="report_grid" Margin="10" Height="auto" Visibility="Visible" >
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="600" >
+                        <DataGrid x:Name="VideoDataGrid" Foreground="#007ACC" AutoGenerateColumns="True" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" />
+                    </ScrollViewer>
+                </Grid>
+
+                <Grid x:Name="video_grid" Height="auto" Visibility="Collapsed">
+                    <StackPanel Orientation="Vertical">
+                        <Grid Height="300">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <MediaElement x:Name="media1" LoadedBehavior="Manual" Grid.Column="0" Margin="5" />
+                            <MediaElement x:Name="media2" LoadedBehavior="Manual" Grid.Column="1" Margin="5"/>
+                            <MediaElement x:Name="media3" LoadedBehavior="Manual" Grid.Column="2" Margin="5"/>
+                        </Grid>
+                        <Grid Height="150" Margin="0,20,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Vertical" Grid.Column="0" Margin="50,0,0,0" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Vehicle No :" FontSize="25" FontWeight="Bold" Foreground="#007ACC" />
+                                    <TextBlock x:Name="txtVehicleNumber" FontSize="25" FontWeight="Bold" Margin="20,0,0,0" Foreground="#007ACC"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Entry Date :" FontSize="25" FontWeight="Bold" Foreground="#007ACC" />
+                                    <TextBlock x:Name="txtDate" FontSize="25" FontWeight="Bold" Margin="20,0,0,0" Foreground="#007ACC"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Entry Time :" FontSize="25" FontWeight="Bold" Foreground="#007ACC" />
+                                    <TextBlock x:Name="txtTime" FontSize="25" FontWeight="Bold" Margin="20,0,0,0" Foreground="#007ACC"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                            <Button Content="Play" Width="150" Height="60" Margin="5" FontSize="25" Click="Play_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="Pause" Width="150" Height="60" Margin="5" FontSize="25" Click="Pause_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="Fast" Width="150" Height="60" Margin="5" FontSize="25" Click="Fast_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="Slow" Width="150" Height="60" Margin="5" FontSize="25" Click="Slow_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="Replay" Width="150" Height="60" Margin="5" FontSize="25" Click="Replay_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Right">
+                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                        <Button Content="Show" x:Name="show_btn" Click="show_btn_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                    </Border>
+                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                        <Button Content="Exit" x:Name="Exit_button" Click="Exit_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

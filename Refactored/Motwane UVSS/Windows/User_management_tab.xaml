@@ -1,0 +1,183 @@
+﻿<Window x:Class="Motwane_UVSS.Presentation.Windows.User_management_tab"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Motwane_UVSS.Presentation.Windows"
+        mc:Ignorable="d"
+        Title="Motwane Under Vehical Scanning System-AreaScan" Height="1100" Width="1920" WindowState="Maximized" Icon="D:\Work_uvss\logo-motwane-90x90.ico">
+
+    <Grid>
+        <Image Source="D:\Work_uvss\MUVSS.png" Stretch="Fill"/>
+
+        <Border CornerRadius="20" 
+                Background="White" 
+                Padding="15"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                MaxWidth="1600"
+                MaxHeight="950">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Foreground="#007ACC" Text="User Management" FontSize="60" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+
+                <Grid>
+                    <TabControl>
+                        <TabItem Header="New User" FontSize="25" FontWeight="SemiBold" Foreground="#007ACC">
+                            <Grid Margin="20">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel Orientation="Vertical" Margin="0,0,20,0">
+                                            <TextBlock Text="User Name: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="ID No: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Mobile No: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Company Name: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Agency Name: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="User ID: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Password: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Confirm Password: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="User Type: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBox x:Name="UserName" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="Idno" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="MobNo" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="CompName" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="Agencyname" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="UserId" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="Password" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="ConfPassword" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <ComboBox x:Name="new_user_tab_user_type" Width="500" Margin="0,10,0,0" Height="35" FontSize="20">
+                                                <ComboBoxItem Content="Operator" />
+                                                <ComboBoxItem Content="Admin" />
+                                                <ComboBoxItem Content="Maintenance" />
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,50,0,0" HorizontalAlignment="Center">
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Save" x:Name="save_button" Click="save_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Exit" x:Name="Exit_button" Click="Exit_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="Edit Existing User" FontSize="25" FontWeight="SemiBold" Foreground="#007ACC" >
+                            <Grid Margin="20">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel Orientation="Vertical" Margin="0,0,20,0">
+                                            <TextBlock Text="User ID: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="ID No: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Mobile No: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Company Name: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Agency Name: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="UserName: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Password: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="Confirm Password: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                            <TextBlock Text="User Type: " Foreground="#007ACC" FontSize="25" Margin="0,10,0,0" Height="35"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBox x:Name="UserId_1" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="Idno_1" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="MobNo_1" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="CompName_1" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="Agencyname_1" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="UserName_1" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="Password_1" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <TextBox x:Name="ConfPassword_1" FontSize="25" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Margin="0,10,0,0" Height="35"/>
+                                            <ComboBox x:Name="new_user_tab_user_type_1" Width="500" Margin="0,10,0,0" Height="35" FontSize="20">
+                                                <ComboBoxItem Content="Operator" />
+                                                <ComboBoxItem Content="Admin" />
+                                                <ComboBoxItem Content="Maintenance" />
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                                            <Border Margin="20,10,0,0" BorderBrush="#007ACC" BorderThickness="2" Height="35" CornerRadius="10" Background="#007ACC">
+                                                <Button Content="Search" x:Name="search_button" Click="search_button_Click" FontSize="15" Foreground="White" Background="Transparent" Margin="2" BorderThickness="0" FontWeight="SemiBold"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,50,0,0" HorizontalAlignment="Center">
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Update" x:Name="update_button" Click="update_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Exit" x:Name="Exit_button_1" Click="Exit_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="List of Users" FontSize="25" FontWeight="SemiBold" Foreground="#007ACC" x:Name="list_of_user_tab" MouseLeftButtonUp="list_of_user_tab_MouseLeftButtonUp">
+                            <Grid Margin="20">
+                                <StackPanel Orientation="Vertical">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500">
+                                        <DataGrid x:Name="UserDataGrid" Foreground="#007ACC" AutoGenerateColumns="True" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" MouseRightButtonUp="UserDataGrid_MouseRightButtonUp"/>
+                                    </ScrollViewer>
+                                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Right">
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Export" x:Name="Export_btn" Click="Export_btn_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Delete" x:Name="Delete_btn" Click="Delete_btn_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Exit" x:Name="Exit_button_2" Click="Exit_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="History" FontSize="25" FontWeight="SemiBold" Foreground="#007ACC" x:Name="history_tab" MouseLeftButtonUp="history_tab_MouseLeftButtonUp">
+                            <Grid Margin="20">
+                                <StackPanel Orientation="Vertical">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500">
+                                        <DataGrid x:Name="UserDataGrid_1" Foreground="#007ACC" AutoGenerateColumns="True" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" />
+                                    </ScrollViewer>
+                                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Right">
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Export" x:Name="Export_btn_1" Click="Export_btn_1_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                        <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                            <Button Content="Exit" x:Name="Exit_button_3" Click="Exit_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="Log Book" FontSize="25" FontWeight="SemiBold" Foreground="#007ACC">
+                            <StackPanel Orientation="Vertical" Margin="20">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="User ID: " Foreground="#007ACC" FontSize="25" Height="35" VerticalAlignment="Center"/>
+                                    <TextBox FontSize="25" x:Name="LogUserIdTextBox" Foreground="Black" BorderThickness="2" Width="500" BorderBrush="#007ACC" Height="35" VerticalAlignment="Center"/>
+                                    <Border Margin="20,0,0,0" BorderBrush="#007ACC" BorderThickness="2" CornerRadius="10" Background="#007ACC" VerticalAlignment="Center">
+                                        <Button Content="Search" x:Name="search_btn_logbook" Click="search_btn_logbook_Click" FontSize="15" Foreground="White" Background="Transparent" Margin="2" BorderThickness="0" Height="25" FontWeight="SemiBold"/>
+                                    </Border>
+                                </StackPanel>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500" Margin="0,20,0,0">
+                                    <DataGrid x:Name="UserLogDataGrid" AutoGenerateColumns="True"/>
+                                </ScrollViewer>
+                                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Right">
+                                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                        <Button Content="Export" x:Name="Export_btn_2" Click="Export_btn_2_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                    </Border>
+                                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
+                                        <Button Content="Exit" x:Name="Exit_button_4" Click="Exit_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

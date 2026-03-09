@@ -1,0 +1,35 @@
+﻿using System;
+using System.Windows.Media.Imaging;
+using Motwane_UVSS.Domain.Entities;
+
+namespace Motwane_UVSS.Presentation.ViewModels
+{
+    public class VehicleEntryLogVM
+    {
+        public int SrNo { get; set; }
+
+        public string Username { get; set; }
+
+        public DateTime? EntryDate { get; set; }
+
+        public TimeSpan? EntryTime { get; set; }
+
+        public string Status { get; set; }
+
+        public string Remark { get; set; }
+
+        public string Numberplate { get; set; }
+
+        public BitmapImage UndersideImage { get; set; }
+
+        public BitmapImage DriverCamImage { get; set; }
+
+        public BitmapImage AnprImage { get; set; }
+
+        public byte[] UndersideBytes { get; set; }
+
+        public byte[] DriverCamBytes { get; set; }
+
+        public byte[] AnprBytes { get; set; }
+    }
+}
