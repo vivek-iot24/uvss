@@ -3,6 +3,7 @@ using LibVLCSharp.Shared;
 using LibVLCSharp.WPF;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32; // ADDED THIS LINE FOR THE FILE DIALOG
+using Motwane_UVSS.Application.Interfaces.HAL;
 using Motwane_UVSS.Application.Services;
 using Motwane_UVSS.Presentation;
 using Motwane_UVSS.Presentation.Windows;
@@ -49,7 +50,7 @@ namespace Motwane_UVSS.Presentation.Windows
     {
 
         // private BitmapSource _originalBitmap;   // THIS NEW VARIABLE will hold the clean, original version of the current image.
-
+        private readonly ICameraService _cameraService;
         private DispatcherTimer timer;
         private readonly VehicleEntryService _vehicleEntryService;
         private Underside_cam_class Underside_cameraHandler;
@@ -110,24 +111,19 @@ namespace Motwane_UVSS.Presentation.Windows
         private readonly VehicleEntryService _vehicleService;
         private volatile bool isRecognitionCompleted = false;
 
-        public Main_uvss_page(VehicleEntryService vehicleEntryService)
+        public Main_uvss_page(
+     VehicleEntryService vehicleEntryService,
+     ICameraService cameraService)
         {
-          
             InitializeComponent();
-            _vehicleService = ((App)System.Windows.Application.Current)
-     .ServiceProvider
-     .GetRequiredService<VehicleEntryService>();
+
             _vehicleEntryService = vehicleEntryService;
+            _cameraService = cameraService;
 
             StartClock();
 
-            Underside_cameraHandler = new Underside_cam_class();
-            string initResult = Underside_cameraHandler.InitCamera();
-
-            if (initResult != null)
-            {
-                MessageBox.Show(initResult);
-            }
+            _cameraService.Initialize();
+            _cameraService.Start();
 
             foreach (var ip in CameraIPs)
             {

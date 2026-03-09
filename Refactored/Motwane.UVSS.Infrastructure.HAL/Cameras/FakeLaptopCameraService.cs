@@ -1,5 +1,4 @@
 ﻿using Motwane_UVSS.Application.Interfaces.HAL;
-using OpenCvSharp;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,45 +7,41 @@ namespace Motwane_UVSS.HAL.Cameras
 {
     public class FakeLaptopCameraService : ICameraService
     {
-        private VideoCapture _capture;
         private CancellationTokenSource _cts;
 
         public event Action<byte[], int, int, int> OnFrameReceived;
 
         public void Initialize()
         {
-            _capture = new VideoCapture(0);
         }
 
         public void Start()
         {
             _cts = new CancellationTokenSource();
 
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                Mat frame = new Mat();
+                int width = 640;
+                int height = 480;
+                int stride = width * 3;
 
                 while (!_cts.Token.IsCancellationRequested)
                 {
-                    if (_capture.Read(frame) && !frame.Empty())
-                    {
-                        int width = frame.Width;
-                        int height = frame.Height;
-                        int stride = (int)frame.Step();
+                    byte[] frame = new byte[width * height * 3];
 
-                        byte[] buffer = new byte[frame.Rows * frame.Cols * frame.ElemSize()];
-                        System.Runtime.InteropServices.Marshal.Copy(frame.Data, buffer, 0, buffer.Length);
+                    // generate dummy image data
+                    new Random().NextBytes(frame);
+                    OnFrameReceived?.Invoke(frame, width, height, stride);
 
-                        OnFrameReceived?.Invoke(buffer, width, height, stride);
-                    }
+                    await Task.Delay(33);
                 }
-            });
+
+            }, _cts.Token);
         }
 
         public void Stop()
         {
             _cts?.Cancel();
-            _capture?.Dispose();
         }
     }
 }

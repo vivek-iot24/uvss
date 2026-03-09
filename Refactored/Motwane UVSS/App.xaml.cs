@@ -6,9 +6,9 @@ using Motwane_UVSS.DAL.Repositories;
 using Motwane_UVSS.HAL.Cameras;
 using Motwane_UVSS.HAL.ExternalServices;
 using Motwane_UVSS.HAL.Hardware;
-
 using Motwane_UVSS.Presentation.Windows;
 using System;
+using OpenCvSharp;
 
 using System.Windows;
 
@@ -16,14 +16,15 @@ namespace Motwane_UVSS.Presentation
 {
     public partial class App : System.Windows.Application
     {
-        string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_DB;Integrated Security=True;";
-        private const string HardwareMode = "Test";
-        public string LoggedInUserID { get; set; }
+        private string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_DB;Integrated Security=True;";
 
+        // Change this to "Real" when hardware is available
+        private const string HardwareMode = "Test";
+
+        public string LoggedInUserID { get; set; }
         public string LoggedInUSERTYPE { get; set; }
 
         public IServiceProvider ServiceProvider { get; private set; }
-
         public static IServiceProvider Services { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -35,16 +36,16 @@ namespace Motwane_UVSS.Presentation
             ConfigureServices(services);
 
             ServiceProvider = services.BuildServiceProvider();
-
             Services = ServiceProvider;
 
-            var reportWindow = ServiceProvider.GetRequiredService<Main_uvss_page>();
-            reportWindow.Show();
+            var mainWindow = ServiceProvider.GetRequiredService<Main_uvss_page>();
+            mainWindow.Show();
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // DAL
+            // ---------------- DAL ----------------
+
             services.AddSingleton<IUserRepository>(sp =>
                 new UserRepository(connectionString));
 
@@ -54,30 +55,48 @@ namespace Motwane_UVSS.Presentation
             services.AddSingleton<IVehicleEntryRepository>(sp =>
                 new VehicleEntryRepository(connectionString));
 
-            // Application Services
+
+            // ---------------- APPLICATION SERVICES ----------------
+
             services.AddSingleton<UserManagementService>();
             services.AddSingleton<AuthenticationService>();
             services.AddSingleton<VehicleEntryService>();
 
-            // HAL Services
+
+            // ---------------- HAL SERVICES ----------------
+
             services.AddSingleton<IFileSystemService, FileSystemService>();
-            services.AddSingleton<IDiagnosticService, DiagnosticService>();
+
+            if (HardwareMode == "Test")
+            {
+                services.AddSingleton<IDiagnosticService, FakeDiagnosticService>();
+            }
+            else
+            {
+                services.AddSingleton<IDiagnosticService, DiagnosticService>();
+            }
+
             services.AddSingleton<IAicComparisonService, AicComparisonService>();
 
 
-            // CAMERA SWITCH
+            // ---------------- CAMERA SERVICE SWITCH ----------------
+
             if (HardwareMode == "Test")
             {
+                // Laptop webcam simulation
                 services.AddSingleton<ICameraService, FakeLaptopCameraService>();
             }
             else
             {
-                services.AddSingleton<Underside_cam_class>();
+                // Real FLIR / Spinnaker camera
+                services.AddSingleton<ICameraService, UndersideCamera_HAL>();
             }
 
 
-            // Windows
+            // ---------------- WINDOWS ----------------
+
             services.AddSingleton<MainWindow>();
+
             services.AddTransient<Self_daignosis>();
             services.AddTransient<Main_uvss_page>();
             services.AddTransient<AicViewerWindow>();
