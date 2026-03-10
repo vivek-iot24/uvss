@@ -9,87 +9,175 @@
 
     <Grid x:Name="mother_grid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="590*"/>
-            <ColumnDefinition Width="47*"/>
             <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
-            <RowDefinition />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
-
         <!-- Bottom Panel of Controls -->
-        <Border Grid.Row="1" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="5,5,5,5" Grid.ColumnSpan="3">
+        <Border Grid.Row="2" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="10,5,10,5" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0">
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,0,0,0">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                            <TextBlock Text="Sensor Status" FontSize="30" FontWeight="SemiBold" Foreground="#007ACC"/>
-                            <Ellipse x:Name="sensor_display" Fill="Green" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,5,0,0"/>
-                            <TextBlock x:Name="sensor_feed" Width="50"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,50,0,0">
-                            <Canvas >
-                                <Ellipse Width="40" Height="40" Fill="Gray" Canvas.Left="30" Canvas.Top="10"/>
-                                <Path Fill="Gray" Canvas.Left="20" Canvas.Top="50"
-                                Data="M 30,0 C 0,0 0,40 0,40 H 60 C 60,40 60,0 30,0 Z"/>
-                            </Canvas>
-                            <StackPanel Orientation="Vertical" Margin="100,10,0,0" >
-                                <TextBlock x:Name="username_textbox" FontSize="30" FontWeight="SemiBold" Foreground="#007ACC"/>
-                                <TextBlock x:Name="usertype_textbox" FontSize="30" FontWeight="SemiBold" Foreground="#007ACC"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
+                <!-- LEFT SECTION -->
+                <StackPanel Grid.Column="0" Orientation="Vertical" Width="250" VerticalAlignment="Center">
 
-                <Grid Grid.Column="1">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" HorizontalAlignment="Left" >
-                            <Button Content="HOLD" x:Name="HOLD_BTN" Click="HOLD_BTN_Click" FontSize="35" Foreground="#007ACC" Background="Transparent" Margin="5,5,5,5" BorderThickness="0"/>
-                        </Border>
-                        <Border Margin="50,0,50,0" BorderBrush="#007ACC"  BorderThickness="3" CornerRadius="10" HorizontalAlignment="Center">
-                            <Button Content="PASS" x:Name="PASS_BTN" Click="PASS_BTN_Click" FontSize="35" Foreground="#007ACC" Background="Transparent" Margin="5,5,5,5" BorderThickness="0"/>
-                        </Border>
-                        <Border Margin="0,0,50,0" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" HorizontalAlignment="Center">
-                            <Button Content="RESET" x:Name="reset_button" Click="reset_button_Click" FontSize="35" Foreground="#007ACC" Background="Transparent" Margin="5,5,5,5" BorderThickness="0"/>
-                        </Border>
-                        <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" HorizontalAlignment="Right">
-                            <Button Content="MENU" x:Name="menu_button" Click="menu_button_Click" FontSize="35" Foreground="#007ACC" Background="Transparent" Margin="5,5,5,5" BorderThickness="0"/>
-                        </Border>
-                    </StackPanel>
-                </Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Sensor Status"
+                       FontSize="18"
+                       FontWeight="SemiBold"
+                       Foreground="#007ACC"/>
 
-                <Grid Grid.Column="2">
-                    <Grid VerticalAlignment="Top" Margin="2,2,2,2">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                            <TextBlock Text="Category:" FontSize="25" FontWeight="SemiBold" Foreground="#007ACC"/>
-                            <ComboBox x:Name="remark_txtbox" Width="350" Margin="5,5,0,0" BorderThickness="2" BorderBrush="#007ACC" FontSize="20" SelectedIndex="5">
-                                <ComboBoxItem Content="Wanted"/>
-                                <ComboBoxItem Content="Suspicious"/>
-                                <ComboBoxItem Content="Stolen"/>
-                                <ComboBoxItem Content="Expired"/>
-                                <ComboBoxItem Content="Other"/>
-                                <ComboBoxItem Content="Normal"/>
-                            </ComboBox>
+                        <Ellipse x:Name="sensor_display"
+                     Fill="Green"
+                     Width="16"
+                     Height="16"
+                     Margin="8,4,0,0"/>
+
+                        <TextBlock x:Name="sensor_feed"
+                       Width="40"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+            Margin="0,2,0,0"
+            VerticalAlignment="Center">
+
+                        <Canvas Width="30" Height="30" VerticalAlignment="Center">
+                            <Ellipse Width="12" Height="12"
+                 Fill="Gray"
+                 Canvas.Left="9"
+                 Canvas.Top="3"/>
+
+                            <Path Fill="Gray"
+              Canvas.Left="3"
+              Canvas.Top="14"
+              Data="M 15,0 C 0,0 0,15 0,15 H 30 C 30,15 30,0 15,0 Z"/>
+                        </Canvas>
+
+                        <StackPanel Margin="8,0,0,0"
+                VerticalAlignment="Center">
+
+                            <TextBlock x:Name="username_textbox"
+                   FontSize="14"
+                   FontWeight="SemiBold"
+                   Foreground="#007ACC"
+                   TextTrimming="CharacterEllipsis"/>
+
+                            <TextBlock x:Name="usertype_textbox"
+                   FontSize="14"
+                   FontWeight="SemiBold"
+                   Foreground="#007ACC"
+                   TextTrimming="CharacterEllipsis"/>
+
                         </StackPanel>
-                    </Grid>
-                    <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom"  Background="Transparent" Margin="0,0,10,0">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock x:Name="DateTextBlock" FontSize="15" Foreground="#007ACC" Height="25" TextAlignment="Center" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="TimeTextBlock" FontSize="15" Foreground="#007ACC" Height="25" TextAlignment="Center" Margin="0,-5,0,0" FontWeight="SemiBold"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
+
+                    </StackPanel>
+                </StackPanel>
+
+
+                <!-- CENTER BUTTONS -->
+                <StackPanel Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+                    <Button Content="HOLD"
+                x:Name="HOLD_BTN"
+                Click="HOLD_BTN_Click"
+                FontSize="16"
+                Padding="10,4"
+                Margin="10,0"/>
+
+                    <Button Content="PASS"
+                x:Name="PASS_BTN"
+                Click="PASS_BTN_Click"
+                FontSize="16"
+                Padding="10,4"
+                Margin="10,0"/>
+
+                    <Button Content="RESET"
+                x:Name="reset_button"
+                Click="reset_button_Click"
+                FontSize="16"
+                Padding="10,4"
+                Margin="10,0"/>
+
+                    <Button Content="MENU"
+                x:Name="menu_button"
+                Click="menu_button_Click"
+                FontSize="16"
+                Padding="10,4"
+                Margin="10,0"/>
+
+                    <Button Content="Load Image"
+                         x:Name="btnLoadImage"
+                        Click="btnLoadImage_Click"
+                        FontSize="16"
+                          Padding="10,4"
+                          Margin="10,0"/>
+
+                    <Button Content="AIC"
+                       x:Name="AIC_btn"
+                        Click="AIC_btn_Click"
+                          FontSize="16"
+                            Padding="10,4"
+                           Margin="10,0"/>
+
+                </StackPanel>
+
+
+                <!-- RIGHT SECTION -->
+                <StackPanel Grid.Column="2"
+                Orientation="Vertical"
+                VerticalAlignment="Center"
+                Margin="20,0,0,0">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Category:"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="#007ACC"/>
+
+                        <ComboBox x:Name="remark_txtbox"
+                      Width="180"
+                      Margin="5,0,0,0"
+                      SelectedIndex="5">
+
+                            <ComboBoxItem Content="Wanted"/>
+                            <ComboBoxItem Content="Suspicious"/>
+                            <ComboBoxItem Content="Stolen"/>
+                            <ComboBoxItem Content="Expired"/>
+                            <ComboBoxItem Content="Other"/>
+                            <ComboBoxItem Content="Normal"/>
+
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,6,0,0">
+                        <TextBlock x:Name="DateTextBlock"
+                       FontSize="12"
+                       Foreground="#007ACC"
+                       TextAlignment="Center"/>
+
+                        <TextBlock x:Name="TimeTextBlock"
+                       FontSize="12"
+                       Foreground="#007ACC"
+                       TextAlignment="Center"/>
+                    </StackPanel>
+
+                </StackPanel>
+
             </Grid>
         </Border>
-
         <!-- Top section with the main image and side panel -->
         <Grid Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
@@ -115,7 +203,6 @@
                     </Grid>
                     <Grid Grid.Row="1">
                         <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                            <Button Content="Load Image" x:Name="btnLoadImage" Click="btnLoadImage_Click" Width="125" Margin="0,0,50,0" FontSize="20" FontWeight="SemiBold" Foreground="White" Background="#007ACC"/>
                             <StackPanel Margin="0,0,0,0" Orientation="Horizontal" >
                                 <TextBlock Text="Brightness" HorizontalAlignment="Center" FontSize="20" FontWeight="SemiBold" Foreground="#007ACC"/>
                                 <Slider x:Name="BrightnessSlider" ValueChanged="BrightnessSlider_ValueChanged" Minimum="0.1" Maximum="3.0" Value="1.0" TickFrequency="0.05" IsSnapToTickEnabled="True" Width="100" Height="30" Margin="10,0,0,0"/>
@@ -135,7 +222,7 @@
                             <Button Content="try" Margin="50,0,0,0" x:Name="try_btn" Click="try_btn_Click" Visibility="Collapsed"/>
                             <Button Content="try" Margin="50,0,0,0" x:Name="try1_btn" Click="try1_btn_Click" Visibility="Collapsed"/>
                             <Button Content="try" Margin="50,0,0,0" x:Name="try2_btn" Click="try2_btn_Click" Visibility="Collapsed"/>
-                            <Button Content="AIC" Margin="50,0,0,0" Width="100" x:Name="AIC_btn" Click="AIC_btn_Click"/>
+                          
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -143,60 +230,167 @@
 
             <!-- Side panel with the ANPR, Number Plate, and Driver images -->
             <Grid Grid.Column="1">
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="4*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="4*"/>
+
+                    <RowDefinition Height="120"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- ANPR Image Section -->
+
+                <!-- ANPR IMAGE -->
                 <Border Grid.Row="0" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
                     <Grid>
-                        <Image x:Name="Anpr_image" Source="D:\muvss_name.png" Stretch="Fill" />
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5" CornerRadius="3" Background="Transparent" BorderThickness="3" BorderBrush="MidnightBlue">
-                            <TextBlock Text="ANPR Image" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="MidnightBlue" FontWeight="Bold" Margin="5,2"/>
+                        <Image x:Name="Anpr_image" Source="D:\muvss_name.png" Stretch="Fill"/>
+                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
+                    CornerRadius="3" Background="Transparent"
+                    BorderThickness="3" BorderBrush="MidnightBlue">
+                            <TextBlock Text="ANPR Image"
+                           FontSize="12"
+                           Foreground="MidnightBlue"
+                           FontWeight="Bold"
+                           Margin="5,2"/>
                         </Border>
                     </Grid>
                 </Border>
 
-                <!-- Number Plate Image Section -->
+
+                <!-- NUMBER PLATE IMAGE -->
                 <Border Grid.Row="1" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
                     <Grid>
-                        <Image x:Name="numberplate_image"  Stretch="Fill"/>
-                        <Border VerticalAlignment="Top"   HorizontalAlignment="Left" Visibility="Hidden"  Margin="5" CornerRadius="3" Height="40" Background="Transparent" BorderThickness="3" BorderBrush="MidnightBlue">
-                            <TextBlock Text="Number Plate Image"  FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="MidnightBlue" FontWeight="Bold" Margin="5,2"/>
+                        <Image x:Name="numberplate_image" Stretch="Fill"/>
+                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
+                    CornerRadius="3" Background="Transparent"
+                    BorderThickness="3" BorderBrush="MidnightBlue">
+                            <TextBlock Text="Number Plate Image"
+                           FontSize="12"
+                           Foreground="MidnightBlue"
+                           FontWeight="Bold"
+                           Margin="5,2"/>
                         </Border>
                     </Grid>
                 </Border>
 
-                <!-- Number Plate Text Section -->
+
+                <!-- NUMBER PLATE TEXT -->
                 <Border Grid.Row="2" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
                     <Grid>
-                        <TextBox x:Name="Numberplate_number_box" Margin="3,3,3,3" BorderThickness="0" Text="" FontWeight="Bold" TextAlignment="Center" VerticalContentAlignment="Center" FontSize="25"/>
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5" CornerRadius="3" Background="Transparent" BorderThickness="3" BorderBrush="MidnightBlue" IsHitTestVisible="False">
-                            <TextBlock Text="Number Plate" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="MidnightBlue" FontWeight="Bold" Margin="5,2"/>
+                        <TextBox x:Name="Numberplate_number_box"
+                     Margin="3"
+                     BorderThickness="0"
+                     FontWeight="Bold"
+                     TextAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     FontSize="25"/>
+
+                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
+                    CornerRadius="3" Background="Transparent"
+                    BorderThickness="3" BorderBrush="MidnightBlue"
+                    IsHitTestVisible="False">
+
+                            <TextBlock Text="Number Plate"
+                           FontSize="12"
+                           Foreground="MidnightBlue"
+                           FontWeight="Bold"
+                           Margin="5,2"/>
                         </Border>
                     </Grid>
                 </Border>
 
-                <!-- Driver Image Section -->
+
+                <!-- DRIVER IMAGE -->
                 <Border Grid.Row="3" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
                     <Grid>
-                        <Image x:Name="Driver_image" Source="D:\muvss_name.png" Stretch="Fill" />
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5" CornerRadius="3" Background="Transparent" BorderThickness="3" BorderBrush="MidnightBlue">
-                            <TextBlock Text="Driver Image" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="MidnightBlue" FontWeight="Bold" Margin="5,2"/>
+                        <Image x:Name="Driver_image" Source="D:\muvss_name.png" Stretch="Fill"/>
+                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
+                    CornerRadius="3" Background="Transparent"
+                    BorderThickness="3" BorderBrush="MidnightBlue">
+                            <TextBlock Text="Driver Image"
+                           FontSize="12"
+                           Foreground="MidnightBlue"
+                           FontWeight="Bold"
+                           Margin="5,2"/>
                         </Border>
-                        <Grid  VerticalAlignment="Bottom">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Height="50" Content="PREVIOUS" x:Name="driver_previous_image" BorderBrush="Black" BorderThickness="2" Click="driver_previous_image_Click"/>
-                            <Button Grid.Column="1" Height="50" Content="NEXT" x:Name="driver_next_image" BorderBrush="Black" BorderThickness="2" Click="driver_next_image_Click"/>
-                        </Grid>
                     </Grid>
                 </Border>
+
+
+                <!-- LOGO IMAGE -->
+                <Border Grid.Row="4" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                    <Grid>
+                        <Image x:Name="LogoImage" Stretch="Uniform" Margin="10"/>
+                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
+                    CornerRadius="3" Background="Transparent"
+                    BorderThickness="3" BorderBrush="MidnightBlue">
+                            <TextBlock Text="Logo Image"
+                           FontSize="12"
+                           Foreground="MidnightBlue"
+                           FontWeight="Bold"
+                           Margin="5,2"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+
+                <!-- LOGO TEXT -->
+                <Border Grid.Row="5" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                    <Grid>
+                        <TextBox x:Name="logo_textbox"
+                     Margin="3"
+                     BorderThickness="0"
+                     FontWeight="Bold"
+                     TextAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     FontSize="22"/>
+
+                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
+                    CornerRadius="3" Background="Transparent"
+                    BorderThickness="3" BorderBrush="MidnightBlue"
+                    IsHitTestVisible="False">
+
+                            <TextBlock Text="Logo Text"
+                           FontSize="12"
+                           Foreground="MidnightBlue"
+                           FontWeight="Bold"
+                           Margin="5,2"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+
+                <!-- BUTTON PANEL -->
+                <Border Grid.Row="6" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                    <Grid Height="60">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                    Height="50"
+                    Content="PREVIOUS"
+                    x:Name="driver_previous_image"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    Click="driver_previous_image_Click"/>
+
+                        <Button Grid.Column="1"
+                    Height="50"
+                    Content="NEXT"
+                    x:Name="driver_next_image"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    Click="driver_next_image_Click"/>
+
+                    </Grid>
+                </Border>
+
             </Grid>
         </Grid>
     </Grid>
