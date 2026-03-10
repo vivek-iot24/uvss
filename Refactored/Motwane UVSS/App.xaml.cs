@@ -8,7 +8,7 @@ using Motwane_UVSS.HAL.ExternalServices;
 using Motwane_UVSS.HAL.Hardware;
 using Motwane_UVSS.Presentation.Windows;
 using System;
-using OpenCvSharp;
+
 
 using System.Windows;
 
