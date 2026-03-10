@@ -29,16 +29,14 @@ namespace Motwane_UVSS.Presentation
 
         protected override void OnStartup(StartupEventArgs e)
         {
+      
             base.OnStartup(e);
-
             var services = new ServiceCollection();
-
             ConfigureServices(services);
-
             ServiceProvider = services.BuildServiceProvider();
             Services = ServiceProvider;
 
-            var mainWindow = ServiceProvider.GetRequiredService<Main_uvss_page>();
+            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
 
@@ -70,27 +68,18 @@ namespace Motwane_UVSS.Presentation
             if (HardwareMode == "Test")
             {
                 services.AddSingleton<IDiagnosticService, FakeDiagnosticService>();
+                services.AddSingleton<ICameraService, FakeLaptopCameraService>();
             }
             else
             {
                 services.AddSingleton<IDiagnosticService, DiagnosticService>();
+                services.AddSingleton<ICameraService, UndersideCamera_HAL>();
             }
 
             services.AddSingleton<IAicComparisonService, AicComparisonService>();
 
 
-            // ---------------- CAMERA SERVICE SWITCH ----------------
-
-            if (HardwareMode == "Test")
-            {
-                // Laptop webcam simulation
-                services.AddSingleton<ICameraService, FakeLaptopCameraService>();
-            }
-            else
-            {
-                // Real FLIR / Spinnaker camera
-                services.AddSingleton<ICameraService, UndersideCamera_HAL>();
-            }
+           
 
 
             // ---------------- WINDOWS ----------------

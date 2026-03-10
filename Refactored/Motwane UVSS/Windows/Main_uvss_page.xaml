@@ -5,224 +5,376 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Motwane_UVSS"
         mc:Ignorable="d"
-        Title="Motwane Under Vehical Scanning System-AreaScan" Closing="Window_Closing" Height="1100" Width="1920" WindowState="Maximized" Loaded="Window_Loaded" Closed="Window_Closed" Icon="D:\Work_uvss\logo-motwane-90x90.ico">
+        Title="Motwane Under Vehical Scanning System-AreaScan"
+        Closing="Window_Closing"
+        Height="1100"
+        Width="1920"
+        WindowState="Maximized"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
+        Icon="D:\Work_uvss\logo-motwane-90x90.ico">
 
     <Grid x:Name="mother_grid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="120"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="120" />
         </Grid.RowDefinitions>
+
         <!-- Bottom Panel of Controls -->
-        <Border Grid.Row="2" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="10,5,10,5" Grid.ColumnSpan="2">
+        <Border Grid.Row="2"
+                Background="Transparent"
+                BorderBrush="MidnightBlue"
+                BorderThickness="2"
+                CornerRadius="10"
+                Margin="5,5,5,5"
+                Grid.ColumnSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <!-- LEFT SECTION -->
-                <StackPanel Grid.Column="0" Orientation="Vertical" Width="250" VerticalAlignment="Center">
+                <StackPanel Grid.Column="0"
+                            Orientation="Vertical"
+                            VerticalAlignment="Top">
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Sensor Status"
-                       FontSize="18"
-                       FontWeight="SemiBold"
-                       Foreground="#007ACC"/>
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="#007ACC" />
 
                         <Ellipse x:Name="sensor_display"
-                     Fill="Green"
-                     Width="16"
-                     Height="16"
-                     Margin="8,4,0,0"/>
+                                 Fill="Green"
+                                 Width="16"
+                                 Height="16"
+                                 Margin="8,4,0,0" />
 
                         <TextBlock x:Name="sensor_feed"
-                       Width="40"/>
+                                   Width="40" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal"
-            Margin="0,2,0,0"
-            VerticalAlignment="Center">
+                                Margin="0,2,0,0"
+                                VerticalAlignment="Center">
 
-                        <Canvas Width="30" Height="30" VerticalAlignment="Center">
-                            <Ellipse Width="12" Height="12"
-                 Fill="Gray"
-                 Canvas.Left="9"
-                 Canvas.Top="3"/>
+                        <Canvas Width="60"
+                                Height="60"
+                                VerticalAlignment="Center">
 
+                            <!-- Head -->
+                            <Ellipse Width="22"
+                                     Height="22"
+                                     Fill="Gray"
+                                     Canvas.Left="19"
+                                     Canvas.Top="0" />
+
+                            <!-- Body -->
                             <Path Fill="Gray"
-              Canvas.Left="3"
-              Canvas.Top="14"
-              Data="M 15,0 C 0,0 0,15 0,15 H 30 C 30,15 30,0 15,0 Z"/>
+                                  Canvas.Left="5"
+                                  Canvas.Top="25"
+                                  Data="M 25,0 C 0,0 0,25 0,25 H 50 C 50,25 50,0 25,0 Z" />
+
                         </Canvas>
 
                         <StackPanel Margin="8,0,0,0"
-                VerticalAlignment="Center">
+                                    VerticalAlignment="Center">
 
                             <TextBlock x:Name="username_textbox"
-                   FontSize="14"
-                   FontWeight="SemiBold"
-                   Foreground="#007ACC"
-                   TextTrimming="CharacterEllipsis"/>
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"
+                                       TextWrapping="NoWrap"
+                                       Width="150" />
 
                             <TextBlock x:Name="usertype_textbox"
-                   FontSize="14"
-                   FontWeight="SemiBold"
-                   Foreground="#007ACC"
-                   TextTrimming="CharacterEllipsis"/>
-
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"
+                                       TextWrapping="NoWrap"
+                                       Width="150" />
                         </StackPanel>
 
                     </StackPanel>
                 </StackPanel>
 
-
+               
                 <!-- CENTER BUTTONS -->
                 <StackPanel Grid.Column="1"
-                Orientation="Horizontal"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
 
-                    <Button Content="HOLD"
+                    <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Margin="10">
+                        <Button Content="HOLD"
                 x:Name="HOLD_BTN"
                 Click="HOLD_BTN_Click"
                 FontSize="16"
-                Padding="10,4"
-                Margin="10,0"/>
+                Foreground="#007ACC"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="20,5"/>
+                    </Border>
 
-                    <Button Content="PASS"
+                    <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Margin="10">
+                        <Button Content="PASS"
                 x:Name="PASS_BTN"
                 Click="PASS_BTN_Click"
                 FontSize="16"
-                Padding="10,4"
-                Margin="10,0"/>
+                Foreground="#007ACC"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="20,5"/>
+                    </Border>
 
-                    <Button Content="RESET"
+                    <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Margin="10">
+                        <Button Content="RESET"
                 x:Name="reset_button"
                 Click="reset_button_Click"
                 FontSize="16"
-                Padding="10,4"
-                Margin="10,0"/>
+                Foreground="#007ACC"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="20,5"/>
+                    </Border>
 
-                    <Button Content="MENU"
+                    <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Margin="10">
+                        <Button Content="MENU"
                 x:Name="menu_button"
                 Click="menu_button_Click"
                 FontSize="16"
-                Padding="10,4"
-                Margin="10,0"/>
+                Foreground="#007ACC"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="20,5"/>
+                    </Border>
 
-                    <Button Content="Load Image"
-                         x:Name="btnLoadImage"
-                        Click="btnLoadImage_Click"
-                        FontSize="16"
-                          Padding="10,4"
-                          Margin="10,0"/>
+                    <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Margin="10">
+                        <Button Content="Load Image"
+                x:Name="btnLoadImage"
+                Click="btnLoadImage_Click"
+                FontSize="16"
+                Foreground="#007ACC"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="20,5"/>
+                    </Border>
 
-                    <Button Content="AIC"
-                       x:Name="AIC_btn"
-                        Click="AIC_btn_Click"
-                          FontSize="16"
-                            Padding="10,4"
-                           Margin="10,0"/>
+                    <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Margin="10">
+                        <Button Content="AIC"
+                x:Name="AIC_btn"
+                Click="AIC_btn_Click"
+                FontSize="16"
+                Foreground="#007ACC"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="20,5"/>
+                    </Border>
+
+                </StackPanel>
+                <!-- CATEGORY -->
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Top"
+                            Margin="20,0">
+
+                    <TextBlock Text="Category:"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#007ACC" />
+
+                    <ComboBox x:Name="remark_txtbox"
+                              Width="160"
+                              Margin="10,0,0,0"
+                              SelectedIndex="5">
+
+                        <ComboBoxItem Content="Wanted" />
+                        <ComboBoxItem Content="Suspicious" />
+                        <ComboBoxItem Content="Stolen" />
+                        <ComboBoxItem Content="Expired" />
+                        <ComboBoxItem Content="Other" />
+                        <ComboBoxItem Content="Normal" />
+
+                    </ComboBox>
 
                 </StackPanel>
 
-
                 <!-- RIGHT SECTION -->
-                <StackPanel Grid.Column="2"
-                Orientation="Vertical"
-                VerticalAlignment="Center"
-                Margin="20,0,0,0">
+                <StackPanel Grid.Column="3"
+                            Orientation="Vertical"
+                            VerticalAlignment="Top"
+                            Margin="20,0">
 
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Category:"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="#007ACC"/>
-
-                        <ComboBox x:Name="remark_txtbox"
-                      Width="180"
-                      Margin="5,0,0,0"
-                      SelectedIndex="5">
-
-                            <ComboBoxItem Content="Wanted"/>
-                            <ComboBoxItem Content="Suspicious"/>
-                            <ComboBoxItem Content="Stolen"/>
-                            <ComboBoxItem Content="Expired"/>
-                            <ComboBoxItem Content="Other"/>
-                            <ComboBoxItem Content="Normal"/>
-
-                        </ComboBox>
-                    </StackPanel>
-
-                    <StackPanel Margin="0,6,0,0">
+                    <!-- TIME -->
+                    <StackPanel>
                         <TextBlock x:Name="DateTextBlock"
-                       FontSize="12"
-                       Foreground="#007ACC"
-                       TextAlignment="Center"/>
+                                   FontSize="12"
+                                   Foreground="#007ACC"
+                                   TextAlignment="Center" />
 
                         <TextBlock x:Name="TimeTextBlock"
-                       FontSize="12"
-                       Foreground="#007ACC"
-                       TextAlignment="Center"/>
+                                   FontSize="12"
+                                   Foreground="#007ACC"
+                                   TextAlignment="Center" />
                     </StackPanel>
 
+                    <!-- LOGO -->
+                    <Image x:Name="BottomLogo"
+                           Source="D:\Work_uvss\logo-motwane-90x90.ico"
+                           Height="80"
+                           Margin="0,8,0,0"
+                           Stretch="Uniform" />
                 </StackPanel>
 
             </Grid>
         </Border>
+
         <!-- Top section with the main image and side panel -->
         <Grid Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="5,5,5,0">
+            <Border Grid.Column="0"
+                    Background="Transparent"
+                    BorderBrush="MidnightBlue"
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Margin="5,5,5,0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="12*"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="12*" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Grid x:Name="grid_for_sticth" ClipToBounds="True">
-                        <Image Panel.ZIndex="1" Name="Sticked_image" Source="D:\Work_uvss\MUVSS.png"  ImageFailed="Sticked_image_ImageFailed" MouseLeftButtonDown="Sticked_image_MouseLeftButtonDown"  Stretch="Fill" MouseWheel="Sticked_image_MouseWheel">
+
+                    <Grid x:Name="grid_for_sticth"
+                          ClipToBounds="True">
+                        <Image Panel.ZIndex="1"
+                               Name="Sticked_image"
+                               Source="D:\Work_uvss\MUVSS.png"
+                               ImageFailed="Sticked_image_ImageFailed"
+                               MouseLeftButtonDown="Sticked_image_MouseLeftButtonDown"
+                               Stretch="Fill"
+                               MouseWheel="Sticked_image_MouseWheel">
                             <Image.RenderTransform>
                                 <TransformGroup>
-                                    <ScaleTransform x:Name="imageScaleTransform" ScaleX="1" ScaleY="1"/>
-                                    <TranslateTransform x:Name="imageTranslateTransform" X="0" Y="0"/>
+                                    <ScaleTransform x:Name="imageScaleTransform"
+                                                    ScaleX="1"
+                                                    ScaleY="1" />
+                                    <TranslateTransform x:Name="imageTranslateTransform"
+                                                        X="0"
+                                                        Y="0" />
                                 </TransformGroup>
                             </Image.RenderTransform>
                         </Image>
                     </Grid>
+
                     <Grid Grid.Row="1">
-                        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                            <StackPanel Margin="0,0,0,0" Orientation="Horizontal" >
-                                <TextBlock Text="Brightness" HorizontalAlignment="Center" FontSize="20" FontWeight="SemiBold" Foreground="#007ACC"/>
-                                <Slider x:Name="BrightnessSlider" ValueChanged="BrightnessSlider_ValueChanged" Minimum="0.1" Maximum="3.0" Value="1.0" TickFrequency="0.05" IsSnapToTickEnabled="True" Width="100" Height="30" Margin="10,0,0,0"/>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="10"
+                                    HorizontalAlignment="Center">
+                            <StackPanel Margin="0,0,0,0"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="Brightness"
+                                           HorizontalAlignment="Center"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="#007ACC" />
+                                <Slider x:Name="BrightnessSlider"
+                                        ValueChanged="BrightnessSlider_ValueChanged"
+                                        Minimum="0.1"
+                                        Maximum="3.0"
+                                        Value="1.0"
+                                        TickFrequency="0.05"
+                                        IsSnapToTickEnabled="True"
+                                        Width="100"
+                                        Height="30"
+                                        Margin="10,0,0,0" />
                             </StackPanel>
-                            <StackPanel Margin="50,0,0,0" Orientation="Horizontal">
-                                <TextBlock Text="Contrast" HorizontalAlignment="Center" FontSize="20" FontWeight="SemiBold" Foreground="#007ACC"/>
-                                <Slider x:Name="ContrastSlider" ValueChanged="ContrastSlider_ValueChanged" Minimum="0" Maximum="2" Value="1" Width="100" TickFrequency="0.1" IsSnapToTickEnabled="True" Height="30" Margin="10,0,0,0"/>
+
+                            <StackPanel Margin="50,0,0,0"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="Contrast"
+                                           HorizontalAlignment="Center"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="#007ACC" />
+                                <Slider x:Name="ContrastSlider"
+                                        ValueChanged="ContrastSlider_ValueChanged"
+                                        Minimum="0"
+                                        Maximum="2"
+                                        Value="1"
+                                        Width="100"
+                                        TickFrequency="0.1"
+                                        IsSnapToTickEnabled="True"
+                                        Height="30"
+                                        Margin="10,0,0,0" />
                             </StackPanel>
-                            <StackPanel Margin="50,0,0,0" Orientation="Horizontal">
-                                <TextBlock Text="Sharpness" HorizontalAlignment="Center" FontSize="20" FontWeight="SemiBold" Foreground="#007ACC"/>
-                                <Slider  x:Name="SharpnessSlider" ValueChanged="SharpnessSlider_ValueChanged" Minimum="0" Maximum="5.0" Value="0" Width="100" TickFrequency="0.5" IsSnapToTickEnabled="True" Height="30" Margin="10,0,0,0"/>
+
+                            <StackPanel Margin="50,0,0,0"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="Sharpness"
+                                           HorizontalAlignment="Center"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="#007ACC" />
+                                <Slider x:Name="SharpnessSlider"
+                                        ValueChanged="SharpnessSlider_ValueChanged"
+                                        Minimum="0"
+                                        Maximum="5.0"
+                                        Value="0"
+                                        Width="100"
+                                        TickFrequency="0.5"
+                                        IsSnapToTickEnabled="True"
+                                        Height="30"
+                                        Margin="10,0,0,0" />
                             </StackPanel>
-                            <StackPanel Margin="50,0,0,0" Orientation="Horizontal">
-                                <TextBlock Text="Zoom" HorizontalAlignment="Center" FontSize="20" FontWeight="SemiBold" Foreground="#007ACC"/>
-                                <Slider x:Name="ZoomSlider" Minimum="0" Maximum="30" Value="1" Width="100" TickFrequency="0.1" IsSnapToTickEnabled="True" Height="30" Margin="10,0,0,0"/>
+
+                            <StackPanel Margin="50,0,0,0"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="Zoom"
+                                           HorizontalAlignment="Center"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="#007ACC" />
+                                <Slider x:Name="ZoomSlider"
+                                        Minimum="0"
+                                        Maximum="30"
+                                        Value="1"
+                                        Width="100"
+                                        TickFrequency="0.1"
+                                        IsSnapToTickEnabled="True"
+                                        Height="30"
+                                        Margin="10,0,0,0" />
                             </StackPanel>
-                            <Button Content="try" Margin="50,0,0,0" x:Name="try_btn" Click="try_btn_Click" Visibility="Collapsed"/>
-                            <Button Content="try" Margin="50,0,0,0" x:Name="try1_btn" Click="try1_btn_Click" Visibility="Collapsed"/>
-                            <Button Content="try" Margin="50,0,0,0" x:Name="try2_btn" Click="try2_btn_Click" Visibility="Collapsed"/>
-                          
+
+                            <Button Content="try"
+                                    Margin="50,0,0,0"
+                                    x:Name="try_btn"
+                                    Click="try_btn_Click"
+                                    Visibility="Collapsed" />
+                            <Button Content="try"
+                                    Margin="50,0,0,0"
+                                    x:Name="try1_btn"
+                                    Click="try1_btn_Click"
+                                    Visibility="Collapsed" />
+                            <Button Content="try"
+                                    Margin="50,0,0,0"
+                                    x:Name="try2_btn"
+                                    Click="try2_btn_Click"
+                                    Visibility="Collapsed" />
+
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -232,161 +384,244 @@
             <Grid Grid.Column="1">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="4*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="4*"/>
-
-                    <RowDefinition Height="120"/>
-                    <RowDefinition Height="70"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="4*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4*" />
+                    <RowDefinition Height="120" />
+                    <RowDefinition Height="70" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
 
                 <!-- ANPR IMAGE -->
-                <Border Grid.Row="0" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                <Border Grid.Row="0"
+                        Background="Transparent"
+                        BorderBrush="MidnightBlue"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="0,5,5,0">
                     <Grid>
-                        <Image x:Name="Anpr_image" Source="D:\muvss_name.png" Stretch="Fill"/>
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
-                    CornerRadius="3" Background="Transparent"
-                    BorderThickness="3" BorderBrush="MidnightBlue">
+                        <Image x:Name="Anpr_image"
+                               Source="D:\muvss_name.png"
+                               Stretch="Fill" />
+                        <Border VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Margin="5"
+                                CornerRadius="3"
+                                Background="Transparent"
+                                BorderThickness="3"
+                                BorderBrush="MidnightBlue">
                             <TextBlock Text="ANPR Image"
-                           FontSize="12"
-                           Foreground="MidnightBlue"
-                           FontWeight="Bold"
-                           Margin="5,2"/>
+                                       FontSize="12"
+                                       Foreground="#007ACC"
+                                       FontWeight="SemiBold"
+                                       Margin="5,2" />
                         </Border>
                     </Grid>
                 </Border>
 
 
                 <!-- NUMBER PLATE IMAGE -->
-                <Border Grid.Row="1" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                <Border Grid.Row="1"
+                        Background="Transparent"
+                        BorderBrush="MidnightBlue"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="0,5,5,0">
                     <Grid>
-                        <Image x:Name="numberplate_image" Stretch="Fill"/>
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
-                    CornerRadius="3" Background="Transparent"
-                    BorderThickness="3" BorderBrush="MidnightBlue">
+                        <Image x:Name="numberplate_image"
+                               Stretch="Fill" />
+                        <Border VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Margin="5"
+                                CornerRadius="3"
+                                Background="Transparent"
+                                BorderThickness="3"
+                                BorderBrush="MidnightBlue">
                             <TextBlock Text="Number Plate Image"
-                           FontSize="12"
-                           Foreground="MidnightBlue"
-                           FontWeight="Bold"
-                           Margin="5,2"/>
+                                       FontSize="12"
+                                       Foreground="#007ACC"
+                                         FontWeight="SemiBold"
+                                        Margin="5,2"/>
                         </Border>
                     </Grid>
                 </Border>
 
 
                 <!-- NUMBER PLATE TEXT -->
-                <Border Grid.Row="2" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                <Border Grid.Row="2"
+                        Background="Transparent"
+                        BorderBrush="MidnightBlue"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="0,5,5,0">
                     <Grid>
                         <TextBox x:Name="Numberplate_number_box"
-                     Margin="3"
-                     BorderThickness="0"
-                     FontWeight="Bold"
-                     TextAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     FontSize="25"/>
+                                 Margin="3"
+                                 BorderThickness="0"
+                                 FontWeight="Bold"
+                                 TextAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="25" />
 
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
-                    CornerRadius="3" Background="Transparent"
-                    BorderThickness="3" BorderBrush="MidnightBlue"
-                    IsHitTestVisible="False">
+                        <Border VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Margin="5"
+                                CornerRadius="3"
+                                Background="Transparent"
+                                BorderThickness="3"
+                                BorderBrush="MidnightBlue"
+                                IsHitTestVisible="False">
 
                             <TextBlock Text="Number Plate"
-                           FontSize="12"
-                           Foreground="MidnightBlue"
-                           FontWeight="Bold"
-                           Margin="5,2"/>
+                                       FontSize="12"
+                                        Foreground="#007ACC"
+                                          FontWeight="SemiBold"
+                                       Margin="5,2"/>
                         </Border>
                     </Grid>
                 </Border>
 
 
                 <!-- DRIVER IMAGE -->
-                <Border Grid.Row="3" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                <!-- DRIVER IMAGE -->
+                <Border Grid.Row="3"
+        Background="Transparent"
+        BorderBrush="MidnightBlue"
+        BorderThickness="2"
+        CornerRadius="10"
+        Margin="0,5,5,0">
                     <Grid>
-                        <Image x:Name="Driver_image" Source="D:\muvss_name.png" Stretch="Fill"/>
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
-                    CornerRadius="3" Background="Transparent"
-                    BorderThickness="3" BorderBrush="MidnightBlue">
+                        <Image x:Name="Driver_image"
+               Source="D:\muvss_name.png"
+               Stretch="Fill" />
+
+                        <Border VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Margin="5"
+                CornerRadius="3"
+                Background="Transparent"
+                BorderThickness="3"
+                 BorderBrush="MidnightBlue">
                             <TextBlock Text="Driver Image"
-                           FontSize="12"
-                           Foreground="MidnightBlue"
-                           FontWeight="Bold"
-                           Margin="5,2"/>
+                       FontSize="12"
+                       Foreground="#007ACC"
+                       FontWeight="SemiBold"
+                       Margin="5,2"/>
                         </Border>
+
                     </Grid>
                 </Border>
 
 
                 <!-- LOGO IMAGE -->
-                <Border Grid.Row="4" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                <Border Grid.Row="4"
+                        Background="Transparent"
+                        BorderBrush="MidnightBlue"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="0,5,5,0">
                     <Grid>
-                        <Image x:Name="LogoImage" Stretch="Uniform" Margin="10"/>
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
-                    CornerRadius="3" Background="Transparent"
-                    BorderThickness="3" BorderBrush="MidnightBlue">
+                        <Image x:Name="LogoImage"
+                               Stretch="Uniform"
+                               Margin="10" />
+                        <Border VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Margin="5"
+                                CornerRadius="3"
+                                Background="Transparent"
+                                BorderThickness="3"
+                                BorderBrush="MidnightBlue">
                             <TextBlock Text="Logo Image"
-                           FontSize="12"
-                           Foreground="MidnightBlue"
-                           FontWeight="Bold"
-                           Margin="5,2"/>
+                                       FontSize="12"
+                                        Foreground="#007ACC"
+           FontWeight="SemiBold"
+           Margin="5,2"/>
                         </Border>
                     </Grid>
                 </Border>
 
 
                 <!-- LOGO TEXT -->
-                <Border Grid.Row="5" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
+                <Border Grid.Row="5"
+                        Background="Transparent"
+                        BorderBrush="MidnightBlue"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="0,5,5,0">
                     <Grid>
                         <TextBox x:Name="logo_textbox"
-                     Margin="3"
-                     BorderThickness="0"
-                     FontWeight="Bold"
-                     TextAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     FontSize="22"/>
-
-                        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5"
-                    CornerRadius="3" Background="Transparent"
-                    BorderThickness="3" BorderBrush="MidnightBlue"
-                    IsHitTestVisible="False">
+                                 Margin="3"
+                                 BorderThickness="0"
+                                 FontWeight="Bold"
+                                 TextAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="22" />
+                        <Border VerticalAlignment="Top" 
+                                HorizontalAlignment="Left" 
+                                Margin="5"
+                                                                CornerRadius="3"
+                                Background="Transparent"
+                                BorderThickness="3"
+                                BorderBrush="MidnightBlue"
+                                IsHitTestVisible="False">
 
                             <TextBlock Text="Logo Text"
-                           FontSize="12"
-                           Foreground="MidnightBlue"
-                           FontWeight="Bold"
-                           Margin="5,2"/>
+                                       FontSize="12"
+                                       Foreground="#007ACC"
+           FontWeight="SemiBold"
+           Margin="5,2"/>
                         </Border>
                     </Grid>
                 </Border>
 
 
                 <!-- BUTTON PANEL -->
-                <Border Grid.Row="6" Background="Transparent" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,5,5,0">
-                    <Grid Height="60">
+                <Border Grid.Row="6"
+        Background="Transparent"
+        BorderBrush="MidnightBlue"
+        BorderThickness="2"
+        CornerRadius="10"
+        Margin="0,5,5,0">
 
+                    <Grid Height="60">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0"
-                    Height="50"
-                    Content="PREVIOUS"
-                    x:Name="driver_previous_image"
-                    BorderBrush="Black"
-                    BorderThickness="2"
-                    Click="driver_previous_image_Click"/>
+                        <Border Grid.Column="0"
+                BorderBrush="#007ACC"
+                BorderThickness="3"
+                CornerRadius="10"
+                Margin="10">
 
-                        <Button Grid.Column="1"
-                    Height="50"
-                    Content="NEXT"
+                            <Button Content="PREVIOUS"
+                    x:Name="driver_previous_image"
+                    Click="driver_previous_image_Click"
+                    FontSize="16"
+                    Foreground="#007ACC"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="20,5"/>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                BorderBrush="#007ACC"
+                BorderThickness="3"
+                CornerRadius="10"
+                Margin="10">
+
+                            <Button Content="NEXT"
                     x:Name="driver_next_image"
-                    BorderBrush="Black"
-                    BorderThickness="2"
-                    Click="driver_next_image_Click"/>
+                    Click="driver_next_image_Click"
+                    FontSize="16"
+                    Foreground="#007ACC"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="20,5"/>
+                        </Border>
 
                     </Grid>
                 </Border>
@@ -395,4 +630,3 @@
         </Grid>
     </Grid>
 </Window>
-
