@@ -15,7 +15,10 @@ namespace Motwane_UVSS.Application.Services
             _repository = repository;
            // _connectionString = connectionString;
         }
-
+        public IEnumerable<string> GetDistinctUsernames()
+        {
+            return _repository.GetDistinctUsernames();
+        }
         public IEnumerable<VehicleEntry> GetEntries(
             DateTime? from,
             DateTime? to,

@@ -16,7 +16,7 @@ namespace Motwane_UVSS.Presentation
 {
     public partial class App : System.Windows.Application
     {
-        private string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_DB;Integrated Security=True;";
+        private string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;";
 
         // Change this to "Real" when hardware is available
         private const string HardwareMode = "Test";

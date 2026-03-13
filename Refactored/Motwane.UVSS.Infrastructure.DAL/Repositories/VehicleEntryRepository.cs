@@ -63,7 +63,7 @@ namespace Motwane_UVSS.DAL.Repositories
             string plate)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand("usp_GetVehicleEntryLogs", conn))
+            using (SqlCommand cmd = new SqlCommand("sp_GetVehicleEntryLogs", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
 

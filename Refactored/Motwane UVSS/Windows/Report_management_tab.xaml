@@ -3,102 +3,225 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Motwane_UVSS"
+        xmlns:local="clr-namespace:Motwane_UVSS.Presentation.Windows"
         mc:Ignorable="d"
-        Title="Motwane Under Vehical Scanning System-AreaScan" Height="1100" Width="1920" WindowState="Maximized" Icon="D:\Work_uvss\logo-motwane-90x90.ico">
+        Title="Motwane Under Vehical Scanning System-AreaScan"
+        Height="1100"
+        Width="1920"
+        WindowState="Maximized"
+        Icon="D:\Work_uvss\logo-motwane-90x90.ico">
 
     <Grid>
         <Image Source="D:\Work_uvss\MUVSS.png" Stretch="Fill"/>
 
-        <Border CornerRadius="20" 
-                Background="White" 
+        <Border CornerRadius="20"
+                Background="White"
                 Padding="20"
-                HorizontalAlignment="Center" 
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 MaxWidth="1800"
                 MaxHeight="950">
 
-            <StackPanel Orientation="Vertical">
-                <TextBlock Foreground="#007ACC" Text="Report Management" FontSize="60" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+            <StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="10,10,10,20" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                    <TextBlock  Text="Filter:" VerticalAlignment="Center" Margin="5" FontSize="16"/>
-                    <ComboBox x:Name="filterTypeComboBox" Width="120" Margin="5" SelectionChanged="FilterTypeComboBox_SelectionChanged"/>
+                <!-- TITLE -->
+                <TextBlock Text="Report Management"
+                           Foreground="#007ACC"
+                           FontSize="60"
+                           FontWeight="Bold"
+                           Margin="0,0,0,20"
+                           HorizontalAlignment="Center"/>
 
-                    <TextBlock  x:Name="fromTextBlock" Text="From:" VerticalAlignment="Center" Margin="5" FontSize="16" Visibility="Collapsed"/>
-                    <DatePicker x:Name="fromDatePicker" Width="120" Margin="5"/>
+                <!-- FILTER GRID (FIXED LAYOUT) -->
+                <Grid Margin="10,10,10,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                    <TextBlock x:Name="toTextBlock" Text="To:" VerticalAlignment="Center" Margin="5" FontSize="16" Visibility="Collapsed"/>
-                    <DatePicker x:Name="toDatePicker" Width="120" Margin="5"/>
+                    <TextBlock Text="Filter:" VerticalAlignment="Center" Grid.Column="0"/>
+                    <ComboBox x:Name="filterTypeComboBox"
+                              Grid.Column="1"
+                              Margin="5"
+                              SelectionChanged="FilterTypeComboBox_SelectionChanged"/>
 
-                    <TextBlock Text="Username:" VerticalAlignment="Center" Margin="15,5,5,5" FontSize="16"/>
-                    <ComboBox x:Name="usernameComboBox" Width="120" Margin="5" />
+                    <TextBlock x:Name="fromTextBlock"
+                               Text="From:"
+                               Visibility="Collapsed"
+                               VerticalAlignment="Center"
+                               Grid.Column="2"/>
 
-                    <TextBlock Text="Numberplate:" VerticalAlignment="Center" Margin="15,5,5,5" FontSize="16"/>
-                    <TextBox x:Name="numberplateTextBox" Width="120" Margin="5"/>
+                    <DatePicker x:Name="fromDatePicker"
+                                Grid.Column="3"
+                                Margin="5"/>
 
-                    <Button  x:Name="Btnsearch" Content="Search" Click="Button_Click" Width="70" Margin="20,5,5,5" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
-                    <Button  x:Name="Btnclear" Content="Clear" Click="Button_Click_1" Width="70" Margin="20,5,5,5" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
-                </StackPanel>
+                    <TextBlock x:Name="toTextBlock"
+                               Text="To:"
+                               Visibility="Collapsed"
+                               VerticalAlignment="Center"
+                               Grid.Column="4"/>
 
+                    <DatePicker x:Name="toDatePicker"
+                                Grid.Column="5"
+                                Margin="5"/>
+
+                    <TextBlock Text="Username:"
+                               Grid.Column="6"
+                               VerticalAlignment="Center"/>
+
+                    <ComboBox x:Name="usernameComboBox"
+                              Grid.Column="7"
+                              Margin="5"/>
+
+                    <TextBlock Text="Numberplate:"
+                               Grid.Column="8"
+                               VerticalAlignment="Center"/>
+
+                    <TextBox x:Name="numberplateTextBox"
+                             Grid.Column="9"
+                             Margin="5"/>
+
+                    <Button x:Name="Btnsearch"
+                            Grid.Column="10"
+                            Content="Search"
+                            Click="Button_Click"
+                            Width="70"
+                            Margin="20,5,5,5"
+                            Background="#007ACC"
+                            Foreground="White"
+                            FontWeight="Bold"/>
+
+                    <Button x:Name="Btnclear"
+                            Grid.Column="11"
+                            Content="Clear"
+                            Click="Button_Click_1"
+                            Width="70"
+                            Margin="20,5,5,5"
+                            Background="#007ACC"
+                            Foreground="White"
+                            FontWeight="Bold"/>
+                </Grid>
+
+                <!-- DATA GRID -->
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="600">
-                    <DataGrid x:Name="dataGrid" Foreground="#007ACC" AutoGenerateColumns="False" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True"   >
+                    <DataGrid x:Name="dataGrid"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              SelectionUnit="FullRow"
+                              Foreground="#007ACC">
+
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Sr No" Binding="{Binding SrNo}" />
-                            <DataGridTextColumn Header="User Name" Binding="{Binding Username}" />
-                            <DataGridTextColumn Header="Entry Date" Binding="{Binding EntryDate}" />
-                            <DataGridTextColumn Header="Entry Time" Binding="{Binding EntryTime}" />
-                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
-                            <DataGridTextColumn Header="Remark" Binding="{Binding Remark}" />
-                            <DataGridTextColumn Header="Numberplate" Binding="{Binding Numberplate}" />
 
-                            <DataGridTemplateColumn Header="Underside Image">
+                            <DataGridTextColumn Header="Sr No" Binding="{Binding SrNo}" Width="80"/>
+                            <DataGridTextColumn Header="User Name" Binding="{Binding Username}" Width="120"/>
+                            <DataGridTextColumn Header="Entry Date" Binding="{Binding EntryDate}" Width="120"/>
+                            <DataGridTextColumn Header="Entry Time" Binding="{Binding EntryTime}" Width="100"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                            <DataGridTextColumn Header="Remark" Binding="{Binding Remark}" Width="200"/>
+                            <DataGridTextColumn Header="Numberplate" Binding="{Binding Numberplate}" Width="120"/>
+
+                            <DataGridTemplateColumn Header="Underside Image" Width="140">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Image Source="{Binding UndersideImage}" Width="100" Height="100" Stretch="Uniform"/>
+                                        <Image Source="{Binding UndersideImage}"
+                                               Width="100"
+                                               Height="100"
+                                               Stretch="Uniform"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="Driver Cam Image">
+                            <DataGridTemplateColumn Header="Driver Cam Image" Width="140">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Image Source="{Binding DriverCamImage}" Width="100" Height="100" Stretch="Uniform"/>
+                                        <Image Source="{Binding DriverCamImage}"
+                                               Width="100"
+                                               Height="100"
+                                               Stretch="Uniform"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="ANPR Image">
+                            <DataGridTemplateColumn Header="ANPR Image" Width="140">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Image Source="{Binding AnprImage}" Width="100" Height="100" Stretch="Uniform"/>
+                                        <Image Source="{Binding AnprImage}"
+                                               Width="100"
+                                               Height="100"
+                                               Stretch="Uniform"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
+
+                <!-- PROGRESS BAR -->
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <ProgressBar x:Name="loadProgress"
-                 Width="300"
-                 Height="20"
-                 Minimum="0"
-                 Maximum="100"
-                 Visibility="Collapsed"/>
+                                 Width="300"
+                                 Height="20"
+                                 Minimum="0"
+                                 Maximum="100"
+                                 Visibility="Collapsed"/>
 
                     <TextBlock x:Name="progressText"
-               Margin="10,0,0,0"
-               VerticalAlignment="Center"/>
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Right">
-                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
-                        <Button Content="Export" x:Name="Export_btn_1" Click="Export_btn_1_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+
+                <!-- BUTTONS -->
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Right">
+
+                    <Border Margin="10"
+                            BorderBrush="#007ACC"
+                            BorderThickness="3"
+                            CornerRadius="10"
+                            Background="#007ACC">
+
+                        <Button x:Name="Export_btn_1"
+                                Content="Export"
+                                Click="Export_btn_1_Click"
+                                FontSize="35"
+                                Foreground="White"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontWeight="SemiBold"/>
                     </Border>
-                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
-                        <Button Content="Exit" x:Name="Exit_button_3" Click="Exit_button_3_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+
+                    <Border Margin="10"
+                            BorderBrush="#007ACC"
+                            BorderThickness="3"
+                            CornerRadius="10"
+                            Background="#007ACC">
+
+                        <Button x:Name="Exit_button_3"
+                                Content="Exit"
+                                Click="Exit_button_3_Click"
+                                FontSize="35"
+                                Foreground="White"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontWeight="SemiBold"/>
                     </Border>
+
                 </StackPanel>
+
             </StackPanel>
         </Border>
     </Grid>
-</Window> 
+</Window>

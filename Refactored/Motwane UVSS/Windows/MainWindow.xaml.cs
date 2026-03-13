@@ -10,7 +10,7 @@ namespace Motwane_UVSS.Presentation.Windows
     {
         private readonly AuthenticationService _authenticationService;
         private readonly IFileSystemService _fileSystemService;
-        public static string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_DB;Integrated Security=True;";
+        public static string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;";
         public string USERID;
 
         public MainWindow(AuthenticationService authenticationService,
