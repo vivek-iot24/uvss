@@ -1,18 +1,18 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Motwane_UVSS.Application.Interfaces.DAL;
-using Motwane_UVSS.Application.Interfaces.HAL;
-using Motwane_UVSS.Application.Services;
-using Motwane_UVSS.DAL.Repositories;
-using Motwane_UVSS.HAL.Cameras;
-using Motwane_UVSS.HAL.ExternalServices;
-using Motwane_UVSS.HAL.Hardware;
-using Motwane_UVSS.Presentation.Windows;
+using Motwane.UVSS.Application.Interfaces.DAL;
+using Motwane.UVSS.Application.Interfaces.HAL;
+using Motwane.UVSS.Application.Services;
+using Motwane.UVSS.DAL.Repositories;
+using Motwane.UVSS.HAL.Cameras;
+using Motwane.UVSS.HAL.ExternalServices;
+using Motwane.UVSS.HAL.Hardware;
+using Motwane.UVSS.Presentation.Windows;
 using System;
 
 
 using System.Windows;
 
-namespace Motwane_UVSS.Presentation
+namespace Motwane.UVSS.Presentation
 {
     public partial class App : System.Windows.Application
     {

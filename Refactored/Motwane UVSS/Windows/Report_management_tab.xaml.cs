@@ -1,8 +1,8 @@
 ﻿using ClosedXML.Excel;
 using Emgu.CV.XImgproc;
 using Microsoft.Win32;
-using Motwane_UVSS.Application.Services;
-using Motwane_UVSS.Presentation.ViewModels;
+using Motwane.UVSS.Application.Services;
+using Motwane.UVSS.Presentation.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     public partial class Report_management_tab : Window
     {

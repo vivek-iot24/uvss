@@ -1,11 +1,11 @@
-﻿using Motwane_UVSS.Domain.Entities;
-using Motwane_UVSS.Application.Interfaces.DAL;
+﻿using Motwane.UVSS.Domain.Entities;
+using Motwane.UVSS.Application.Interfaces.DAL;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Motwane_UVSS.DAL.Repositories
+namespace Motwane.UVSS.DAL.Repositories
 {
     public class VehicleEntryRepository : IVehicleEntryRepository
     {

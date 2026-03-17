@@ -1,17 +1,17 @@
-﻿<Window x:Class="Motwane_UVSS.Presentation.Windows.Video_Management_window"
+﻿<Window x:Class="Motwane.UVSS.Presentation.Windows.Video_Management_window"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Motwane_UVSS.Presentation.Windows"
+        xmlns:local="clr-namespace:Motwane.UVSS.Presentation.Windows"
         mc:Ignorable="d"
         Title="Motwane Under Vehical Scanning System-AreaScan"
         Height="1100"
         Width="1920"
         WindowState="Maximized"
-        Icon="D:\Work_uvss\logo-motwane-90x90.ico">
+        Icon="/Resources/logo-motwane-90x90.ico">
     <Grid>
-        <Image Source="D:\Work_uvss\MUVSS.png" Stretch="Fill"/>
+        <Image Source="/Resources/MUVSS.png" Stretch="Fill"/>
 
         <Border CornerRadius="20" 
                 Background="White" 

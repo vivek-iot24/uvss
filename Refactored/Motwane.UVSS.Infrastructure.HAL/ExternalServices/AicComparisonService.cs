@@ -2,14 +2,14 @@
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Motwane_UVSS.Application.Interfaces.HAL;
+using Motwane.UVSS.Application.Interfaces.HAL;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using WMPLib;
 
-namespace Motwane_UVSS.HAL.ExternalServices
+namespace Motwane.UVSS.HAL.ExternalServices
 {
     public class AicComparisonService : IAicComparisonService
     {

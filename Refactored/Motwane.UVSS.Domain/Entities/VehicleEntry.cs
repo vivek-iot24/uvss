@@ -5,7 +5,7 @@ using System.Text;
 
 
 using System.Threading.Tasks;
-namespace Motwane_UVSS.Domain.Entities
+namespace Motwane.UVSS.Domain.Entities
 {
     public class VehicleEntry
     {

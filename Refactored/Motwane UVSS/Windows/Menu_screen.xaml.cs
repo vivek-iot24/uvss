@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Motwane_UVSS.Presentation;
-using Motwane_UVSS.Presentation.Windows;
+using Motwane.UVSS.Presentation;
+using Motwane.UVSS.Presentation.Windows;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-namespace Motwane_UVSS
+namespace Motwane.UVSS
 {
     public partial class Menu_screen : Window
     {

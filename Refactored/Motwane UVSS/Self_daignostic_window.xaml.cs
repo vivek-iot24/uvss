@@ -19,7 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Motwane_UVSS
+namespace Motwane.UVSS
 {
     /// <summary>
     /// Interaction logic for Self_daignostic_window.xaml

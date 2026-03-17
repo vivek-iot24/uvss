@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Motwane_UVSS.Application.Interfaces.HAL;
+using Motwane.UVSS.Application.Interfaces.HAL;
 using System.IO.Ports;
 using System.Net.NetworkInformation;
 
 
-namespace Motwane_UVSS.HAL.Hardware
+namespace Motwane.UVSS.HAL.Hardware
 {
     public class DiagnosticService : IDiagnosticService
     {

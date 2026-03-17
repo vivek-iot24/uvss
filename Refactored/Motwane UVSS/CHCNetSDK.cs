@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-namespace Motwane_UVSS
+namespace Motwane.UVSS
 {
 	/// <summary>
 	/// CHCNetSDK 的摘要说明。

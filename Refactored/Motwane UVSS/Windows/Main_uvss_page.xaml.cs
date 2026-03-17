@@ -3,10 +3,10 @@ using LibVLCSharp.Shared;
 using LibVLCSharp.WPF;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32; // ADDED THIS LINE FOR THE FILE DIALOG
-using Motwane_UVSS.Application.Interfaces.HAL;
-using Motwane_UVSS.Application.Services;
-using Motwane_UVSS.Presentation;
-using Motwane_UVSS.Presentation.Windows;
+using Motwane.UVSS.Application.Interfaces.HAL;
+using Motwane.UVSS.Application.Services;
+using Motwane.UVSS.Presentation;
+using Motwane.UVSS.Presentation.Windows;
 using Onvif.Core.Client;
 using Onvif.Core.Client.Media;
 using Onvif.IP;
@@ -41,7 +41,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using MessageBox = System.Windows.MessageBox;
 
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     /// <summary>
     /// Interaction logic for Main_uvss_page.xaml

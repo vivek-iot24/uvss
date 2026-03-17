@@ -1,9 +1,9 @@
-﻿using Motwane_UVSS.Application.Interfaces.HAL;
+﻿using Motwane.UVSS.Application.Interfaces.HAL;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Motwane_UVSS.HAL.Cameras
+namespace Motwane.UVSS.HAL.Cameras
 {
     public class FakeLaptopCameraService : ICameraService
     {

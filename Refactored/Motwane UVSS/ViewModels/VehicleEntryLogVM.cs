@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Media.Imaging;
-using Motwane_UVSS.Domain.Entities;
+using Motwane.UVSS.Domain.Entities;
 
-namespace Motwane_UVSS.Presentation.ViewModels
+namespace Motwane.UVSS.Presentation.ViewModels
 {
     public class VehicleEntryLogVM
     {

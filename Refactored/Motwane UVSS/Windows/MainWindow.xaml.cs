@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Motwane_UVSS.Application.Interfaces.HAL;
-using Motwane_UVSS.Application.Services;
+using Motwane.UVSS.Application.Interfaces.HAL;
+using Motwane.UVSS.Application.Services;
 using System;
 using System.Windows;
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     public partial class MainWindow : Window
     {
@@ -24,8 +24,8 @@ namespace Motwane_UVSS.Presentation.Windows
             _fileSystemService.DeleteAllFiles(@"D:\uvss\underside image");
         }
         public MainWindow() : this(
-    ((Motwane_UVSS.Presentation.App)System.Windows.Application.Current).ServiceProvider.GetService<AuthenticationService>(),
-    ((Motwane_UVSS.Presentation.App)System.Windows.Application.Current).ServiceProvider.GetService<IFileSystemService>())
+    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current).ServiceProvider.GetService<AuthenticationService>(),
+    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current).ServiceProvider.GetService<IFileSystemService>())
         {
         }
         private void Login_btn_Click(object sender, RoutedEventArgs e)
@@ -45,8 +45,8 @@ namespace Motwane_UVSS.Presentation.Windows
                     Self_daignosis self_Daignosis = new Self_daignosis();
                     self_Daignosis.Show();
 
-                    ((Motwane_UVSS.Presentation.App)System.Windows.Application.Current).LoggedInUserID = txtUserID.Text;
-                    ((Motwane_UVSS.Presentation.App)System.Windows.Application.Current).LoggedInUSERTYPE = cmbUserType.Text;
+                    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current).LoggedInUserID = txtUserID.Text;
+                    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current).LoggedInUSERTYPE = cmbUserType.Text;
                 }
                 else
                 {

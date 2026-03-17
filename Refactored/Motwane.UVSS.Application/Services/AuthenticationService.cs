@@ -1,7 +1,7 @@
 ﻿using System;
-using Motwane_UVSS.Application.Interfaces.DAL;
+using Motwane.UVSS.Application.Interfaces.DAL;
 
-namespace Motwane_UVSS.Application.Services
+namespace Motwane.UVSS.Application.Services
 {
     public class AuthenticationService
     {

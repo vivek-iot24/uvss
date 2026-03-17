@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using Motwane_UVSS.Application.Interfaces.DAL;
-using Motwane_UVSS.Domain.Entities;
+using Motwane.UVSS.Application.Interfaces.DAL;
+using Motwane.UVSS.Domain.Entities;
 
-namespace Motwane_UVSS.DAL.Repositories
+namespace Motwane.UVSS.DAL.Repositories
 {
     public class UserRepository : IUserRepository
     {

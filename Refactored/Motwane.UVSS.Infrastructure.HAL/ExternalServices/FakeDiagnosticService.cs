@@ -1,7 +1,7 @@
-﻿using Motwane_UVSS.Application.Interfaces.HAL;
+﻿using Motwane.UVSS.Application.Interfaces.HAL;
 using System.Threading.Tasks;
 
-namespace Motwane_UVSS.HAL.ExternalServices
+namespace Motwane.UVSS.HAL.ExternalServices
 {
     public class FakeDiagnosticService : IDiagnosticService
     {
