@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComputerVision\Class1.cs" />
+    <Compile Include="DTOs\VehicleEntryRequest.cs" />
     <Compile Include="Interfaces\DAL\IUserRepository.cs" />
     <Compile Include="Interfaces\DAL\IVehicleEntryRepository.cs" />
     <Compile Include="Interfaces\DAL\IVideoRepository.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
     <Compile Include="Services\VehicleEntryService.cs" />
+    <Compile Include="UseCases\SaveVehicleEntryUseCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Motwane.UVSS.Domain\Motwane.UVSS.Domain.csproj">

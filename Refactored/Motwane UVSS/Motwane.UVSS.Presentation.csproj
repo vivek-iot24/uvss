@@ -76,7 +76,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-   <ApplicationIcon>Resources\logo-motwane-90x90.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\logo-motwane-90x90.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Azure.Core, Version=1.38.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
@@ -392,6 +392,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Windows\About_screen.xaml.cs">
       <DependentUpon>About_screen.xaml</DependentUpon>
     </Compile>
@@ -554,7 +556,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\Motwane.UVSS.Application\Motwane.UVSS.Application.csproj">
       <Project>{9c6a4c4d-ba0b-43f7-898c-6ff8f1bfbc27}</Project>

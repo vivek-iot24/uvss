@@ -129,7 +129,7 @@
                     <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Margin="10">
                         <Button Content="PASS"
                 x:Name="PASS_BTN"
-                Click="PASS_BTN_Click"
+                Command="{Binding PassCommand}"
                 FontSize="16"
                 Foreground="#007ACC"
                 Background="Transparent"
@@ -140,7 +140,7 @@
                     <Border BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Margin="10">
                         <Button Content="RESET"
                 x:Name="reset_button"
-                Click="reset_button_Click"
+               Command="{Binding HoldCommand}"
                 FontSize="16"
                 Foreground="#007ACC"
                 Background="Transparent"
