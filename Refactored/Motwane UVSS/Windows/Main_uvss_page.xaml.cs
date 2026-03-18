@@ -2230,7 +2230,7 @@ namespace Motwane_UVSS.Presentation.Windows
             {
                 try
                 {
-                    string Anprimage = "D:\\WhatsApp Image 2025-08-29 at 6.44.45 P1M.jpg";
+                    string Anprimage = @"C:\Users\Security\OneDrive - The Motwane Manufacturing Company Pvt. Ltd\Pictures\Screenshots\np1.png";
                     string MainImage = "D:\\PanoramicImage.jpg";
                     string NumberPlateImage = "D:\\Image2.png";
                     string DriverImage = "D:\\WhatsApp Image 2025-08-29 at 6.43.57 PM.jpeg";
@@ -2240,8 +2240,15 @@ namespace Motwane_UVSS.Presentation.Windows
                         btnload = !btnload;
 
                         // This line loads the new image and puts it in the display frame.
-                        Sticked_image.Source = LoadImageUnlocked(MainImage);
-                        Driver_image.Source = LoadImageUnlocked(DriverImage);
+                        //Sticked_image.Source = LoadImageUnlocked(MainImage);
+                        //Driver_image.Source = LoadImageUnlocked(DriverImage);
+                        //Anpr_image.Source = LoadImageUnlocked(Anprimage);
+                        //numberplate_image.Source = LoadImageUnlocked(NumberPlateImage);
+                        // THE FIX: This single line updates the master copy with the new image's data.
+                        UpdateOriginalPixels();
+                        ComputerVisionResult result = _anprEngine.ProcessImage(Anprimage);
+                        NumberPlateImage = result.PlateCropPath;
+                        Numberplate_number_box.Text = result.RegistrationNumber;
                         Anpr_image.Source = LoadImageUnlocked(Anprimage);
                         numberplate_image.Source = LoadImageUnlocked(NumberPlateImage);
 
