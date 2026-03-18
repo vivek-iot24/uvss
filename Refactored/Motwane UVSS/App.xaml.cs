@@ -85,7 +85,7 @@ namespace Motwane.UVSS.Presentation
             // ---------------- WINDOWS ----------------
 
             services.AddSingleton<MainWindow>();
-
+            
             services.AddTransient<Self_daignosis>();
             services.AddTransient<Main_uvss_page>();
             services.AddTransient<AicViewerWindow>();
