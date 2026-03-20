@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Motwane.UVSS.Application.ComputerVision;
 using Motwane.UVSS.Application.Interfaces.DAL;
 using Motwane.UVSS.Application.Interfaces.HAL;
 using Motwane.UVSS.Application.Services;
@@ -7,6 +8,7 @@ using Motwane.UVSS.HAL.Cameras;
 using Motwane.UVSS.HAL.ExternalServices;
 using Motwane.UVSS.HAL.Hardware;
 using Motwane.UVSS.Presentation.Windows;
+using OpenCvSharp.Dnn;
 using System;
 
 
@@ -20,7 +22,7 @@ namespace Motwane.UVSS.Presentation
 
         // Change this to "Real" when hardware is available
         private const string HardwareMode = "Test";
-
+      
         public string LoggedInUserID { get; set; }
         public string LoggedInUSERTYPE { get; set; }
 
@@ -59,8 +61,23 @@ namespace Motwane.UVSS.Presentation
             services.AddSingleton<UserManagementService>();
             services.AddSingleton<AuthenticationService>();
             services.AddSingleton<VehicleEntryService>();
+            services.AddSingleton<AnprEngine>(sp =>
+            {
+                var basePath = AppDomain.CurrentDomain.BaseDirectory;
 
+                var cvDir = System.IO.Path.Combine(basePath,
+                    @"..\..\..\..\Motwane.UVSS.Application\ComputerVision");
 
+                var outputDir = System.IO.Path.Combine(basePath, "AnprOutput");
+
+                return new AnprEngine(
+                    System.IO.Path.Combine(cvDir, "best_plate.onnx"),
+                    System.IO.Path.Combine(cvDir, "encoder.onnx"),
+                    System.IO.Path.Combine(cvDir, "decoder.onnx"),
+                    System.IO.Path.Combine(cvDir, "vocab.json"),
+                    outputDir
+                );
+            });
             // ---------------- HAL SERVICES ----------------
 
             services.AddSingleton<IFileSystemService, FileSystemService>();

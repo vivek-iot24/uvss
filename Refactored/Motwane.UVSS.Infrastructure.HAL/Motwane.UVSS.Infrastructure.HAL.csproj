@@ -7,8 +7,8 @@
     <ProjectGuid>{0A29E0F2-F605-4088-BC6A-BF8EAC416732}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Motwane.UVSS.HAL</RootNamespace>
-    <AssemblyName>Motwane.UVSS.HAL</AssemblyName>
+    <RootNamespace>Motwane.UVSS.Infrastructure.HAL</RootNamespace>
+    <AssemblyName>Motwane.UVSS.Infrastructure.HAL</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -62,9 +62,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SpinnakerNETd_v140, Version=4.0.0.116, Culture=neutral, PublicKeyToken=e3ed2bf1f221d241, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\BackupCode_Original_recevied\Protocal_system_code_1_tested_reaalased\UVSS v01.1\UVSS v01.1\Motwane UVSS\Motwane UVSS\bin\x64\Debug\SpinnakerNETd_v140.dll</HintPath>
+    <Reference Include="SpinnakerNETd_v140">
+      <HintPath>C:\BackupCode_Original_recevied\Protocal_system_code_1_tested_reaalased\UVSS v01.1\UVSS v01.1\Motwane UVSS\Motwane UVSS\bin\x64\Debug\SpinnakerNETd_v140.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">

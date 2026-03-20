@@ -38,6 +38,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Motwane.UVSS.Application.ComputerVision;
 using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using MessageBox = System.Windows.MessageBox;
@@ -52,6 +53,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
         // private BitmapSource _originalBitmap;   // THIS NEW VARIABLE will hold the clean, original version of the current image.
         private readonly ICameraService _cameraService;
+        private readonly AnprEngine _anprEngine;
         private DispatcherTimer timer;
         private readonly VehicleEntryService _vehicleEntryService;
         private Underside_cam_class Underside_cameraHandler;
@@ -114,13 +116,13 @@ namespace Motwane.UVSS.Presentation.Windows
 
         public Main_uvss_page(
      VehicleEntryService vehicleEntryService,
-     ICameraService cameraService)
+     ICameraService cameraService,AnprEngine anprEngine)
         {
             InitializeComponent();
 
             _vehicleEntryService = vehicleEntryService;
             _cameraService = cameraService;
-
+            _anprEngine = anprEngine;
             StartClock();
 
             _cameraService.Initialize();
@@ -134,6 +136,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
             Core.Initialize();
             _libVLC = new LibVLC();
+            
         }
 
         private void StartClock()
@@ -2072,7 +2075,7 @@ namespace Motwane.UVSS.Presentation.Windows
             {
                 try
                 {
-                    string Anprimage = "D:\\WhatsApp Image 2025-08-29 at 6.44.45 P1M.jpg";
+                    string Anprimage = @"D:\uvss_images\ANPR\MH41V 7911_10.png";
                     string MainImage = "D:\\PanoramicImage.jpg";
                     string NumberPlateImage = "D:\\Image2.png";
                     string DriverImage = "D:\\WhatsApp Image 2025-08-29 at 6.43.57 PM.jpeg";
@@ -2082,8 +2085,15 @@ namespace Motwane.UVSS.Presentation.Windows
                         btnload = !btnload;
 
                         // This line loads the new image and puts it in the display frame.
-                        Sticked_image.Source = LoadImageUnlocked(MainImage);
-                        Driver_image.Source = LoadImageUnlocked(DriverImage);
+                        //Sticked_image.Source = LoadImageUnlocked(MainImage);
+                        //Driver_image.Source = LoadImageUnlocked(DriverImage);
+                        //Anpr_image.Source = LoadImageUnlocked(Anprimage);
+                        //numberplate_image.Source = LoadImageUnlocked(NumberPlateImage);
+                        // THE FIX: This single line updates the master copy with the new image's data.
+                        UpdateOriginalPixels();
+                        ComputerVisionResult result = _anprEngine.ProcessImage(Anprimage);
+                        NumberPlateImage = result.PlateCropPath;
+                        Numberplate_number_box.Text = result.RegistrationNumber;
                         Anpr_image.Source = LoadImageUnlocked(Anprimage);
                         numberplate_image.Source = LoadImageUnlocked(NumberPlateImage);
 
