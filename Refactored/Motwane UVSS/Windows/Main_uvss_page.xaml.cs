@@ -2075,7 +2075,7 @@ namespace Motwane.UVSS.Presentation.Windows
             {
                 try
                 {
-                    string Anprimage = "D:\\WhatsApp Image 2025-08-29 at 6.44.45 P1M.jpg";
+                    string Anprimage = @"C:\\Users\\Security\\Downloads\\uvss_images\\uvss_images\\ANPR\\MH41V 7911_28.png";
                     string MainImage = "D:\\PanoramicImage.jpg";
                     string NumberPlateImage = "D:\\Image2.png";
                     string DriverImage = "D:\\WhatsApp Image 2025-08-29 at 6.43.57 PM.jpeg";

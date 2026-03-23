@@ -18,7 +18,7 @@ namespace Motwane.UVSS.Presentation
 {
     public partial class App : System.Windows.Application
     {
-        private string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;";
+        private string connectionString = "Server=SEC-VIVEKS\\SQLEXPRESS;Database=UVSS_USER_DETAILS;Integrated Security=True;";
 
         // Change this to "Real" when hardware is available
         private const string HardwareMode = "Test";
@@ -65,16 +65,22 @@ namespace Motwane.UVSS.Presentation
             {
                 var basePath = AppDomain.CurrentDomain.BaseDirectory;
 
+                //var cvDir = System.IO.Path.Combine(basePath,
+                //    @"..\..\..\..\Motwane.UVSS.Application\ComputerVision");
                 var cvDir = System.IO.Path.Combine(basePath,
                     @"..\..\..\..\Motwane.UVSS.Application\ComputerVision");
 
                 var outputDir = System.IO.Path.Combine(basePath, "AnprOutput");
 
                 return new AnprEngine(
-                    System.IO.Path.Combine(cvDir, "best_plate.onnx"),
-                    System.IO.Path.Combine(cvDir, "encoder.onnx"),
-                    System.IO.Path.Combine(cvDir, "decoder.onnx"),
-                    System.IO.Path.Combine(cvDir, "vocab.json"),
+                    //System.IO.Path.Combine(cvDir, "best_plate.onnx"),
+                    //System.IO.Path.Combine(cvDir, "encoder.onnx"),
+                    //System.IO.Path.Combine(cvDir, "decoder.onnx"),
+                    //System.IO.Path.Combine(cvDir, "vocab.json"),
+                    @"C:\Users\Security\Documents\IPMsg\AutoSave\best_plate.onnx",
+                    @"C:\Users\Security\Documents\IPMsg\AutoSave\encoder.onnx",
+                    @"C:\Users\Security\Downloads\decoder.onnx",
+                    @"C:\Users\Security\vivek\UVSS\uvss\Refactored\Motwane.UVSS.Application\ComputerVision\vocab.json",
                     outputDir
                 );
             });
