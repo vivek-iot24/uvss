@@ -6,10 +6,10 @@ using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Motwane_UVSS.Application.Services;
-using Motwane_UVSS.Domain.Entities;
+using Motwane.UVSS.Application.Services;
+using Motwane.UVSS.Domain.Entities;
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     public partial class User_management_tab : Window
     {

@@ -1,8 +1,8 @@
 ﻿using System.Data;
-using Motwane_UVSS.Application.Interfaces.DAL;
-using Motwane_UVSS.Domain.Entities;
+using Motwane.UVSS.Application.Interfaces.DAL;
+using Motwane.UVSS.Domain.Entities;
 
-namespace Motwane_UVSS.Application.Services
+namespace Motwane.UVSS.Application.Services
 {
     public class UserManagementService
     {

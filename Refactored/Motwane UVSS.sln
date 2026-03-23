@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motwane.UVSS.Application", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motwane.UVSS.Domain", "Motwane.UVSS.Domain\Motwane.UVSS.Domain.csproj", "{A045C2BA-FC6F-4841-8FF2-9CD1EDD24AA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motwane.UVSS.DAL", "Motwane.UVSS.Infrastructure.DAL\Motwane.UVSS.DAL.csproj", "{F604EA98-882C-455A-9E39-89CCAF2BB8C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motwane.UVSS.Infrastructure.DAL", "Motwane.UVSS.Infrastructure.DAL\Motwane.UVSS.Infrastructure.DAL.csproj", "{F604EA98-882C-455A-9E39-89CCAF2BB8C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motwane.UVSS.HAL", "Motwane.UVSS.Infrastructure.HAL\Motwane.UVSS.HAL.csproj", "{0A29E0F2-F605-4088-BC6A-BF8EAC416732}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motwane.UVSS.Infrastructure.HAL", "Motwane.UVSS.Infrastructure.HAL\Motwane.UVSS.Infrastructure.HAL.csproj", "{0A29E0F2-F605-4088-BC6A-BF8EAC416732}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

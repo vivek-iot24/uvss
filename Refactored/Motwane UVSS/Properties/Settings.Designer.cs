@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Motwane_UVSS.Properties
+namespace Motwane.UVSS.Properties
 {
 
 

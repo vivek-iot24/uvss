@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Motwane_UVSS.Application.Interfaces.HAL
+namespace Motwane.UVSS.Application.Interfaces.HAL
 {
     public interface IDiagnosticService
     {

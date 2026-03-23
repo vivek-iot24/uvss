@@ -1,11 +1,11 @@
-﻿using Motwane_UVSS.Application.Interfaces.HAL;
+﻿using Motwane.UVSS.Application.Interfaces.HAL;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
-using Motwane_UVSS.Presentation.Windows;
+using Motwane.UVSS.Presentation.Windows;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     public partial class Self_daignosis : Window
     {
@@ -25,7 +25,7 @@ namespace Motwane_UVSS.Presentation.Windows
 
         // Compatibility constructor (keeps existing code working)
         public Self_daignosis() : this(
-            ((Motwane_UVSS.Presentation.App)System.Windows.Application.Current)
+            ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
             .ServiceProvider
             .GetService(typeof(IDiagnosticService)) as IDiagnosticService)
         {
@@ -87,7 +87,7 @@ namespace Motwane_UVSS.Presentation.Windows
         public void method_to_go_next_page()
         {
             var main_Uvss_Page =
-                ((Motwane_UVSS.Presentation.App )System.Windows. Application.Current)
+                ((Motwane.UVSS.Presentation.App )System.Windows. Application.Current)
                 .ServiceProvider .GetRequiredService<Main_uvss_page>();
 
           

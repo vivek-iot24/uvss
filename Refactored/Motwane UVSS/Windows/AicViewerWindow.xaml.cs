@@ -1,5 +1,5 @@
 ﻿using LibVLCSharp.Shared;
-using Motwane_UVSS.Application.Interfaces.HAL;
+using Motwane.UVSS.Application.Interfaces.HAL;
 using NAudio.CoreAudioApi;
 using System;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WMPLib;
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     public partial class AicViewerWindow : Window
     {

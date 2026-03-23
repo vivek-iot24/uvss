@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5B3DD28F-20BF-4C13-9345-BF39E2EB54EF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Motwane_UVSS</RootNamespace>
+    <RootNamespace>Motwane.UVSS</RootNamespace>
     <AssemblyName>Motwane UVSS</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -76,7 +76,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logo-motwane-90x90.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\logo-motwane-90x90.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Azure.Core, Version=1.38.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
@@ -214,6 +214,9 @@
     <Reference Include="OpenTK, Version=3.3.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.3.3\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK.GLControl, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.GLControl.3.0.0\lib\net20\OpenTK.GLControl.dll</HintPath>
+    </Reference>
     <Reference Include="PdfSharp, Version=6.1.1.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>..\packages\PDFsharp.6.1.1\lib\netstandard2.0\PdfSharp.dll</HintPath>
     </Reference>
@@ -238,8 +241,8 @@
     <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
     </Reference>
-    <Reference Include="SpinnakerNET_v140, Version=4.0.0.116, Culture=neutral, PublicKeyToken=e3ed2bf1f221d241, processorArchitecture=AMD64">
-      <HintPath>..\packages\SpinnakerNET_v140.4.0.0.116\lib\net40\SpinnakerNET_v140.dll</HintPath>
+    <Reference Include="SpinnakerNETd_v140">
+      <HintPath>C:\BackupCode_Original_recevied\Protocal_system_code_1_tested_reaalased\UVSS v01.1\UVSS v01.1\Motwane UVSS\Motwane UVSS\bin\x64\Debug\SpinnakerNETd_v140.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -391,6 +394,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Windows\About_screen.xaml.cs">
       <DependentUpon>About_screen.xaml</DependentUpon>
     </Compile>
@@ -554,9 +559,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo-motwane-90x90.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Motwane.UVSS.Application\Motwane.UVSS.Application.csproj">
       <Project>{9c6a4c4d-ba0b-43f7-898c-6ff8f1bfbc27}</Project>
       <Name>Motwane.UVSS.Application</Name>
@@ -565,14 +567,19 @@
       <Project>{a045c2ba-fc6f-4841-8ff2-9cd1edd24aa7}</Project>
       <Name>Motwane.UVSS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Motwane.UVSS.Infrastructure.DAL\Motwane.UVSS.DAL.csproj">
+    <ProjectReference Include="..\Motwane.UVSS.Infrastructure.DAL\Motwane.UVSS.Infrastructure.DAL.csproj">
       <Project>{f604ea98-882c-455a-9e39-89ccaf2bb8c1}</Project>
-      <Name>Motwane.UVSS.DAL</Name>
+      <Name>Motwane.UVSS.Infrastructure.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Motwane.UVSS.Infrastructure.HAL\Motwane.UVSS.HAL.csproj">
+    <ProjectReference Include="..\Motwane.UVSS.Infrastructure.HAL\Motwane.UVSS.Infrastructure.HAL.csproj">
       <Project>{0a29e0f2-f605-4088-bc6a-bf8eac416732}</Project>
-      <Name>Motwane.UVSS.HAL</Name>
+      <Name>Motwane.UVSS.Infrastructure.HAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\logo-motwane-90x90.ico" />
+    <Resource Include="Resources\MUVSS.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Data.SqlClient.SNI.6.0.2\build\net462\Microsoft.Data.SqlClient.SNI.targets" Condition="Exists('..\packages\Microsoft.Data.SqlClient.SNI.6.0.2\build\net462\Microsoft.Data.SqlClient.SNI.targets')" />
@@ -583,8 +590,8 @@
     <Error Condition="!Exists('..\packages\Microsoft.Data.SqlClient.SNI.6.0.2\build\net462\Microsoft.Data.SqlClient.SNI.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Data.SqlClient.SNI.6.0.2\build\net462\Microsoft.Data.SqlClient.SNI.targets'))" />
     <Error Condition="!Exists('..\packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets'))" />
     <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
-    <Error Condition="!Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props'))" />
     <Error Condition="!Exists('..\packages\Emgu.CV.runtime.windows.4.4.0.4099\build\Emgu.CV.runtime.windows.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Emgu.CV.runtime.windows.4.4.0.4099\build\Emgu.CV.runtime.windows.targets'))" />
+    <Error Condition="!Exists('..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCvSharp4.runtime.win.4.11.0.20250507\build\net48\OpenCvSharp4.runtime.win.props'))" />
   </Target>
   <Import Project="..\packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets" Condition="Exists('..\packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets')" />
   <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />

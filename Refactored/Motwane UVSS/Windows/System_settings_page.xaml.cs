@@ -14,7 +14,7 @@ using System.Windows.Threading;
 using WMPLib;
 using VLCMediaPlayer = LibVLCSharp.Shared.MediaPlayer;
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     /// <summary>
     /// Interaction logic for System_settings_page.xaml

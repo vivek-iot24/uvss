@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
-using Motwane_UVSS.Domain.Entities;
+using Motwane.UVSS.Domain.Entities;
 
-namespace Motwane_UVSS.Application.Interfaces.DAL
+namespace Motwane.UVSS.Application.Interfaces.DAL
 {
     public interface IUserRepository
     {

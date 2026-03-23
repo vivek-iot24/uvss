@@ -1,8 +1,8 @@
 ﻿using ClosedXML.Excel;
 using Emgu.CV.XImgproc;
 using Microsoft.Win32;
-using Motwane_UVSS.Application.Services;
-using Motwane_UVSS.Presentation.ViewModels;
+using Motwane.UVSS.Application.Services;
+using Motwane.UVSS.Presentation.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     public partial class Report_management_tab : Window
     {
@@ -27,9 +27,10 @@ namespace Motwane_UVSS.Presentation.Windows
         public Report_management_tab(VehicleEntryService service)
         {
             InitializeComponent();
-
+            filterTypeComboBox.ItemsSource = Enum.GetValues(typeof(DateFilterType));
+            filterTypeComboBox.SelectedItem = DateFilterType.All;
             _service = service;
-
+            LoadUsernames();
             dataGrid.ItemsSource = VehicleEntries;
 
             LoadData();
@@ -43,6 +44,12 @@ namespace Motwane_UVSS.Presentation.Windows
             DateTime from = fromDatePicker.SelectedDate ?? DateTime.Now;
             DateTime to = toDatePicker.SelectedDate ?? DateTime.Now;
             return (from, to);
+        }
+        private void LoadUsernames()
+        {
+            var users = _service.GetDistinctUsernames();
+
+            usernameComboBox.ItemsSource = users;
         }
         private async void ReloadGridAsync()
         {
@@ -97,7 +104,7 @@ namespace Motwane_UVSS.Presentation.Windows
             numberplateTextBox.Clear();
 
             VehicleEntries.Clear();
-
+           
             ReloadGridAsync();
         }
 
@@ -117,6 +124,21 @@ namespace Motwane_UVSS.Presentation.Windows
         {
             fromDatePicker.Visibility = Visibility.Collapsed;
             toDatePicker.Visibility = Visibility.Collapsed;
+            fromTextBlock.Visibility = Visibility.Collapsed;
+            toTextBlock.Visibility = Visibility.Collapsed;
+            DateFilterType type = (DateFilterType)filterTypeComboBox.SelectedItem;
+            if (type == DateFilterType.SpecificDate)
+            {
+                fromDatePicker.Visibility = Visibility.Visible;
+                fromTextBlock.Visibility = Visibility.Visible;
+            }
+            if (type == DateFilterType.CustomRange)
+            {
+                fromDatePicker.Visibility = Visibility.Visible;
+                toDatePicker.Visibility = Visibility.Visible;
+                fromTextBlock.Visibility = Visibility.Visible;
+                toTextBlock.Visibility = Visibility.Visible;
+            }
         }
         private void LoadData()
         {

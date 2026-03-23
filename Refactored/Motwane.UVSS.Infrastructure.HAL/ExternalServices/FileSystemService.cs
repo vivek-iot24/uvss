@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Motwane_UVSS.Application.Interfaces.HAL;
+using Motwane.UVSS.Application.Interfaces.HAL;
 
-namespace Motwane_UVSS.HAL.ExternalServices
+namespace Motwane.UVSS.HAL.ExternalServices
 {
     public class FileSystemService : IFileSystemService
     {

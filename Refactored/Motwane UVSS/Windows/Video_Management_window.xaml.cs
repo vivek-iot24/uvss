@@ -1,11 +1,11 @@
-﻿using Motwane_UVSS.Application.Interfaces.DAL;
-using Motwane_UVSS.Domain.Entities;
+﻿using Motwane.UVSS.Application.Interfaces.DAL;
+using Motwane.UVSS.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Motwane_UVSS.Presentation.Windows
+namespace Motwane.UVSS.Presentation.Windows
 {
     public partial class Video_Management_window : Window
     {

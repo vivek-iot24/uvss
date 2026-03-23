@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace Motwane_UVSS
+namespace Motwane.UVSS
 {
     public class Underside_cam_class1
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Motwane_UVSS.Domain.Entities
+namespace Motwane.UVSS.Domain.Entities
 {
     public class VideoRecord
     {

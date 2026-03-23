@@ -1,8 +1,8 @@
-﻿using Motwane_UVSS.Domain.Entities;
+﻿using Motwane.UVSS.Domain.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace Motwane_UVSS.Application.Interfaces.DAL
+namespace Motwane.UVSS.Application.Interfaces.DAL
 {
     public interface IVehicleEntryRepository
     {
