@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Motwane.UVSS.Application.Interfaces.HAL;
 
-namespace Motwane.UVSS.HAL.ExternalServices
+namespace Motwane.UVSS.Infrastructure.HAL.ExternalServices
 {
     public class FileSystemService : IFileSystemService
     {

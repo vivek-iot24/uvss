@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Motwane.UVSS.Infrastructure.HAL.Services
+namespace Motwane.UVSS.Infrastructure.Infrastructure.HAl.Services
 {
     public interface IImageProcessingService
     {

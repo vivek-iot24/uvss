@@ -6,6 +6,7 @@ using Microsoft.Win32; // ADDED THIS LINE FOR THE FILE DIALOG
 using Motwane.UVSS.Application.Interfaces.HAL;
 using Motwane.UVSS.Application.Services;
 using Motwane.UVSS.HAL;
+using System.Windows.Controls.Primitives;
 using Motwane.UVSS.Presentation;
 using Motwane.UVSS.Presentation.ViewModels;
 using Motwane.UVSS.Presentation.Windows;
@@ -873,30 +874,38 @@ namespace Motwane.UVSS.Presentation.Windows
             vm.PassCommand.Execute(null);
         }
 
-        private void HOLD_BTN_Click(object sender, RoutedEventArgs e)
-        {
-            var vm = (MainViewModel)DataContext;
-            vm.HoldCommand.Execute(null);
+        private string selectedHoldReason = ""; private void HOLD_BTN_Click(object sender, RoutedEventArgs e) { HoldPopup.IsOpen = true; }
+        private void HoldOption_Click(object sender, RoutedEventArgs e)
+        { var btn = sender as ToggleButton; selectedHoldReason = btn.Content.ToString(); 
         }
+        private void ApplyHold_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(selectedHoldReason))
+            { MessageBox.Show("Select hold reason"); return; }
+            var vm = (MainViewModel)DataContext; vm.HoldCommand.Execute(selectedHoldReason);
+            HoldPopup.IsOpen = false;
+        }
+       
+            // 🔴 crash likely here HoldPopup.IsOpen = false; }
 
         //private byte[] ImageToByteArray(System.Windows.Controls.Image imageControl)
         //{
         //    if (imageControl.Source == null)
         //        return null;
 
-        //    var bitmapSource = imageControl.Source as BitmapSource;
+            //    var bitmapSource = imageControl.Source as BitmapSource;
 
-        //    using (var stream = new MemoryStream())
-        //    {
-        //        BitmapEncoder encoder = new PngBitmapEncoder();
-        //        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-        //        encoder.Save(stream);
-        //        return stream.ToArray();
-        //    }
-        //}
+            //    using (var stream = new MemoryStream())
+            //    {
+            //        BitmapEncoder encoder = new PngBitmapEncoder();
+            //        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+            //        encoder.Save(stream);
+            //        return stream.ToArray();
+            //    }
+            //}
 
 
-      
+
         private void CreatePanoramicImage_2(string[] imageFiles)
         {
             var firstImage = new Bitmap(imageFiles[0]);

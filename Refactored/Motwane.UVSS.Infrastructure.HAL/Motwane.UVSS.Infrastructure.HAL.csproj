@@ -7,8 +7,8 @@
     <ProjectGuid>{0A29E0F2-F605-4088-BC6A-BF8EAC416732}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Motwane.UVSS.HAL</RootNamespace>
-    <AssemblyName>Motwane.UVSS.HAL</AssemblyName>
+    <RootNamespace>Motwane.UVSS.Infrastructure.HAL</RootNamespace>
+    <AssemblyName>Motwane.UVSS.Infrastructure.HAL</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

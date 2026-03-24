@@ -1,7 +1,7 @@
 ﻿using Motwane.UVSS.Application.DTOs;
 using Motwane.UVSS.Application.UseCases;
 using Motwane.UVSS.HAL;
-using Motwane.UVSS.Infrastructure.HAL.Services;
+using Motwane.UVSS.Infrastructure.Infrastructure.HAl.Services;
 using Motwane.UVSS.Presentation.Commands;
 using System;
 using System.ComponentModel;

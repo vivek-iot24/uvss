@@ -8,7 +8,7 @@ using System.IO.Ports;
 using System.Net.NetworkInformation;
 
 
-namespace Motwane.UVSS.HAL.Hardware
+namespace Motwane.UVSS.Infrastructure.HAL.Hardware
 {
     public class DiagnosticService : IDiagnosticService
     {

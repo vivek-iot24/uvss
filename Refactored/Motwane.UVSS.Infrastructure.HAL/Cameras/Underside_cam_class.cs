@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using SpinnakerNET.GenApi;
 using SpinnakerNET;
 
-namespace Motwane.UVSS.HAL.Cameras
+namespace Motwane.UVSS.Infrastructure.HAL.Cameras
 {
     public class Underside_cam_class
     {

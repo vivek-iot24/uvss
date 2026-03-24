@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 
-namespace Motwane.UVSS.HAL.Sensors
+namespace Motwane.UVSS.Infrastructure.HAL.Sensors
 {
     public class SerialSensorService
     {

@@ -9,7 +9,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using WMPLib;
 
-namespace Motwane.UVSS.HAL.ExternalServices
+namespace Motwane.UVSS.Infrastructure.HAL.ExternalServices
 {
     public class AicComparisonService : IAicComparisonService
     {
