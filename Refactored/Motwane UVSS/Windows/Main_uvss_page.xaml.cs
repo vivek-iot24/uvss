@@ -3,12 +3,10 @@ using LibVLCSharp.Shared;
 using LibVLCSharp.WPF;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32; // ADDED THIS LINE FOR THE FILE DIALOG
-using Motwane.UVSS.Application.Interfaces.HAL;
+using Motwane.UVSS;
+using Motwane.UVSS.Application.ComputerVision;
 using Motwane.UVSS.Application.Services;
-using Motwane.UVSS.HAL;
-using System.Windows.Controls.Primitives;
 using Motwane.UVSS.Presentation;
-using Motwane.UVSS.Presentation.ViewModels;
 using Motwane.UVSS.Presentation.Windows;
 using Onvif.Core.Client;
 using Onvif.Core.Client.Media;
@@ -39,10 +37,11 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Motwane.UVSS.Application.ComputerVision;
 using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using MessageBox = System.Windows.MessageBox;
+
 
 namespace Motwane.UVSS.Presentation.Windows
 {
@@ -53,16 +52,16 @@ namespace Motwane.UVSS.Presentation.Windows
     {
 
         // private BitmapSource _originalBitmap;   // THIS NEW VARIABLE will hold the clean, original version of the current image.
-        private readonly ICameraService _cameraService;
-        private readonly AnprEngine _anprEngine;
+
         private DispatcherTimer timer;
+        private readonly AnprEngine _anprEngine;
         private readonly VehicleEntryService _vehicleEntryService;
         private Underside_cam_class Underside_cameraHandler;
-        private readonly ISensorService _sensorService;
+
         #region using this to communicate with ir sensor
 
-
-     
+        private SerialPort serialPort;
+        private string lastState = "0";
 
         #endregion
 
@@ -115,19 +114,25 @@ namespace Motwane.UVSS.Presentation.Windows
         private readonly VehicleEntryService _vehicleService;
         private volatile bool isRecognitionCompleted = false;
 
-        public Main_uvss_page(
-     VehicleEntryService vehicleEntryService,
-     ICameraService cameraService,AnprEngine anprEngine)
+        public Main_uvss_page(VehicleEntryService vehicleEntryService, AnprEngine anprEngine)
         {
-            InitializeComponent();
 
+            InitializeComponent();
+            _vehicleService = ((App)System.Windows.Application.Current)
+     .ServiceProvider
+     .GetRequiredService<VehicleEntryService>();
             _vehicleEntryService = vehicleEntryService;
-            _cameraService = cameraService;
             _anprEngine = anprEngine;
+
             StartClock();
 
-            _cameraService.Initialize();
-            _cameraService.Start();
+            Underside_cameraHandler = new Underside_cam_class();
+            string initResult = Underside_cameraHandler.InitCamera();
+
+            if (initResult != null)
+            {
+                MessageBox.Show(initResult);
+            }
 
             foreach (var ip in CameraIPs)
             {
@@ -137,7 +142,6 @@ namespace Motwane.UVSS.Presentation.Windows
 
             Core.Initialize();
             _libVLC = new LibVLC();
-            
         }
 
         private void StartClock()
@@ -164,7 +168,8 @@ namespace Motwane.UVSS.Presentation.Windows
             //this.Close();
 
 
-         
+            if (serialPort != null && serialPort.IsOpen)
+                serialPort.Close();
         }
 
 
@@ -197,7 +202,30 @@ namespace Motwane.UVSS.Presentation.Windows
             username_textbox.Text = ((App)System.Windows.Application.Current).LoggedInUserID;
             //usertype_textbox.Text = ((App)System.Windows.Application.Current).LoggedInUSERTYPE;
 
-           
+            try
+            {
+                serialPort = new SerialPort
+                {
+                    PortName = "COM3",
+                    BaudRate = 9600,
+                    Parity = Parity.None,
+                    DataBits = 8,
+                    StopBits = StopBits.One,
+                    Handshake = Handshake.None,
+                    Encoding = Encoding.ASCII
+                };
+
+                serialPort.DataReceived += SerialPort_DataReceived;
+                serialPort.Open();
+
+
+
+                //ReceivedDataTextBlock.Text = "Listening...";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Serial communication failed: {ex.Message}", "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             //// ADD THIS LINE: Capture the initial hardcoded image as our first "master copy".
             //if (Sticked_image.Source != null)
@@ -222,130 +250,149 @@ namespace Motwane.UVSS.Presentation.Windows
 
         }
 
-        private string lastState = "0";
-
-        private void HandleSensorSignal(string incoming)
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            try
             {
-                if (incoming == "1" && lastState != "1")
+                string incoming = serialPort.ReadExisting().Trim();
+
+                if (!string.IsNullOrEmpty(incoming))
                 {
-                    lastState = "1";
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        if (incoming == "1" && lastState != "1")
+                        {
+                            lastState = "1";
+                            sensor_display.Fill = System.Windows.Media.Brushes.Red;
+                            HOLD_BTN.IsEnabled = false;
+                            PASS_BTN.IsEnabled = false;
+                            reset_button.IsEnabled = false;
+                            menu_button.IsEnabled = false;
 
-                    sensor_display.Fill = System.Windows.Media.Brushes.Red;
-                    HOLD_BTN.IsEnabled = false;
-                    PASS_BTN.IsEnabled = false;
+                            showImage = true;
+                            //Diver_camera_image_trigger();
+                            //anpr_camera_image_trigger();
+                            anpr_imageCaptureSnapshotAndShow();
+                            driver_imageCaptureSnapshotAndShow();
+                            Dispatcher.InvokeAsync(async () => await StartRecordingAsync());
+                            Underside_cameraHandler.StartAcquisition();
 
-                    CaptureAnpr();
-                    CaptureDriver();
 
-                    _ = StartRecordingAsync();
-                    Underside_cameraHandler.StartAcquisition();
+                        }
+                        else if (incoming == "0" && lastState != "0")
+                        {
+                            lastState = "0";
+                            sensor_display.Fill = System.Windows.Media.Brushes.Green;
+                            HOLD_BTN.IsEnabled = true;
+                            PASS_BTN.IsEnabled = true;
+                            reset_button.IsEnabled = true;
+                            menu_button.IsEnabled = true;
+
+
+                            Dispatcher.InvokeAsync(() => StopAllRecordingsSafe());
+                            Underside_cameraHandler.StopAcquisition();
+                            fgyh();
+                        }
+                    });
                 }
-                else if (incoming == "0" && lastState != "0")
-                {
-                    lastState = "0";
-
-                    sensor_display.Fill = System.Windows.Media.Brushes.Green;
-                    HOLD_BTN.IsEnabled = true;
-                    PASS_BTN.IsEnabled = true;
-
-                    StopAllRecordingsSafe();
-                    Underside_cameraHandler.StopAcquisition();
-                }
-            });
+            }
+            catch (Exception ex)
+            {
+                Dispatcher.Invoke(() =>
+                    MessageBox.Show($"Serial error: {ex.Message}", "SerialPort", MessageBoxButton.OK, MessageBoxImage.Error));
+            }
         }
 
-        //private async void anpr_imageCaptureSnapshotAndShow()
-        //{
-        //    try
-        //    {
-        //        var handler = new HttpClientHandler
-        //        {
-        //            Credentials = new NetworkCredential(username, password),
-        //            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true // For HTTPS without valid cert
-        //        };
+        private async void anpr_imageCaptureSnapshotAndShow()
+        {
+            try
+            {
+                var handler = new HttpClientHandler
+                {
+                    Credentials = new NetworkCredential(username, password),
+                    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true // For HTTPS without valid cert
+                };
 
-        //        var client = new HttpClient(handler);
-        //        var response = await client.GetAsync(anprsnapshotUrl);
+                var client = new HttpClient(handler);
+                var response = await client.GetAsync(anprsnapshotUrl);
 
-        //        if (!response.IsSuccessStatusCode)
-        //        {
-        //            MessageBox.Show($"Failed to capture image: {response.StatusCode}");
-        //            return;
-        //        }
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Failed to capture image: {response.StatusCode}");
+                    return;
+                }
 
-        //        var imageBytes = await response.Content.ReadAsByteArrayAsync();
+                var imageBytes = await response.Content.ReadAsByteArrayAsync();
 
-        //        // Load image into WPF Image control
-        //        var ms = new MemoryStream(imageBytes);
-        //        var bitmap = new BitmapImage();
-        //        bitmap.BeginInit();
-        //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-        //        bitmap.StreamSource = ms;
-        //        bitmap.EndInit();
-        //        bitmap.Freeze();
+                // Load image into WPF Image control
+                var ms = new MemoryStream(imageBytes);
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = ms;
+                bitmap.EndInit();
+                bitmap.Freeze();
 
-        //        Anpr_image.Source = bitmap; // Assuming you have an Image control named imgSnapshot
+                Anpr_image.Source = bitmap; // Assuming you have an Image control named imgSnapshot
 
-        //        StartNumberPlateRecognitionThread();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error: " + ex.Message);
-        //    }
-        //}
+                StartNumberPlateRecognitionThread();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
 
-        //private async void driver_imageCaptureSnapshotAndShow()
-        //{
-        //    try
-        //    {
+        private async void driver_imageCaptureSnapshotAndShow()
+        {
+            try
+            {
 
-        //        //var handler = new HttpClientHandler
-        //        //{
-        //        //    Credentials = new NetworkCredential("admin", "sefthS$2702")
-        //        //};
+                //var handler = new HttpClientHandler
+                //{
+                //    Credentials = new NetworkCredential("admin", "sefthS$2702")
+                //};
 
-        //        // var client = new HttpClient(handler);
-        //        //var response = await client.GetAsync("http://192.168.4.57/cpapi/snapshot.cgi");
-
-
+                // var client = new HttpClient(handler);
+                //var response = await client.GetAsync("http://192.168.4.57/cpapi/snapshot.cgi");
 
 
-        //        var handler = new HttpClientHandler
-        //        {
-        //            Credentials = new NetworkCredential(username, password),
-        //            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true // For HTTPS without valid cert
-        //        };
 
-        //        var client = new HttpClient(handler);
 
-        //        var response = await client.GetAsync(driversnapshotUrl);
+                var handler = new HttpClientHandler
+                {
+                    Credentials = new NetworkCredential(username, password),
+                    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true // For HTTPS without valid cert
+                };
 
-        //        if (!response.IsSuccessStatusCode)
-        //        {
-        //            MessageBox.Show($"Failed to capture image: {response.StatusCode}");
-        //            return;
-        //        }
+                var client = new HttpClient(handler);
 
-        //        var imageBytes = await response.Content.ReadAsByteArrayAsync();
+                var response = await client.GetAsync(driversnapshotUrl);
 
-        //        // Load image into WPF Image control
-        //        var ms = new MemoryStream(imageBytes);
-        //        var bitmap = new BitmapImage();
-        //        bitmap.BeginInit();
-        //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-        //        bitmap.StreamSource = ms;
-        //        bitmap.EndInit();
-        //        bitmap.Freeze();
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Failed to capture image: {response.StatusCode}");
+                    return;
+                }
 
-        //        Driver_image.Source = bitmap; // Assuming you have an Image control named imgSnapshot
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error: " + ex.Message);
-        //    }
-        //}
+                var imageBytes = await response.Content.ReadAsByteArrayAsync();
+
+                // Load image into WPF Image control
+                var ms = new MemoryStream(imageBytes);
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = ms;
+                bitmap.EndInit();
+                bitmap.Freeze();
+
+                Driver_image.Source = bitmap; // Assuming you have an Image control named imgSnapshot
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
 
         private void ContrastSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -865,47 +912,168 @@ namespace Motwane.UVSS.Presentation.Windows
             }
         }
 
-     
+
         DateTime now = DateTime.Now;
 
         private void PASS_BTN_Click(object sender, RoutedEventArgs e)
         {
-            var vm = (MainViewModel)DataContext;
-            vm.PassCommand.Execute(null);
+            string connectionString = MainWindow.connectionString;
+
+            string username = username_textbox.Text;
+            string status = "PASS";
+            string remark = selectedRemark;
+            string numberplate = Numberplate_number_box.Text;
+
+            DateTime entryDate = now.Date;
+            TimeSpan entryTime = new TimeSpan(now.Hour, now.Minute, now.Second, 0);
+
+            byte[] undersideImage = ImageToByteArray(Sticked_image);
+            byte[] driverCamImage = ImageToByteArray(Driver_image);
+            byte[] anprImage = ImageToByteArray(Anpr_image);
+
+            try
+            {
+                string lastRemark = _vehicleEntryService.GetLastVehicleRemark(numberplate);
+
+                if (lastRemark != null && lastRemark != "Normal")
+                {
+                    if (System.Windows.Forms.MessageBox.Show(
+                        $"The Registered Vehicle no is {lastRemark}",
+                        "Will You allow this Operation",
+                        MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+            }
+            catch { }
+
+            try
+            {
+                _vehicleEntryService.SaveVehicleEntry(
+
+                    username,
+                    entryDate,
+                    entryTime,
+                    status,
+                    remark,
+                    numberplate,
+                    undersideImage,
+                    driverCamImage,
+                    anprImage
+                );
+
+                MessageBox.Show("Data saved successfully!");
+            }
+            catch { }
+
+            try
+            {
+                _vehicleEntryService.SaveVideoRecord(
+
+                    Numberplate_number_box.Text,
+                    pinhole_came_path + @"\camera1.mp4",
+                    pinhole_came_path + @"\camera2.mp4",
+                    pinhole_came_path + @"\camera3.mp4",
+                    undersideImage
+                );
+            }
+            catch { }
+
+            Numberplate_number_box.Text = "";
+            LoadImageWithoutLocking("D:\\muvss_name.png", numberplate_image);
+            LoadImageWithoutLocking(@"D:\muvss_name.png", Sticked_image);
+            LoadImageWithoutLocking(@"D:\muvss_name.png", Anpr_image);
+            LoadImageWithoutLocking(@"D:\muvss_name.png", Driver_image);
         }
 
-        private string selectedHoldReason = ""; private void HOLD_BTN_Click(object sender, RoutedEventArgs e) { HoldPopup.IsOpen = true; }
+        private byte[] ImageToByteArray(System.Windows.Controls.Image imageControl)
+        {
+            if (imageControl.Source == null)
+                return null;
+
+            var bitmapSource = imageControl.Source as BitmapSource;
+
+            using (var stream = new MemoryStream())
+            {
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                encoder.Save(stream);
+                return stream.ToArray();
+            }
+        }
+        private string selectedRemark = "";
         private void HoldOption_Click(object sender, RoutedEventArgs e)
-        { var btn = sender as ToggleButton; selectedHoldReason = btn.Content.ToString(); 
+        {
+            var btn = sender as System.Windows.Controls.Primitives.ToggleButton;
+
+            if (btn != null)
+            {
+                selectedRemark = btn.Content.ToString();
+            }
         }
         private void ApplyHold_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(selectedHoldReason))
-            { MessageBox.Show("Select hold reason"); return; }
-            var vm = (MainViewModel)DataContext; vm.HoldCommand.Execute(selectedHoldReason);
+            if (string.IsNullOrEmpty(selectedRemark))
+            {
+                MessageBox.Show("Please select a category!");
+                return;
+            }
+
             HoldPopup.IsOpen = false;
+
+            string connectionString = MainWindow.connectionString;
+
+            string username = username_textbox.Text;
+            string status = "HOLD";
+            string remark = selectedRemark;   // ✅ FIXED
+            string numberplate = Numberplate_number_box.Text;
+
+            DateTime entryDate = now.Date;
+            TimeSpan entryTime = new TimeSpan(now.Hour, now.Minute, 0);
+
+            byte[] undersideImage = ImageToByteArray(Sticked_image);
+            byte[] driverCamImage = ImageToByteArray(Driver_image);
+            byte[] anprImage = ImageToByteArray(Anpr_image);
+
+            try
+            {
+                _vehicleEntryService.SaveVehicleEntry(
+                    username,
+                    entryDate,
+                    entryTime,
+                    status,
+                    remark,
+                    numberplate,
+                    undersideImage,
+                    driverCamImage,
+                    anprImage
+                );
+
+                MessageBox.Show("Data saved successfully!");
+            }
+            catch { }
+
+            try
+            {
+                _vehicleEntryService.SaveVideoRecord(
+                    Numberplate_number_box.Text,
+                    pinhole_came_path + @"\camera1.mp4",
+                    pinhole_came_path + @"\camera2.mp4",
+                    pinhole_came_path + @"\camera3.mp4",
+                    undersideImage
+                );
+            }
+            catch { }
+
+            LoadImageWithoutLocking(@"D:\muvss_name.png", Sticked_image);
+            LoadImageWithoutLocking(@"D:\muvss_name.png", Anpr_image);
+            LoadImageWithoutLocking(@"D:\muvss_name.png", Driver_image);
         }
-       
-            // 🔴 crash likely here HoldPopup.IsOpen = false; }
-
-        //private byte[] ImageToByteArray(System.Windows.Controls.Image imageControl)
-        //{
-        //    if (imageControl.Source == null)
-        //        return null;
-
-            //    var bitmapSource = imageControl.Source as BitmapSource;
-
-            //    using (var stream = new MemoryStream())
-            //    {
-            //        BitmapEncoder encoder = new PngBitmapEncoder();
-            //        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-            //        encoder.Save(stream);
-            //        return stream.ToArray();
-            //    }
-            //}
-
-
-
+        private void HOLD_BTN_Click(object sender, RoutedEventArgs e)
+        {
+            HoldPopup.IsOpen = true;
+        }
         private void CreatePanoramicImage_2(string[] imageFiles)
         {
             var firstImage = new Bitmap(imageFiles[0]);
@@ -2284,8 +2452,8 @@ namespace Motwane.UVSS.Presentation.Windows
                                 string timestampInfo = $"Date: {date:yyyy-MM-dd}   Time: {time:hh\\:mm\\:ss}";
 
                                 // --- FINAL INTEGRATION ---
-                              var app = (App)System.Windows.Application.Current;
-AicViewerWindow viewer = app.ServiceProvider.GetRequiredService<AicViewerWindow>();
+                                var app = (App)System.Windows.Application.Current;
+                                AicViewerWindow viewer = app.ServiceProvider.GetRequiredService<AicViewerWindow>();
 
                                 // CHANGE 3: Pass the new timestamp string to the viewer window
                                 viewer.LoadAndCompareImages(sourceImagePath, dbImagePath, timestampInfo);
@@ -2750,7 +2918,6 @@ AicViewerWindow viewer = app.ServiceProvider.GetRequiredService<AicViewerWindow>
         }
 
         #endregion
-        private async void CaptureAnpr() { }
-        private async void CaptureDriver() { }
+
     }
 }

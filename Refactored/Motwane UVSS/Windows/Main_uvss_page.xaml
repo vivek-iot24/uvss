@@ -120,7 +120,7 @@
                             Margin="10">
                         <Button Content="RESET"
                                 x:Name="reset_button"
-                                Command="{Binding HoldCommand}"
+                                Click="reset_button_Click"
                                 FontSize="16"
                                 Foreground="#007ACC"
                                 Background="Transparent"
@@ -221,7 +221,7 @@
                             Margin="10">
                         <Button Content="PASS"
                                 x:Name="PASS_BTN"
-                                Command="{Binding PassCommand}"
+                                Click="PASS_BTN_Click"
                                 FontSize="16"
                                 Foreground="#007ACC"
                                 Background="Transparent"
