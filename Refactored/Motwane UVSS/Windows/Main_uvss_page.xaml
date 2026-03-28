@@ -505,11 +505,11 @@
 
                 <!-- COMBINED 2x2 GRID FOR NUMBER PLATE & LOGO - Grid.Row="2" -->
                 <Border Grid.Row="2"
-                        Background="Transparent"
-                        BorderBrush="MidnightBlue"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Margin="0,2,5,5">
+        Background="Transparent"
+        BorderBrush="MidnightBlue"
+        BorderThickness="2"
+        CornerRadius="10"
+        Margin="0,2,5,5">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -522,119 +522,121 @@
 
                         <!-- NUMBER PLATE IMAGE (Top-Left) -->
                         <Border Grid.Row="0" Grid.Column="0"
-                                Background="Transparent"
-                                BorderBrush="MidnightBlue"
-                                BorderThickness="1"
-                                CornerRadius="5"
-                                Margin="2">
+                Background="Transparent"
+                BorderBrush="MidnightBlue"
+                BorderThickness="1"
+                CornerRadius="5"
+                Margin="2">
                             <Grid>
                                 <Image x:Name="numberplate_image" Stretch="Fill" />
                                 <Border VerticalAlignment="Top"
-                                        HorizontalAlignment="Left"
-                                        Margin="3"
-                                        CornerRadius="3"
-                                        Background="Transparent"
-                                        BorderThickness="2"
-                                        BorderBrush="MidnightBlue">
+                        HorizontalAlignment="Left"
+                        Margin="3"
+                        CornerRadius="3"
+                        Background="Transparent"
+                        BorderThickness="2"
+                        BorderBrush="MidnightBlue">
                                     <TextBlock Text="Number Plate Image"
-                                               FontSize="10"
-                                               Foreground="#007ACC"
-                                               FontWeight="SemiBold"
-                                               Margin="3,1" />
+                               FontSize="10"
+                               Foreground="#007ACC"
+                               FontWeight="SemiBold"
+                               Margin="3,1" />
                                 </Border>
                             </Grid>
                         </Border>
 
-                        <!-- NUMBER PLATE TEXT (Top-Right) -->
+                        <!-- LOGO IMAGE (Top-Right) -->
                         <Border Grid.Row="0" Grid.Column="1"
-                                Background="Transparent"
-                                BorderBrush="MidnightBlue"
-                                BorderThickness="1"
-                                CornerRadius="5"
-                                Margin="2">
-                            <Grid>
-                                <TextBox x:Name="Numberplate_number_box"
-                                         Margin="3"
-                                         BorderThickness="0"
-                                         FontWeight="Bold"
-                                         TextAlignment="Center"
-                                         VerticalContentAlignment="Center"
-                                         FontSize="20" />
-                                <Border VerticalAlignment="Top" 
-                                        HorizontalAlignment="Left" 
-                                        Margin="3"
-                                        CornerRadius="3"
-                                        Background="Transparent"
-                                        BorderThickness="2"
-                                        BorderBrush="MidnightBlue"
-                                        IsHitTestVisible="False">
-                                    <TextBlock Text="Number Plate"
-                                               FontSize="10"
-                                               Foreground="#007ACC"
-                                               FontWeight="SemiBold"
-                                               Margin="3,1"/>
-                                </Border>
-                            </Grid>
-                        </Border>
-
-                        <!-- LOGO IMAGE (Bottom-Left) -->
-                        <Border Grid.Row="1" Grid.Column="0"
-                                Background="Transparent"
-                                BorderBrush="MidnightBlue"
-                                BorderThickness="1"
-                                CornerRadius="5"
-                                Margin="2">
+                Background="Transparent"
+                BorderBrush="MidnightBlue"
+                BorderThickness="1"
+                CornerRadius="5"
+                Margin="2">
                             <Grid>
                                 <Image x:Name="LogoImage"
-                                       Stretch="Uniform"
-                                       Margin="5" />
+                       Stretch="Uniform"
+                       Margin="5" />
                                 <Border VerticalAlignment="Top"
-                                        HorizontalAlignment="Left"
-                                        Margin="3"
-                                        CornerRadius="3"
-                                        Background="Transparent"
-                                        BorderThickness="2"
-                                        BorderBrush="MidnightBlue">
+                        HorizontalAlignment="Left"
+                        Margin="3"
+                        CornerRadius="3"
+                        Background="Transparent"
+                        BorderThickness="2"
+                        BorderBrush="MidnightBlue">
                                     <TextBlock Text="Logo Image"
-                                               FontSize="10"
-                                               Foreground="#007ACC"
-                                               FontWeight="SemiBold"
-                                               Margin="3,1"/>
+                               FontSize="10"
+                               Foreground="#007ACC"
+                               FontWeight="SemiBold"
+                               Margin="3,1"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- NUMBER PLATE TEXT (Bottom-Left) -->
+                        <Border Grid.Row="1" Grid.Column="0"
+                Background="Transparent"
+                BorderBrush="MidnightBlue"
+                BorderThickness="1"
+                CornerRadius="5"
+                Margin="2">
+                            <Grid>
+                                <TextBox x:Name="Numberplate_number_box"
+                                         
+                         Margin="3"
+                         BorderThickness="0"
+                         FontWeight="Bold"
+                         TextAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         FontSize="20" />
+                                <Border VerticalAlignment="Top" 
+                        HorizontalAlignment="Left" 
+                        Margin="3"
+                        CornerRadius="3"
+                        Background="Transparent"
+                        BorderThickness="2"
+                        BorderBrush="MidnightBlue"
+                        IsHitTestVisible="False">
+                                    <TextBlock Text="Number Plate"
+                               FontSize="10"
+                               Foreground="#007ACC"
+                               FontWeight="SemiBold"
+                               Margin="3,1"/>
                                 </Border>
                             </Grid>
                         </Border>
 
                         <!-- LOGO TEXT (Bottom-Right) -->
                         <Border Grid.Row="1" Grid.Column="1"
-                                Background="Transparent"
-                                BorderBrush="MidnightBlue"
-                                BorderThickness="1"
-                                CornerRadius="5"
-                                Margin="2">
+                Background="Transparent"
+                BorderBrush="MidnightBlue"
+                BorderThickness="1"
+                CornerRadius="5"
+                Margin="2">
                             <Grid>
                                 <TextBox x:Name="logo_textbox"
-                                         Margin="3"
-                                         BorderThickness="0"
-                                         FontWeight="Bold"
-                                         TextAlignment="Center"
-                                         VerticalContentAlignment="Center"
-                                         FontSize="18" />
+                         Margin="3"
+                         BorderThickness="0"
+                         FontWeight="Bold"
+                         TextAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         FontSize="18" />
                                 <Border VerticalAlignment="Top" 
-                                        HorizontalAlignment="Left" 
-                                        Margin="3"
-                                        CornerRadius="3"
-                                        Background="Transparent"
-                                        BorderThickness="2"
-                                        BorderBrush="MidnightBlue"
-                                        IsHitTestVisible="False">
+                        HorizontalAlignment="Left" 
+                        Margin="3"
+                        CornerRadius="3"
+                        Background="Transparent"
+                        BorderThickness="2"
+                        BorderBrush="MidnightBlue"
+                        IsHitTestVisible="False">
                                     <TextBlock Text="Logo Text"
-                                               FontSize="10"
-                                               Foreground="#007ACC"
-                                               FontWeight="SemiBold"
-                                               Margin="3,1"/>
+                               FontSize="10"
+                               Foreground="#007ACC"
+                               FontWeight="SemiBold"
+                               Margin="3,1"/>
                                 </Border>
                             </Grid>
                         </Border>
+
                     </Grid>
                 </Border>
             </Grid>

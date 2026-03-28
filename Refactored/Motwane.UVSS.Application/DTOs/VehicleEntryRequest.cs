@@ -20,7 +20,9 @@ namespace Motwane.UVSS.Application.DTOs
         public byte[] UndersideImage { get; set; }
         public byte[] DriverImage { get; set; }
         public byte[] AnprImage { get; set; }
-
+        public string UndersideImagePath { get; set; }
+        public string DriverImagePath { get; set; }
+        public string AnprImagePath { get; set; }
         public string Video1Path { get; set; }
         public string Video2Path { get; set; }
         public string Video3Path { get; set; }

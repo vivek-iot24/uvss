@@ -16,7 +16,9 @@ namespace Motwane.UVSS.Domain.Entities
         public string Status { get; set; }
         public string Remark { get; set; }
         public string Numberplate { get; set; }
-
+        public string UndersideImagePath { get; set; }
+        public string DriverImagePath { get; set; }
+        public string AnprImagePath { get; set; }
         public byte[] UndersideBytes { get; set; }
         public byte[] DriverCamBytes { get; set; }
         public byte[] AnprBytes { get; set; }

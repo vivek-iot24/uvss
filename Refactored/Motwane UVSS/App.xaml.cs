@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Motwane.UVSS;
 using Motwane.UVSS.Application.ComputerVision;
 using Motwane.UVSS.Application.Interfaces.DAL;
 using Motwane.UVSS.Application.Interfaces.HAL;
@@ -8,44 +9,45 @@ using Motwane.UVSS.Infrastructure.HAL.Cameras;
 using Motwane.UVSS.Infrastructure.HAL.ExternalServices;
 using Motwane.UVSS.Infrastructure.HAL.Hardware;
 using Motwane.UVSS.Presentation.Windows;
-using OpenCvSharp.Dnn;
+using Motwane.UVSS.ViewModels;
 using System;
-
-
 using System.Windows;
 
 namespace Motwane.UVSS.Presentation
 {
     public partial class App : System.Windows.Application
     {
-        private string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;";
-
-        // Change this to "Real" when hardware is available
-        private const string HardwareMode = "Test";
-      
+        string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;";
+        public const string HardwareMode = "Test";
         public string LoggedInUserID { get; set; }
+
         public string LoggedInUSERTYPE { get; set; }
 
         public IServiceProvider ServiceProvider { get; private set; }
+
         public static IServiceProvider Services { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-      
             base.OnStartup(e);
+
             var services = new ServiceCollection();
+
             ConfigureServices(services);
+
             ServiceProvider = services.BuildServiceProvider();
+
             Services = ServiceProvider;
 
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
+            var mediaService = new MediaFolderService();
+            mediaService.EnsureStructure();
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // ---------------- DAL ----------------
-
+            // DAL 
             services.AddSingleton<IUserRepository>(sp =>
                 new UserRepository(connectionString));
 
@@ -55,9 +57,7 @@ namespace Motwane.UVSS.Presentation
             services.AddSingleton<IVehicleEntryRepository>(sp =>
                 new VehicleEntryRepository(connectionString));
 
-
-            // ---------------- APPLICATION SERVICES ----------------
-
+            // Application Services
             services.AddSingleton<UserManagementService>();
             services.AddSingleton<AuthenticationService>();
             services.AddSingleton<VehicleEntryService>();
@@ -78,31 +78,29 @@ namespace Motwane.UVSS.Presentation
                     outputDir
                 );
             });
-            // ---------------- HAL SERVICES ----------------
 
+            // HAL Services
             services.AddSingleton<IFileSystemService, FileSystemService>();
-
-            if (HardwareMode == "Test")
-            {
-                services.AddSingleton<IDiagnosticService, FakeDiagnosticService>();
-                services.AddSingleton<ICameraService, FakeLaptopCameraService>();
-            }
-            else
-            {
-                services.AddSingleton<IDiagnosticService, DiagnosticService>();
-                services.AddSingleton<ICameraService, UndersideCamera_HAL>();
-            }
-
+            services.AddSingleton<IDiagnosticService, DiagnosticService>();
             services.AddSingleton<IAicComparisonService, AicComparisonService>();
 
 
-           
+            // CAMERA SWITCH
+            if (HardwareMode == "Test")
+            {
+                services.AddSingleton<ICameraService, FakeLaptopCameraService>();
+                // ADD THIS
+                services.AddSingleton<Underside_cam_class>();
+            }
+            else
+            {
+                services.AddSingleton<DiagnosticService>();
+                services.AddSingleton<Underside_cam_class>();
+            }
 
 
-            // ---------------- WINDOWS ----------------
-
+            // Windows
             services.AddSingleton<MainWindow>();
-            
             services.AddTransient<Self_daignosis>();
             services.AddTransient<Main_uvss_page>();
             services.AddTransient<AicViewerWindow>();

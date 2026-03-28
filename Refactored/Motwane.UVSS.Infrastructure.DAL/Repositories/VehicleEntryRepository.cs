@@ -89,9 +89,9 @@ namespace Motwane.UVSS.DAL.Repositories
                             Status = r["status"] as string,
                             Remark = r["remark"] as string,
                             Numberplate = r["numberplate"] as string,
-                            UndersideBytes = r["underside_image"] as byte[],
-                            DriverCamBytes = r["driver_cam_image"] as byte[],
-                            AnprBytes = r["anpr_image"] as byte[]
+                            UndersideImagePath = r["underside_image"] as string,
+                            DriverImagePath = r["driver_cam_image"] as string,
+                            AnprImagePath = r["anpr_image"] as string
                         };
                     }
                 }
@@ -124,25 +124,24 @@ namespace Motwane.UVSS.DAL.Repositories
         }
 
         public void InsertVehicleEntry(
-           
-            string username,
-            DateTime entryDate,
-            TimeSpan entryTime,
-            string status,
-            string remark,
-            string numberplate,
-            byte[] undersideImage,
-            byte[] driverCamImage,
-            byte[] anprImage
-        )
+      string username,
+      DateTime entryDate,
+      TimeSpan entryTime,
+      string status,
+      string remark,
+      string numberplate,
+      string undersideImage,
+      string driverCamImage,
+      string anprImage
+  )
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 string query = @"
-                INSERT INTO vehicle_entry_log 
-                (username, entry_date, entry_time, status, remark, numberplate, underside_image, driver_cam_image, anpr_image)
-                VALUES 
-                (@username, @entry_date, @entry_time, @status, @remark, @numberplate, @underside_image, @driver_cam_image, @anpr_image)";
+        INSERT INTO vehicle_entry_log 
+        (username, entry_date, entry_time, status, remark, numberplate, underside_image, driver_cam_image, anpr_image)
+        VALUES 
+        (@username, @entry_date, @entry_time, @status, @remark, @numberplate, @underside_image, @driver_cam_image, @anpr_image)";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -152,9 +151,9 @@ namespace Motwane.UVSS.DAL.Repositories
                     cmd.Parameters.AddWithValue("@status", status);
                     cmd.Parameters.AddWithValue("@remark", remark);
                     cmd.Parameters.AddWithValue("@numberplate", numberplate);
-                    cmd.Parameters.AddWithValue("@underside_image", undersideImage);
-                    cmd.Parameters.AddWithValue("@driver_cam_image", driverCamImage);
-                    cmd.Parameters.AddWithValue("@anpr_image", anprImage);
+                    cmd.Parameters.AddWithValue("@underside_image", (object)undersideImage ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@driver_cam_image", (object)driverCamImage ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@anpr_image", (object)anprImage ?? DBNull.Value);
 
                     conn.Open();
                     cmd.ExecuteNonQuery();
@@ -168,7 +167,7 @@ namespace Motwane.UVSS.DAL.Repositories
             string video1,
             string video2,
             string video3,
-            byte[] vehicleImage
+          string vehicleImage
         )
         {
             using (var conn = new SqlConnection(_connectionString))

@@ -8,17 +8,17 @@ namespace Motwane.UVSS.Application.Services
     public class VehicleEntryService
     {
         private readonly IVehicleEntryRepository _repository;
-       // private readonly string _connectionString;
 
-        public VehicleEntryService(
-            IVehicleEntryRepository repository)        {
+        public VehicleEntryService(IVehicleEntryRepository repository)
+        {
             _repository = repository;
-           // _connectionString = connectionString;
         }
+
         public IEnumerable<string> GetDistinctUsernames()
         {
             return _repository.GetDistinctUsernames();
         }
+
         public IEnumerable<VehicleEntry> GetEntries(
             DateTime? from,
             DateTime? to,
@@ -33,7 +33,7 @@ namespace Motwane.UVSS.Application.Services
             return _repository.GetLastVehicleRemark(numberplate);
         }
 
-
+        // ✅ UPDATED: IMAGE PATHS INSTEAD OF BYTE[]
         public void SaveVehicleEntry(
             string username,
             DateTime entryDate,
@@ -41,37 +41,38 @@ namespace Motwane.UVSS.Application.Services
             string status,
             string remark,
             string numberplate,
-            byte[] undersideImage,
-            byte[] driverCamImage,
-            byte[] anprImage)
+            string undersideImagePath,
+            string driverImagePath,
+            string anprImagePath)
         {
             _repository.InsertVehicleEntry(
-               
                 username,
                 entryDate,
                 entryTime,
                 status,
                 remark,
                 numberplate,
-                undersideImage,
-                driverCamImage,
-                anprImage);
+                undersideImagePath,
+                driverImagePath,
+                anprImagePath
+            );
         }
 
+        // ✅ UPDATED: IMAGE PATH INSTEAD OF BYTE[]
         public void SaveVideoRecord(
             string vehicleNumber,
             string video1,
             string video2,
             string video3,
-            byte[] vehicleImage)
+            string vehicleImagePath)
         {
             _repository.InsertVideoManagementRecord(
-              
                 vehicleNumber,
                 video1,
                 video2,
                 video3,
-                vehicleImage);
+                vehicleImagePath
+            );
         }
     }
 }

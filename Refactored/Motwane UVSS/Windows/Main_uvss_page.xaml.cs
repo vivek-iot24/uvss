@@ -292,6 +292,7 @@ namespace Motwane.UVSS.Presentation.Windows
                             Dispatcher.InvokeAsync(() => StopAllRecordingsSafe());
                             Underside_cameraHandler.StopAcquisition();
                             fgyh();
+                            SaveVehicleEntryOnStop();
                         }
                     });
                 }
@@ -303,6 +304,111 @@ namespace Motwane.UVSS.Presentation.Windows
             }
         }
 
+        private void SaveVehicleEntryOnStop()
+        {
+            try
+            {
+                string username = username_textbox.Text;
+
+                // ✅ STATUS LOGIC
+                string status = "AUTO";
+
+                if (!string.IsNullOrEmpty(selectedRemark))
+                {
+                    if (selectedRemark.StartsWith("HOLD"))
+                        status = "HOLD";
+                    else if (selectedRemark == "PASS")
+                        status = "PASS";
+                }
+
+                string remark = selectedRemark;
+                string numberplate = Numberplate_number_box.Text;
+
+                DateTime now = DateTime.Now;
+                DateTime entryDate = now.Date;
+                TimeSpan entryTime = now.TimeOfDay;
+
+                // ✅ BASE PATH
+                string baseFolder = @"D:\UVSS_MEDIA\Entry Media";
+                string dateFolder = now.ToString("yyyy-MM-dd");
+
+                // ✅ SANITIZE NUMBER PLATE (VERY IMPORTANT)
+                string safeNumberplate = CleanFileName(numberplate);
+
+                if (string.IsNullOrWhiteSpace(safeNumberplate))
+                    safeNumberplate = "UNKNOWN_" + now.Ticks;
+
+                string vehicleFolder =System.IO.Path.Combine(baseFolder, dateFolder, safeNumberplate);
+
+                // ✅ CREATE DIRECTORY (handles nested automatically)
+                Directory.CreateDirectory(vehicleFolder);
+
+                // ✅ UNIQUE FILE NAMES (avoid overwrite)
+                string timestamp = now.ToString("HHmmss");
+
+                string undersidePath = SaveImageToFolder(
+                    Sticked_image,
+                    vehicleFolder,
+                    $"underside_{timestamp}.jpg"
+                );
+
+                string driverPath = SaveImageToFolder(
+                    Driver_image,
+                    vehicleFolder,
+                    $"driver_{timestamp}.jpg"
+                );
+
+                string anprPath = SaveImageToFolder(
+                    Anpr_image,
+                    vehicleFolder,
+                    $"anpr_{timestamp}.jpg"
+                );
+
+                // ✅ VIDEO PATHS
+                string cam1 =System.IO.Path.Combine(pinhole_came_path, "camera1.mp4");
+                string cam2 =System.IO.Path.Combine(pinhole_came_path, "camera2.mp4");
+                string cam3 =System.IO.Path.Combine(pinhole_came_path, "camera3.mp4");
+
+                // ✅ SAVE ENTRY (STORE PATHS IN DB)
+                _vehicleEntryService.SaveVehicleEntry(
+                    username,
+                    entryDate,
+                    entryTime,
+                    status,
+                    remark,
+                    numberplate,
+                    undersidePath,
+                    driverPath,
+                    anprPath
+                );
+
+                // ✅ SAVE VIDEO RECORD
+                _vehicleEntryService.SaveVideoRecord(
+                    numberplate,
+                    cam1,
+                    cam2,
+                    cam3,
+                    undersidePath   // using path instead of byte[]
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Save failed: " + ex.Message);
+            }
+
+            // ✅ RESET STATE
+            selectedRemark = "";
+        }
+        private string CleanFileName(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return "";
+
+            foreach (char c in Path.GetInvalidFileNameChars())
+                input = input.Replace(c, '_');
+
+            return input.Replace(" ", "_");
+        }
         private async void anpr_imageCaptureSnapshotAndShow()
         {
             try
@@ -505,14 +611,16 @@ namespace Motwane.UVSS.Presentation.Windows
             string MainImage = "D:\\muvss_name.png";
             string NumberPlateImage = "D:\\muvss_name.png";
             string DriverImage = "D:\\muvss_name.png";
-
+            string logoImage = "D:\\muvss_name.png";
 
             // This line loads the new image and puts it in the display frame.
             Sticked_image.Source = LoadImageUnlocked(MainImage);
             Driver_image.Source = LoadImageUnlocked(DriverImage);
             Anpr_image.Source = LoadImageUnlocked(Anprimage);
             numberplate_image.Source = LoadImageUnlocked(NumberPlateImage);
+            LogoImage.Source = LoadImageUnlocked(logoImage); ;
             Numberplate_number_box.Text = "";
+            logo_textbox.Text = "";
         }
 
         private byte Clamp(double value)
@@ -917,76 +1025,19 @@ namespace Motwane.UVSS.Presentation.Windows
 
         private void PASS_BTN_Click(object sender, RoutedEventArgs e)
         {
-            string connectionString = MainWindow.connectionString;
+            selectedRemark = "PASS"; // just mark status
 
-            string username = username_textbox.Text;
-            string status = "PASS";
-            string remark = selectedRemark;
-            string numberplate = Numberplate_number_box.Text;
+            MessageBox.Show("Marked as PASS");
 
-            DateTime entryDate = now.Date;
-            TimeSpan entryTime = new TimeSpan(now.Hour, now.Minute, now.Second, 0);
-
-            byte[] undersideImage = ImageToByteArray(Sticked_image);
-            byte[] driverCamImage = ImageToByteArray(Driver_image);
-            byte[] anprImage = ImageToByteArray(Anpr_image);
-
-            try
-            {
-                string lastRemark = _vehicleEntryService.GetLastVehicleRemark(numberplate);
-
-                if (lastRemark != null && lastRemark != "Normal")
-                {
-                    if (System.Windows.Forms.MessageBox.Show(
-                        $"The Registered Vehicle no is {lastRemark}",
-                        "Will You allow this Operation",
-                        MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
-                    {
-                        return;
-                    }
-                }
-            }
-            catch { }
-
-            try
-            {
-                _vehicleEntryService.SaveVehicleEntry(
-
-                    username,
-                    entryDate,
-                    entryTime,
-                    status,
-                    remark,
-                    numberplate,
-                    undersideImage,
-                    driverCamImage,
-                    anprImage
-                );
-
-                MessageBox.Show("Data saved successfully!");
-            }
-            catch { }
-
-            try
-            {
-                _vehicleEntryService.SaveVideoRecord(
-
-                    Numberplate_number_box.Text,
-                    pinhole_came_path + @"\camera1.mp4",
-                    pinhole_came_path + @"\camera2.mp4",
-                    pinhole_came_path + @"\camera3.mp4",
-                    undersideImage
-                );
-            }
-            catch { }
-
+            logo_textbox.Text = "";
             Numberplate_number_box.Text = "";
-            LoadImageWithoutLocking("D:\\muvss_name.png", numberplate_image);
+
+            LoadImageWithoutLocking(@"D:\muvss_name.png", numberplate_image);
             LoadImageWithoutLocking(@"D:\muvss_name.png", Sticked_image);
             LoadImageWithoutLocking(@"D:\muvss_name.png", Anpr_image);
             LoadImageWithoutLocking(@"D:\muvss_name.png", Driver_image);
+            LoadImageWithoutLocking(@"D:\muvss_name.png", LogoImage);
         }
-
         private byte[] ImageToByteArray(System.Windows.Controls.Image imageControl)
         {
             if (imageControl.Source == null)
@@ -1022,53 +1073,18 @@ namespace Motwane.UVSS.Presentation.Windows
 
             HoldPopup.IsOpen = false;
 
-            string connectionString = MainWindow.connectionString;
+            selectedRemark = "HOLD - " + selectedRemark;
 
-            string username = username_textbox.Text;
-            string status = "HOLD";
-            string remark = selectedRemark;   // ✅ FIXED
-            string numberplate = Numberplate_number_box.Text;
+            MessageBox.Show("Marked as HOLD");
 
-            DateTime entryDate = now.Date;
-            TimeSpan entryTime = new TimeSpan(now.Hour, now.Minute, 0);
+            logo_textbox.Text = "";
+            Numberplate_number_box.Text = "";
 
-            byte[] undersideImage = ImageToByteArray(Sticked_image);
-            byte[] driverCamImage = ImageToByteArray(Driver_image);
-            byte[] anprImage = ImageToByteArray(Anpr_image);
-
-            try
-            {
-                _vehicleEntryService.SaveVehicleEntry(
-                    username,
-                    entryDate,
-                    entryTime,
-                    status,
-                    remark,
-                    numberplate,
-                    undersideImage,
-                    driverCamImage,
-                    anprImage
-                );
-
-                MessageBox.Show("Data saved successfully!");
-            }
-            catch { }
-
-            try
-            {
-                _vehicleEntryService.SaveVideoRecord(
-                    Numberplate_number_box.Text,
-                    pinhole_came_path + @"\camera1.mp4",
-                    pinhole_came_path + @"\camera2.mp4",
-                    pinhole_came_path + @"\camera3.mp4",
-                    undersideImage
-                );
-            }
-            catch { }
-
+            LoadImageWithoutLocking(@"D:\muvss_name.png", numberplate_image);
             LoadImageWithoutLocking(@"D:\muvss_name.png", Sticked_image);
             LoadImageWithoutLocking(@"D:\muvss_name.png", Anpr_image);
             LoadImageWithoutLocking(@"D:\muvss_name.png", Driver_image);
+            LoadImageWithoutLocking(@"D:\muvss_name.png", LogoImage);
         }
         private void HOLD_BTN_Click(object sender, RoutedEventArgs e)
         {
@@ -2900,6 +2916,28 @@ namespace Motwane.UVSS.Presentation.Windows
                 }
                 catch { /* ignore cleanup errors */ }
             }
+        }
+        private string SaveImageToFolder(System.Windows.Controls.Image imageControl, string folderPath, string fileName)
+        {
+            if (imageControl.Source == null)
+                return null;
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            string fullPath =System.IO.Path.Combine(folderPath, fileName);
+
+            var bitmapSource = imageControl.Source as BitmapSource;
+
+            BitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                encoder.Save(stream);
+            }
+
+            return fullPath;
         }
 
         // ✅ Unlocks and loads image safely (avoids file lock)

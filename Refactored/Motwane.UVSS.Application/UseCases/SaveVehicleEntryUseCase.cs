@@ -1,10 +1,6 @@
 ﻿using Motwane.UVSS.Application.DTOs;
 using Motwane.UVSS.Application.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Motwane.UVSS.Application.UseCases
 {
@@ -28,6 +24,7 @@ namespace Motwane.UVSS.Application.UseCases
                 );
             }
 
+            
             _vehicleService.SaveVehicleEntry(
                 request.Username,
                 request.EntryDate,
@@ -35,17 +32,18 @@ namespace Motwane.UVSS.Application.UseCases
                 request.Status,
                 request.Remark,
                 request.NumberPlate,
-                request.UndersideImage,
-                request.DriverImage,
-                request.AnprImage
+                request.UndersideImagePath,
+                request.DriverImagePath,
+                request.AnprImagePath
             );
 
+           
             _vehicleService.SaveVideoRecord(
                 request.NumberPlate,
                 request.Video1Path,
                 request.Video2Path,
                 request.Video3Path,
-                request.UndersideImage
+                request.UndersideImagePath
             );
         }
     }

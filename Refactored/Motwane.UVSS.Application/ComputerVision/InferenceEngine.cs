@@ -186,14 +186,14 @@ namespace Motwane.UVSS.Application.ComputerVision
         private Dictionary<int, string> ParseVocab(string json)
         {
             var dict = new Dictionary<int, string>();
-
+           
             var matches = System.Text.RegularExpressions.Regex.Matches(json, "\"([^\"]+)\":(\\d+)");
             foreach (System.Text.RegularExpressions.Match match in matches)
             {
                
                     if (int.TryParse(match.Groups[2].Value, out int id))
                     {
-                       
+                        
                         dict[id] = match.Groups[1].Value;
                     }
             }
