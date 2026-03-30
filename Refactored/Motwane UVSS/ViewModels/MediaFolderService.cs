@@ -5,64 +5,52 @@ namespace Motwane.UVSS.ViewModels
 {
     public class MediaFolderService
     {
-        private readonly string basePath = @"D:\UVSS_MEDIA";
-
+        private readonly string basePath = @"C:\Document\UVSS MEDIA";
         public void EnsureStructure()
         {
             try
             {
-                // Ensure root exists
                 Directory.CreateDirectory(basePath);
-
-                string[] mainFolders = { "Entry Media", "Exit Media" };
-
-                string[] subFolders =
-                {
-                    "ANPR Images",
+                string[] mainFolders = { "Entry Media","Exit Media"};
+                string[] imageFolders =
+                {   "ANPR Images",
                     "Driver Images",
                     "Underside Images",
                     "Cropped Logo Images",
-                    "Cropped Number Plate Images",
-                    "Video Camera1",
-                    "Video Camera2",
-                    "Video Camera3"
+                    "Cropped Number Plate Images"
                 };
-
+               string[] videoFolders =
+                {
+                    "Camera1",
+                    "Camera2",
+                    "Camera3"
+                };
                 DateTime now = DateTime.Now;
-
                 string year = now.Year.ToString();
                 string month = now.Month.ToString("D2");
                 string day = now.Day.ToString("D2");
-
-                foreach (var main in mainFolders)
+                 foreach (var main in mainFolders)
                 {
-                    foreach (var sub in subFolders)
+                    foreach (var folder in imageFolders)
                     {
-                        string fullPath = Path.Combine(
-                            basePath,
-                            main,
-                            sub,
-                            year,
-                            month,
-                            day
-                        );
-
+                        string fullPath = Path.Combine(basePath, main, folder, year, month, day);
                         Directory.CreateDirectory(fullPath);
+                    }
+                    foreach (var camera in videoFolders)
+                    {
+                        string videoPath = Path.Combine(basePath, main, "Video", camera, year, month, day);
+                        Directory.CreateDirectory(videoPath);
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Log instead of crashing app
                 Console.WriteLine("Folder creation error: " + ex.Message);
             }
         }
-
-        
         public string GetTodayPath(string mainFolder, string subFolder)
-        {
+        {  
             DateTime now = DateTime.Now;
-
             string path = Path.Combine(
                 basePath,
                 mainFolder,
@@ -71,9 +59,23 @@ namespace Motwane.UVSS.ViewModels
                 now.Month.ToString("D2"),
                 now.Day.ToString("D2")
             );
-
             Directory.CreateDirectory(path);
+            return path;
+        }
 
+        public string GetTodayVideoPath(string mainFolder, string cameraName)
+        {
+            DateTime now = DateTime.Now;
+            string path = Path.Combine(
+                basePath,
+                mainFolder,
+                "Video",
+                cameraName,
+                now.Year.ToString(),
+                now.Month.ToString("D2"),
+                now.Day.ToString("D2")
+            );
+            Directory.CreateDirectory(path);
             return path;
         }
     }

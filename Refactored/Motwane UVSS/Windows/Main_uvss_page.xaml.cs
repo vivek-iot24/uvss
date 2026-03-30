@@ -8,6 +8,7 @@ using Motwane.UVSS.Application.ComputerVision;
 using Motwane.UVSS.Application.Services;
 using Motwane.UVSS.Presentation;
 using Motwane.UVSS.Presentation.Windows;
+using Motwane.UVSS.ViewModels;
 using Onvif.Core.Client;
 using Onvif.Core.Client.Media;
 using Onvif.IP;
@@ -164,18 +165,12 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             Menu_screen menu_Screen = new Menu_screen();
             menu_Screen.Show();
-
             //this.Close();
-
-
             if (serialPort != null && serialPort.IsOpen)
                 serialPort.Close();
         }
-
-
         private byte[] originalPixels;
         private int width, height, stride;
-
         private void load()
         {
             BitmapSource source = (BitmapSource)Sticked_image.Source;
@@ -189,8 +184,6 @@ namespace Motwane.UVSS.Presentation.Windows
             formattedBitmap.CopyPixels(originalPixels, stride, 0);
 
             Sticked_image.Source = formattedBitmap;
-
-
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -230,11 +223,9 @@ namespace Motwane.UVSS.Presentation.Windows
             //// ADD THIS LINE: Capture the initial hardcoded image as our first "master copy".
             //if (Sticked_image.Source != null)
             //{
-            //    _originalBitmap = Sticked_image.Source as BitmapSource;
+            //_originalBitmap = Sticked_image.Source as BitmapSource;
             //}
-
             // This code creates the "master copy" of the image for your sliders to use.
-
             // Step 1: Safety check to make sure the hardcoded image was loaded.
             if (Sticked_image.Source is BitmapSource bitmapSource)
             {
@@ -242,7 +233,6 @@ namespace Motwane.UVSS.Presentation.Windows
                 width = bitmapSource.PixelWidth;
                 height = bitmapSource.PixelHeight;
                 stride = width * (bitmapSource.Format.BitsPerPixel / 8);
-
                 // Step 3: Create the byte array and copy the pixel data into it.
                 originalPixels = new byte[height * stride];
                 bitmapSource.CopyPixels(originalPixels, stride, 0);
@@ -268,8 +258,7 @@ namespace Motwane.UVSS.Presentation.Windows
                             PASS_BTN.IsEnabled = false;
                             reset_button.IsEnabled = false;
                             menu_button.IsEnabled = false;
-
-                            showImage = true;
+                             showImage = true;
                             //Diver_camera_image_trigger();
                             //anpr_camera_image_trigger();
                             anpr_imageCaptureSnapshotAndShow();
@@ -308,9 +297,15 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             try
             {
-                string username = username_textbox.Text;
+                var mediaService = new MediaFolderService();
 
-                // ✅ STATUS LOGIC
+                string username = username_textbox.Text;
+                string numberplate = Numberplate_number_box.Text;
+
+                DateTime now = DateTime.Now;
+                DateTime entryDate = now.Date;
+                TimeSpan entryTime = now.TimeOfDay;
+
                 string status = "AUTO";
 
                 if (!string.IsNullOrEmpty(selectedRemark))
@@ -322,54 +317,64 @@ namespace Motwane.UVSS.Presentation.Windows
                 }
 
                 string remark = selectedRemark;
-                string numberplate = Numberplate_number_box.Text;
 
-                DateTime now = DateTime.Now;
-                DateTime entryDate = now.Date;
-                TimeSpan entryTime = now.TimeOfDay;
-
-                // ✅ BASE PATH
-                string baseFolder = @"D:\UVSS_MEDIA\Entry Media";
-                string dateFolder = now.ToString("yyyy-MM-dd");
-
-                // ✅ SANITIZE NUMBER PLATE (VERY IMPORTANT)
+               
                 string safeNumberplate = CleanFileName(numberplate);
-
                 if (string.IsNullOrWhiteSpace(safeNumberplate))
                     safeNumberplate = "UNKNOWN_" + now.Ticks;
 
-                string vehicleFolder =System.IO.Path.Combine(baseFolder, dateFolder, safeNumberplate);
+                
+                string anprFolder = mediaService.GetTodayPath("Entry Media", "ANPR Images");
+                string driverFolder = mediaService.GetTodayPath("Entry Media", "Driver Images");
+                string undersideFolder = mediaService.GetTodayPath("Entry Media", "Underside Images");
 
-                // ✅ CREATE DIRECTORY (handles nested automatically)
-                Directory.CreateDirectory(vehicleFolder);
+                string cam1Folder = mediaService.GetTodayPath("Entry Media", "Video Camera1");
+                string cam2Folder = mediaService.GetTodayPath("Entry Media", "Video Camera2");
+                string cam3Folder = mediaService.GetTodayPath("Entry Media", "Video Camera3");
 
-                // ✅ UNIQUE FILE NAMES (avoid overwrite)
+                
                 string timestamp = now.ToString("HHmmss");
 
+                
                 string undersidePath = SaveImageToFolder(
                     Sticked_image,
-                    vehicleFolder,
-                    $"underside_{timestamp}.jpg"
+                    undersideFolder,
+                    $"{safeNumberplate}_underside_{timestamp}.jpg"
                 );
 
                 string driverPath = SaveImageToFolder(
                     Driver_image,
-                    vehicleFolder,
-                    $"driver_{timestamp}.jpg"
+                    driverFolder,
+                    $"{safeNumberplate}_driver_{timestamp}.jpg"
                 );
 
                 string anprPath = SaveImageToFolder(
                     Anpr_image,
-                    vehicleFolder,
-                    $"anpr_{timestamp}.jpg"
+                    anprFolder,
+                    $"{safeNumberplate}_anpr_{timestamp}.jpg"
                 );
 
-                // ✅ VIDEO PATHS
-                string cam1 =System.IO.Path.Combine(pinhole_came_path, "camera1.mp4");
-                string cam2 =System.IO.Path.Combine(pinhole_came_path, "camera2.mp4");
-                string cam3 =System.IO.Path.Combine(pinhole_came_path, "camera3.mp4");
+                // ✅ VIDEO DESTINATION PATHS
+                string cam1Dest = System.IO.Path.Combine(cam1Folder, $"{safeNumberplate}_cam1_{timestamp}.mp4");
+                string cam2Dest = System.IO.Path.Combine(cam2Folder, $"{safeNumberplate}_cam2_{timestamp}.mp4");
+                string cam3Dest = System.IO.Path.Combine(cam3Folder, $"{safeNumberplate}_cam3_{timestamp}.mp4");
 
-                // ✅ SAVE ENTRY (STORE PATHS IN DB)
+                // ✅ SOURCE VIDEO PATHS
+                string cam1Source = System.IO.Path.Combine(pinhole_came_path, "camera1.mp4");
+                string cam2Source = System.IO.Path.Combine(pinhole_came_path, "camera2.mp4");
+                string cam3Source = System.IO.Path.Combine(pinhole_came_path, "camera3.mp4");
+
+                // ✅ COPY VIDEOS SAFELY
+                if (File.Exists(cam1Source))
+                    File.Copy(cam1Source, cam1Dest, true);
+
+                if (File.Exists(cam2Source))
+                    File.Copy(cam2Source, cam2Dest, true);
+
+                if (File.Exists(cam3Source))
+                    File.Copy(cam3Source, cam3Dest, true);
+
+                // ✅ SAVE ENTRY TO DB
                 _vehicleEntryService.SaveVehicleEntry(
                     username,
                     entryDate,
@@ -385,10 +390,10 @@ namespace Motwane.UVSS.Presentation.Windows
                 // ✅ SAVE VIDEO RECORD
                 _vehicleEntryService.SaveVideoRecord(
                     numberplate,
-                    cam1,
-                    cam2,
-                    cam3,
-                    undersidePath   // using path instead of byte[]
+                    cam1Dest,
+                    cam2Dest,
+                    cam3Dest,
+                    undersidePath
                 );
             }
             catch (Exception ex)
@@ -404,7 +409,7 @@ namespace Motwane.UVSS.Presentation.Windows
             if (string.IsNullOrWhiteSpace(input))
                 return "";
 
-            foreach (char c in Path.GetInvalidFileNameChars())
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
                 input = input.Replace(c, '_');
 
             return input.Replace(" ", "_");
