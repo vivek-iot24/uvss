@@ -40,7 +40,7 @@ namespace Motwane.UVSS.Presentation.ViewModels
         {
             var now = System.DateTime.Now;
 
-            var request = new Motwane.UVSS.Application.DTOs.VehicleEntryRequest
+            var request = new VehicleEntryRequest
             {
                 Username = Username,
                 Status = status,
@@ -49,9 +49,9 @@ namespace Motwane.UVSS.Presentation.ViewModels
                 EntryDate = now.Date,
                 EntryTime = now.TimeOfDay,
 
-                UndersideImage = _imageService.GetUndersideImage(),
-                DriverImage = _imageService.GetDriverImage(),
-                AnprImage = _imageService.GetAnprImage(),
+                UndersideImagePath = _imageService.GetUndersideImagePath(),
+                DriverImagePath = _imageService.GetDriverImagePath(),
+                AnprImagePath = _imageService.GetAnprImagePath(),
 
                 Video1Path = _imageService.GetVideoPath(1),
                 Video2Path = _imageService.GetVideoPath(2),

@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Presentation;
 using LibVLCSharp.Shared;
 using LibVLCSharp.WPF;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Win32; // ADDED THIS LINE FOR THE FILE DIALOG
 using Motwane.UVSS;
 using Motwane.UVSS.Application.ComputerVision;
 using Motwane.UVSS.Application.Services;
+using Motwane.UVSS.Domain.Entities;
 using Motwane.UVSS.Presentation;
 using Motwane.UVSS.Presentation.Windows;
 using Motwane.UVSS.ViewModels;
@@ -374,26 +376,25 @@ namespace Motwane.UVSS.Presentation.Windows
                 if (File.Exists(cam3Source))
                     File.Copy(cam3Source, cam3Dest, true);
 
-                // ✅ SAVE ENTRY TO DB
-                _vehicleEntryService.SaveVehicleEntry(
-                    username,
-                    entryDate,
-                    entryTime,
-                    status,
-                    remark,
-                    numberplate,
-                    undersidePath,
-                    driverPath,
-                    anprPath
-                );
+                int vehicleEntryId = _vehicleEntryService.SaveVehicleEntry(
+     username,
+     entryDate,
+     entryTime,
+     status,
+     remark,
+     numberplate,
+     undersidePath,
+     driverPath,
+     anprPath
+ );
 
-                // ✅ SAVE VIDEO RECORD
                 _vehicleEntryService.SaveVideoRecord(
-                    numberplate,
+                    vehicleEntryId,
                     cam1Dest,
                     cam2Dest,
                     cam3Dest,
-                    undersidePath
+                    undersidePath,
+                    anprPath
                 );
             }
             catch (Exception ex)

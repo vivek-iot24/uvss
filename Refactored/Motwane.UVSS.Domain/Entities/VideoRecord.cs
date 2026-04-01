@@ -19,5 +19,6 @@ namespace Motwane.UVSS.Domain.Entities
         public string video3_path { get; set; }
 
         public byte[] vehicle_image { get; set; }
+        public string vehicle_image_path { get; set; }
     }
 }

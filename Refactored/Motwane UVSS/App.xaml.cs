@@ -12,12 +12,21 @@ using Motwane.UVSS.Presentation.Windows;
 using Motwane.UVSS.ViewModels;
 using System;
 using System.Windows;
-
+using System.IO;
 namespace Motwane.UVSS.Presentation
 {
     public partial class App : System.Windows.Application
     {
-        string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;";
+        public static string ConnectionString { get; private set; }
+
+        public App()
+        {
+            ConnectionString = File.ReadAllText(
+                Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Resources",
+                    "dbconfig.txt"));
+        }
         public const string HardwareMode = "Test";
         public string LoggedInUserID { get; set; }
 
@@ -49,13 +58,13 @@ namespace Motwane.UVSS.Presentation
         {
             // DAL 
             services.AddSingleton<IUserRepository>(sp =>
-                new UserRepository(connectionString));
+                new UserRepository(ConnectionString));
 
             services.AddSingleton<IVideoRepository>(sp =>
-                new VideoRepository(connectionString));
+                new VideoRepository(ConnectionString));
 
             services.AddSingleton<IVehicleEntryRepository>(sp =>
-                new VehicleEntryRepository(connectionString));
+                new VehicleEntryRepository(ConnectionString));
 
             // Application Services
             services.AddSingleton<UserManagementService>();

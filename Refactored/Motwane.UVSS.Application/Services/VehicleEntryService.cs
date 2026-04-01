@@ -1,4 +1,5 @@
-﻿using Motwane.UVSS.Application.Interfaces.DAL;
+﻿using Motwane.UVSS.Application.DTOs;
+using Motwane.UVSS.Application.Interfaces.DAL;
 using Motwane.UVSS.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -33,8 +34,8 @@ namespace Motwane.UVSS.Application.Services
             return _repository.GetLastVehicleRemark(numberplate);
         }
 
-        // ✅ UPDATED: IMAGE PATHS INSTEAD OF BYTE[]
-        public void SaveVehicleEntry(
+        // ✅ MUST RETURN ENTRY ID
+        public int SaveVehicleEntry(
             string username,
             DateTime entryDate,
             TimeSpan entryTime,
@@ -45,7 +46,7 @@ namespace Motwane.UVSS.Application.Services
             string driverImagePath,
             string anprImagePath)
         {
-            _repository.InsertVehicleEntry(
+            return _repository.InsertVehicleEntry(
                 username,
                 entryDate,
                 entryTime,
@@ -58,8 +59,9 @@ namespace Motwane.UVSS.Application.Services
             );
         }
 
-        // ✅ UPDATED: IMAGE PATH INSTEAD OF BYTE[]
+        // ✅ NOW TAKES entryId
         public void SaveVideoRecord(
+            int entryId,
             string vehicleNumber,
             string video1,
             string video2,
@@ -67,11 +69,37 @@ namespace Motwane.UVSS.Application.Services
             string vehicleImagePath)
         {
             _repository.InsertVideoManagementRecord(
+                entryId,
                 vehicleNumber,
                 video1,
                 video2,
                 video3,
                 vehicleImagePath
+            );
+        }
+
+        // ✅ THIS FIXES YOUR MAIN ERROR
+        public void SaveCompleteVehicleLog(VehicleEntryRequest request)
+        {
+            int entryId = SaveVehicleEntry(
+                request.Username,
+                request.EntryDate,
+                request.EntryTime,
+                request.Status,
+                request.Remark,
+                request.NumberPlate,
+                request.UndersideImagePath,
+                request.DriverImagePath,
+                request.AnprImagePath
+            );
+
+            SaveVideoRecord(
+                entryId,
+                request.NumberPlate,
+                request.Video1Path,
+                request.Video2Path,
+                request.Video3Path,
+                request.UndersideImagePath
             );
         }
     }

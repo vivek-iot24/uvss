@@ -17,34 +17,15 @@ namespace Motwane.UVSS.Application.UseCases
         {
             var lastRemark = _vehicleService.GetLastVehicleRemark(request.NumberPlate);
 
-            if (lastRemark != null && lastRemark != "Normal")
+            if (!string.IsNullOrWhiteSpace(lastRemark) &&
+                !lastRemark.Equals("Normal", StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException(
                     $"Vehicle flagged: {lastRemark}"
                 );
             }
 
-            
-            _vehicleService.SaveVehicleEntry(
-                request.Username,
-                request.EntryDate,
-                request.EntryTime,
-                request.Status,
-                request.Remark,
-                request.NumberPlate,
-                request.UndersideImagePath,
-                request.DriverImagePath,
-                request.AnprImagePath
-            );
-
-           
-            _vehicleService.SaveVideoRecord(
-                request.NumberPlate,
-                request.Video1Path,
-                request.Video2Path,
-                request.Video3Path,
-                request.UndersideImagePath
-            );
+            _vehicleService.SaveCompleteVehicleLog(request);
         }
     }
 }

@@ -23,7 +23,20 @@ namespace Motwane.UVSS.DAL.Repositories
             {
                 conn.Open();
 
-                string query = "SELECT * FROM video_management_table";
+                string query = @"
+                    SELECT 
+                        M.M_ID,
+                        E.Vehicle_Registration_No,
+                        E.Entry_Date,
+                        E.Entry_time,
+                        M.Video_Cam1,
+                        M.Video_Cam2,
+                        M.Video_Cam3,
+                        M.Underside_image_path
+                    FROM TB_Vehicle_Entry_Media M
+                    INNER JOIN TB_Vehicle_Entry_Log E
+                        ON M.V_Entry_ID = E.V_Entry_ID
+                    ORDER BY E.Entry_DateTime DESC";
 
                 using (var cmd = new SqlCommand(query, conn))
                 using (var reader = cmd.ExecuteReader())
@@ -32,25 +45,31 @@ namespace Motwane.UVSS.DAL.Repositories
                     {
                         data.Add(new VideoRecord
                         {
-                            id = reader["id"] != DBNull.Value ? Convert.ToInt32(reader["id"]) : 0,
+                            id = reader["M_ID"] != DBNull.Value
+                                ? Convert.ToInt32(reader["M_ID"])
+                                : 0,
 
-                            vehicle_number = reader["vehicle_number"]?.ToString(),
+                            vehicle_number = reader["Vehicle_Registration_No"]?.ToString(),
 
-                            capture_date = reader["capture_date"] != DBNull.Value
-                                ? Convert.ToDateTime(reader["capture_date"])
+                            capture_date = reader["Entry_Date"] != DBNull.Value
+                                ? Convert.ToDateTime(reader["Entry_Date"])
                                 : DateTime.MinValue,
 
-                            capture_time = reader["capture_time"] != DBNull.Value
-                                ? (TimeSpan)reader["capture_time"]
+                            capture_time = reader["Entry_time"] != DBNull.Value
+                                ? Convert.ToDateTime(reader["Entry_time"]).TimeOfDay
                                 : TimeSpan.Zero,
 
-                            video1_path = reader["video1_path"]?.ToString(),
+                            video1_path = reader["Video_Cam1"]?.ToString(),
 
-                            video2_path = reader["video2_path"]?.ToString(),
+                            video2_path = reader["Video_Cam2"]?.ToString(),
 
-                            video3_path = reader["video3_path"]?.ToString(),
+                            video3_path = reader["Video_Cam3"]?.ToString(),
 
-                            vehicle_image = reader["vehicle_image"] as byte[]
+                            // keeping old model compatibility
+                            vehicle_image = null,
+
+                            // ✅ if your VideoRecord supports string path add this
+                            vehicle_image_path = reader["Underside_image_path"]?.ToString()
                         });
                     }
                 }

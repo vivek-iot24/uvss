@@ -6,14 +6,17 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
 {
     public interface IUserRepository
     {
-        int ValidateUser(string userId, string password, string userType);
+        int ValidateUser(string userName, string passwordHash, string userType);
 
-        void InsertLoginLog(string userId, DateTime loginTime);
+        void InsertLoginLog(int userId, int machineId, DateTime loginTime);
 
-        void UpdateLogoutLog(string userId, DateTime logoutTime);
+        void UpdateLogoutLog(int userId, DateTime logoutTime);
 
         void InsertUser(User user);
 
+        User GetUserByName(string userName);
+
+        // ✅ compatibility methods for existing services
         User GetUserById(string userId);
 
         void UpdateUser(User user);
@@ -22,8 +25,11 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
 
         DataTable GetDeletedUserHistory();
 
-        DataTable GetUserLoginLog(string userId);
+        DataTable GetUserLoginLog(int userId);
 
+        void DeleteUser(int userId);
+
+        // ✅ compatibility overload
         void DeleteUser(string userId, string userName, string idNo);
     }
 }

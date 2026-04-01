@@ -1,16 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Motwane.UVSS.HAL
 {
     public class ImageService : IImageService
     {
-        public byte[] GetUndersideImage() => new byte[0];
-        public byte[] GetDriverImage() => new byte[0];
-        public byte[] GetAnprImage() => new byte[0];
-        public string GetVideoPath(int index) => "";
+        private readonly string _baseFolder;
+
+        public ImageService()
+        {
+            _baseFolder = @"D:\UVSS_MEDIA";
+        }
+
+        public string GetUndersideImagePath()
+        {
+            return Path.Combine(_baseFolder, "Entry Media", "Underside Images");
+        }
+
+        public string GetDriverImagePath()
+        {
+            return Path.Combine(_baseFolder, "Entry Media", "Driver Images");
+        }
+
+        public string GetAnprImagePath()
+        {
+            return Path.Combine(_baseFolder, "Entry Media", "ANPR Images");
+        }
+
+        public string GetVideoPath(int index)
+        {
+            return Path.Combine(_baseFolder, "Entry Media", $"Video Camera{index}");
+        }
     }
 }

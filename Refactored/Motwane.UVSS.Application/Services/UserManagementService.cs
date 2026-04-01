@@ -40,7 +40,10 @@ namespace Motwane.UVSS.Application.Services
 
         public DataTable GetUserLoginLog(string userId)
         {
-            return userRepository.GetUserLoginLog(userId);
+            int parsedUserId = 0;
+            int.TryParse(userId, out parsedUserId);
+
+            return userRepository.GetUserLoginLog(parsedUserId);
         }
 
         public void DeleteUser(string userId, string userName, string idNo)

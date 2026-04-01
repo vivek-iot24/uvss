@@ -19,12 +19,28 @@ namespace Motwane.UVSS.Application.Services
 
         public void InsertLoginLog(string userId, DateTime loginTime)
         {
-            _userRepository.InsertLoginLog(userId, loginTime);
+            int parsedUserId = 0;
+            int.TryParse(userId, out parsedUserId);
+
+            // temporary default machine id
+            int machineId = 1;
+
+            _userRepository.InsertLoginLog(
+                parsedUserId,
+                machineId,
+                loginTime
+            );
         }
 
         public void UpdateLogoutLog(string userId, DateTime logoutTime)
         {
-            _userRepository.UpdateLogoutLog(userId, logoutTime);
+            int parsedUserId = 0;
+            int.TryParse(userId, out parsedUserId);
+
+            _userRepository.UpdateLogoutLog(
+                parsedUserId,
+                logoutTime
+            );
         }
     }
 }

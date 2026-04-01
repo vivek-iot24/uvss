@@ -1,35 +1,46 @@
-﻿using System;
+﻿using System.IO;
 using System.Windows.Media.Imaging;
-using Motwane.UVSS.Domain.Entities;
 
 namespace Motwane.UVSS.Presentation.ViewModels
 {
     public class VehicleEntryLogVM
     {
         public int SrNo { get; set; }
-
         public string Username { get; set; }
-
-        public DateTime? EntryDate { get; set; }
-
-        public TimeSpan? EntryTime { get; set; }
-
         public string Status { get; set; }
-
         public string Remark { get; set; }
-
         public string Numberplate { get; set; }
 
-        public BitmapImage UndersideImage { get; set; }
+        public string UndersideImagePath { get; set; }
+        public string DriverImagePath { get; set; }
+        public string AnprImagePath { get; set; }
 
-        public BitmapImage DriverCamImage { get; set; }
+    
+        public BitmapImage UndersideImage => LoadImage(UndersideImagePath);
+        public BitmapImage DriverCamImage => LoadImage(DriverImagePath);
+        public BitmapImage AnprImage => LoadImage(AnprImagePath);
 
-        public BitmapImage AnprImage { get; set; }
+        private BitmapImage LoadImage(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+                return null;
 
-        public byte[] UndersideBytes { get; set; }
+            var bitmap = new BitmapImage();
 
-        public byte[] DriverCamBytes { get; set; }
+            using (var stream = new FileStream(
+                path,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite))
+            {
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = stream;
+                bitmap.EndInit();
+                bitmap.Freeze();
+            }
 
-        public byte[] AnprBytes { get; set; }
+            return bitmap;
+        }
     }
 }

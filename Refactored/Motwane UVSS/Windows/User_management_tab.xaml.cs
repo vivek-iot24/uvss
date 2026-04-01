@@ -126,13 +126,12 @@ namespace Motwane.UVSS.Presentation.Windows
                 User user = new User
                 {
                     UserName = UserName.Text,
-                    IdNo = Idno.Text,
                     MobileNo = MobNo.Text,
                     CompanyName = CompName.Text,
-                    AgencyName = Agencyname.Text,
-                    UserID = UserId.Text,
-                    Password = Password.Text,
-                    UserType = new_user_tab_user_type.Text
+                    Usertype_ID = 1,          // default admin/operator type
+                    Authentication_ID = 1,    // default auth type
+                    PasswordHash = Password.Text,
+                    PasswordSalt = "STATIC"
                 };
 
                 userService.InsertUser(user);
@@ -140,11 +139,8 @@ namespace Motwane.UVSS.Presentation.Windows
                 MessageBox.Show("Data inserted successfully!");
 
                 UserName.Clear();
-                Idno.Clear();
                 MobNo.Clear();
                 CompName.Clear();
-                Agencyname.Clear();
-                UserId.Clear();
                 Password.Clear();
                 ConfPassword.Clear();
             }
@@ -173,34 +169,19 @@ namespace Motwane.UVSS.Presentation.Windows
             }
 
             UserName_1.Text = user.UserName;
-            Idno_1.Text = user.IdNo;
             MobNo_1.Text = user.MobileNo;
             CompName_1.Text = user.CompanyName;
-            Agencyname_1.Text = user.AgencyName;
             UserId_1.Text = user.UserID;
-            Password_1.Text = user.Password;
-            ConfPassword_1.Text = user.Password;
-            new_user_tab_user_type_1.Text = user.UserType;
         }
 
         private void update_button_Click(object sender, RoutedEventArgs e)
         {
-            if (Password_1.Text != ConfPassword_1.Text)
-            {
-                MessageBox.Show("Password & Confirm Password is different");
-                return;
-            }
-
             User user = new User
             {
-                UserName = UserName_1.Text,
-                IdNo = Idno_1.Text,
-                MobileNo = MobNo_1.Text,
-                CompanyName = CompName_1.Text,
-                AgencyName = Agencyname_1.Text,
                 UserID = UserId_1.Text,
-                Password = Password_1.Text,
-                UserType = new_user_tab_user_type_1.Text
+                UserName = UserName_1.Text,
+                MobileNo = MobNo_1.Text,
+                CompanyName = CompName_1.Text
             };
 
             userService.UpdateUser(user);
@@ -218,8 +199,8 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             if (UserDataGrid.SelectedItem is DataRowView rowView)
             {
-                string userId = rowView["UserID"].ToString();
-                string userName = rowView["UserName"].ToString();
+                string userName = rowView["User_Name"].ToString();
+                string userId = rowView["User_ID"].ToString();
                 string idNo = rowView["IdNo"].ToString();
 
                 var result = MessageBox.Show(
@@ -244,7 +225,6 @@ namespace Motwane.UVSS.Presentation.Windows
             DataTable dt = userService.GetDeletedUserHistory();
             UserDataGrid_1.ItemsSource = dt.DefaultView;
         }
-
         private void search_btn_logbook_Click(object sender, RoutedEventArgs e)
         {
             string userId = LogUserIdTextBox.Text.Trim();

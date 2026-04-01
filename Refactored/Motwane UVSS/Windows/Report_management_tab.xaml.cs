@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.EMMA;
 using Emgu.CV.XImgproc;
 using Microsoft.Win32;
 using Motwane.UVSS.Application.Services;
@@ -69,19 +70,16 @@ namespace Motwane.UVSS.Presentation.Windows
             {
                 VehicleEntries.Add(new VehicleEntryLogVM
                 {
-                    SrNo = model.SrNo,
+                    SrNo = model.UserId,
                     Username = model.Username,
-                    EntryDate = model.EntryDate,
-                    EntryTime = model.EntryTime,
                     Status = model.Status,
                     Remark = model.Remark,
                     Numberplate = model.Numberplate,
-                    UndersideBytes = model.UndersideBytes,
-                    DriverCamBytes = model.DriverCamBytes,
-                    AnprBytes = model.AnprBytes
+                    UndersideImagePath = model.UndersideImagePath,
+                    DriverImagePath = model.DriverImagePath,
+                    AnprImagePath = model.AnprImagePath
                 });
             }
-
             dataGrid.IsEnabled = true;
         }
         public enum DateFilterType
@@ -150,16 +148,14 @@ namespace Motwane.UVSS.Presentation.Windows
             {
                 VehicleEntries.Add(new VehicleEntryLogVM
                 {
-                    SrNo = model.SrNo,
+                    SrNo = model.UserId,
                     Username = model.Username,
-                    EntryDate = model.EntryDate,
-                    EntryTime = model.EntryTime,
                     Status = model.Status,
                     Remark = model.Remark,
                     Numberplate = model.Numberplate,
-                    UndersideBytes = model.UndersideBytes,
-                    DriverCamBytes = model.DriverCamBytes,
-                    AnprBytes = model.AnprBytes
+                    UndersideImagePath = model.UndersideImagePath,
+                    DriverImagePath = model.DriverImagePath,
+                    AnprImagePath = model.AnprImagePath
                 });
             }
         }

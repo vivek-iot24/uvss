@@ -10,9 +10,9 @@ namespace Motwane.UVSS.HAL
 {
     public interface IImageService
     {
-        byte[] GetUndersideImage();
-        byte[] GetDriverImage();
-        byte[] GetAnprImage();
+        string GetUndersideImagePath();
+        string GetDriverImagePath();
+        string GetAnprImagePath();
         string GetVideoPath(int index);
     }
 }
