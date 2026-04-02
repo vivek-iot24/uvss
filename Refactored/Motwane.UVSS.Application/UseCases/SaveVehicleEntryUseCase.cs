@@ -24,7 +24,6 @@ namespace Motwane.UVSS.Application.UseCases
                 );
             }
 
-            
             _vehicleService.SaveVehicleEntry(
                 request.Username,
                 request.EntryDate,
@@ -34,16 +33,10 @@ namespace Motwane.UVSS.Application.UseCases
                 request.NumberPlate,
                 request.UndersideImagePath,
                 request.DriverImagePath,
-                request.AnprImagePath
-            );
-
-           
-            _vehicleService.SaveVideoRecord(
-                request.NumberPlate,
+                request.AnprImagePath,
                 request.Video1Path,
-                request.Video2Path,
-                request.Video3Path,
-                request.UndersideImagePath
+                request.Video1Path,
+                request.Video1Path
             );
         }
     }

@@ -10,11 +10,15 @@ namespace Motwane.UVSS.Presentation.Windows
     {
         private readonly AuthenticationService _authenticationService;
         private readonly IFileSystemService _fileSystemService;
-        public static string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;";
-        public string USERID;
 
-        public MainWindow(AuthenticationService authenticationService,
-                   IFileSystemService fileSystemService)
+        public static string connectionString =
+            "Server=(localdb)\\MSSQLLocalDB;Database=Motwane_UVSS;Integrated Security=True;";
+
+        public string USERNAME = string.Empty;
+
+        public MainWindow(
+            AuthenticationService authenticationService,
+            IFileSystemService fileSystemService)
         {
             InitializeComponent();
 
@@ -23,44 +27,62 @@ namespace Motwane.UVSS.Presentation.Windows
 
             _fileSystemService.DeleteAllFiles(@"D:\uvss\underside image");
         }
+
         public MainWindow() : this(
-    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current).ServiceProvider.GetService<AuthenticationService>(),
-    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current).ServiceProvider.GetService<IFileSystemService>())
+            ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
+                .ServiceProvider.GetService<AuthenticationService>(),
+            ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
+                .ServiceProvider.GetService<IFileSystemService>())
         {
         }
+
         private void Login_btn_Click(object sender, RoutedEventArgs e)
         {
-            string userId = txtUserID.Text.Trim();
+            string userName = txtUserName.Text.Trim();
             string password = txtPassword.Password.Trim();
             string userType = cmbUserType.Text.Trim();
 
-            USERID = userId;
+            USERNAME = userName;
 
             try
             {
-                int count = _authenticationService.ValidateUser(userId, password, userType);
+                int count = _authenticationService.ValidateUser(userName, password, userType);
 
                 if (count > 0)
                 {
-                    Self_daignosis self_Daignosis = new Self_daignosis();
-                    self_Daignosis.Show();
+                    // Insert login log only after successful login
+                    _authenticationService.InsertLoginLog(userName, DateTime.Now);
 
-                    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current).LoggedInUserID = txtUserID.Text;
-                    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current).LoggedInUSERTYPE = cmbUserType.Text;
+                    Self_daignosis selfDiagnosis = new Self_daignosis();
+                    selfDiagnosis.Show();
+
+                    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
+                        .LoggedInUserID = userName;
+
+                    ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
+                        .LoggedInUSERTYPE = userType;
+
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Invalid User ID, Password or User Type.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        "Invalid User ID, Password or User Type.",
+                        "Login Failed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "Error: " + ex.Message,
+                    "Exception",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
 
-            _authenticationService.InsertLoginLog(userId, DateTime.Now);
-
-            txtUserID.Clear();
+            txtUserName.Clear();
             txtPassword.Clear();
         }
 
@@ -68,7 +90,10 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             try
             {
-                _authenticationService.UpdateLogoutLog(USERID, DateTime.Now);
+                if (!string.IsNullOrWhiteSpace(USERNAME))
+                {
+                    _authenticationService.UpdateLogoutLog(USERNAME, DateTime.Now);
+                }
             }
             catch (Exception ex)
             {

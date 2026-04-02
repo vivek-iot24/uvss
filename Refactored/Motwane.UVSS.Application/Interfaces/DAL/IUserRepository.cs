@@ -10,7 +10,7 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
 
         void InsertLoginLog(string userId, DateTime loginTime);
 
-        void UpdateLogoutLog(string userId, DateTime logoutTime);
+        void UpdateLogoutLog(string UserName, DateTime logoutTime);
 
         void InsertUser(User user);
 

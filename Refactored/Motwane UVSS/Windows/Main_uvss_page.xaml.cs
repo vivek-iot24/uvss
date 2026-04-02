@@ -309,6 +309,11 @@ namespace Motwane.UVSS.Presentation.Windows
             try
             {
                 string username = username_textbox.Text;
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    MessageBox.Show("Username is required.");
+                    return;
+                }
 
                 // ✅ STATUS LOGIC
                 string status = "AUTO";
@@ -371,25 +376,21 @@ namespace Motwane.UVSS.Presentation.Windows
 
                 // ✅ SAVE ENTRY (STORE PATHS IN DB)
                 _vehicleEntryService.SaveVehicleEntry(
-                    username,
-                    entryDate,
-                    entryTime,
-                    status,
-                    remark,
-                    numberplate,
-                    undersidePath,
-                    driverPath,
-                    anprPath
-                );
+     username,
+     entryDate,
+     entryTime,
+     status,
+     remark,
+     numberplate,
+     undersidePath,
+     driverPath,
+     anprPath,
+     cam1,
+     cam2,
+     cam3
+ );
 
-                // ✅ SAVE VIDEO RECORD
-                _vehicleEntryService.SaveVideoRecord(
-                    numberplate,
-                    cam1,
-                    cam2,
-                    cam3,
-                    undersidePath   // using path instead of byte[]
-                );
+
             }
             catch (Exception ex)
             {
@@ -404,7 +405,7 @@ namespace Motwane.UVSS.Presentation.Windows
             if (string.IsNullOrWhiteSpace(input))
                 return "";
 
-            foreach (char c in Path.GetInvalidFileNameChars())
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
                 input = input.Replace(c, '_');
 
             return input.Replace(" ", "_");

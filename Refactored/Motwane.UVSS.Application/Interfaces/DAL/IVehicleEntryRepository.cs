@@ -6,7 +6,11 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
 {
     public interface IVehicleEntryRepository
     {
-        int GetTotalRowCount(DateTime? from, DateTime? to, string user, string plate);
+        int GetTotalRowCount(
+            DateTime? from,
+            DateTime? to,
+            string user,
+            string plate);
 
         List<string> GetDistinctUsernames();
 
@@ -18,26 +22,20 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
 
         string GetLastVehicleRemark(string numberplate);
 
-       
         void InsertVehicleEntry(
-            string username,
-            DateTime entryDate,
-            TimeSpan entryTime,
-            string status,
-            string remark,
-            string numberplate,
-            string undersideImagePath,
-            string driverImagePath,
-            string anprImagePath
-        );
+      string username,
+      DateTime entryDate,
+      TimeSpan entryTime,
+      string status,
+      string remark,
+      string numberplate,
+      string undersideImagePath,
+      string driverImagePath,
+      string anprImagePath,
+      string videoCam1,
+      string videoCam2,
+      string videoCam3);
 
-     
-        void InsertVideoManagementRecord(
-            string vehicleNumber,
-            string video1,
-            string video2,
-            string video3,
-            string vehicleImagePath
-        );
+
     }
 }

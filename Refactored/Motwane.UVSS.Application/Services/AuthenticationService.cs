@@ -22,9 +22,9 @@ namespace Motwane.UVSS.Application.Services
             _userRepository.InsertLoginLog(userId, loginTime);
         }
 
-        public void UpdateLogoutLog(string userId, DateTime logoutTime)
+        public void UpdateLogoutLog(string UserName, DateTime logoutTime)
         {
-            _userRepository.UpdateLogoutLog(userId, logoutTime);
+            _userRepository.UpdateLogoutLog(UserName, logoutTime);
         }
     }
 }

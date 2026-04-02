@@ -15,79 +15,113 @@ namespace Motwane.UVSS.DAL.Repositories
             this.connectionString = connectionString;
         }
 
-        public int ValidateUser(string userId, string password, string userType)
+        public int ValidateUser(string userName, string password, string userType)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                string query = "SELECT COUNT(*) FROM dbo.Users WHERE UserID = @UserID AND Password = @Password AND UserType = @UserType";
+                string query = @"
+            SELECT COUNT(*)
+            FROM TB_Users U
+            INNER JOIN TB_Usertype T
+                ON U.Usertype_ID = T.Usertype_ID
+            WHERE U.User_Name = @User_Name
+            AND U.Password = @Password
+            AND T.Usertype = @Usertype
+            AND ISNULL(U.user_status, 'Active') = 'Active'";
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.AddWithValue("@User_Name", userName);
                     cmd.Parameters.AddWithValue("@Password", password);
-                    cmd.Parameters.AddWithValue("@UserType", userType);
+                    cmd.Parameters.AddWithValue("@Usertype", userType);
 
-                    int count = (int)cmd.ExecuteScalar();
-                    return count;
+                    return Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
         }
 
-        public void InsertLoginLog(string userId, DateTime loginTime)
+        public void InsertLoginLog(string userName, DateTime loginTime)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                string loginQuery = @" INSERT INTO user_login_log (UserID, LoginTime)VALUES (@UserID, @LoginTime)";
+                int userId = GetUserIdByUserName(connection, userName);
+
+                string loginQuery = @"
+            INSERT INTO TB_User_Login_log
+            (User_ID, Logged_in)
+            VALUES
+            (@User_ID, @Logged_in)";
 
                 using (SqlCommand cmd = new SqlCommand(loginQuery, connection))
                 {
-                    cmd.Parameters.AddWithValue("@UserID", userId);
-                    cmd.Parameters.AddWithValue("@LoginTime", loginTime);
+                    cmd.Parameters.AddWithValue("@User_ID", userId);
+                    cmd.Parameters.AddWithValue("@Logged_in", loginTime);
+
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
-        public void UpdateLogoutLog(string userId, DateTime logoutTime)
+        public void UpdateLogoutLog(string userName, DateTime logoutTime)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                string logoutQuery = @" UPDATE user_login_log SET LogoutTime = @LogoutTime WHERE UserID = @UserID AND LogoutTime IS NULL";
+                int userId = GetUserIdByUserName(connection, userName);
+
+                string logoutQuery = @"
+            UPDATE TB_User_Login_log
+            SET Logged_out = @Logged_out
+            WHERE User_ID = @User_ID
+            AND Logged_out IS NULL";
 
                 using (SqlCommand cmd = new SqlCommand(logoutQuery, connection))
                 {
-                    cmd.Parameters.AddWithValue("@UserID", userId);
-                    cmd.Parameters.AddWithValue("@LogoutTime", logoutTime);
+                    cmd.Parameters.AddWithValue("@User_ID", userId);
+                    cmd.Parameters.AddWithValue("@Logged_out", logoutTime);
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
         public void InsertUser(User user)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                string query =
-                    "INSERT INTO dbo.Users (UserName, MobileNo, CompanyName, AgencyName, UserID, Password,UserType,IdNo) " +
-                    "VALUES (@UserName, @MobileNo, @CompanyName, @AgencyName, @UserID, @Password, @UserType, @IdNo)";
+                string query = @"
+            INSERT INTO TB_Users
+            (
+                User_Name,
+                Mobile_no,
+                Comapny_Name,
+                AgencyName,
+                Password,
+                IdNo,
+                user_status
+            )
+            VALUES
+            (
+                @User_Name,
+                @Mobile_no,
+                @Comapny_Name,
+                @AgencyName,
+                @Password,
+                @IdNo,
+                'Active'
+            )";
 
                 SqlCommand cmd = new SqlCommand(query, connection);
 
-                cmd.Parameters.AddWithValue("@UserName", user.UserName);
-                cmd.Parameters.AddWithValue("@MobileNo", user.MobileNo);
-                cmd.Parameters.AddWithValue("@CompanyName", user.CompanyName);
+                cmd.Parameters.AddWithValue("@User_Name", user.UserName);
+                cmd.Parameters.AddWithValue("@Mobile_no", user.MobileNo);
+                cmd.Parameters.AddWithValue("@Comapny_Name", user.CompanyName);
                 cmd.Parameters.AddWithValue("@AgencyName", user.AgencyName);
-                cmd.Parameters.AddWithValue("@UserID", user.UserID);
                 cmd.Parameters.AddWithValue("@Password", user.Password);
-                cmd.Parameters.AddWithValue("@UserType", user.UserType);
                 cmd.Parameters.AddWithValue("@IdNo", user.IdNo);
 
                 cmd.ExecuteNonQuery();
@@ -100,8 +134,10 @@ namespace Motwane.UVSS.DAL.Repositories
             {
                 connection.Open();
 
-                string query =
-                    "SELECT UserName, MobileNo, CompanyName, AgencyName, UserID, Password, UserType, IdNo FROM dbo.Users WHERE UserID = @UserID";
+                string query = @"
+    SELECT *
+    FROM TB_Users
+    WHERE User_ID = @User_ID";
 
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@UserID", userId);
@@ -126,6 +162,25 @@ namespace Motwane.UVSS.DAL.Repositories
 
             return null;
         }
+        public int GetUserIdByUserName(SqlConnection connection, string userName)
+        {
+            string query = @"
+        SELECT User_ID
+        FROM TB_Users
+        WHERE User_Name = @User_Name";
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@User_Name", userName);
+
+                object result = cmd.ExecuteScalar();
+
+                if (result == null || result == DBNull.Value)
+                    throw new Exception($"User not found: {userName}");
+
+                return Convert.ToInt32(result);
+            }
+        }
 
         public void UpdateUser(User user)
         {
@@ -133,9 +188,15 @@ namespace Motwane.UVSS.DAL.Repositories
             {
                 connection.Open();
 
-                string query =
-                    "UPDATE dbo.Users SET UserName = @UserName, MobileNo = @MobileNo, CompanyName = @CompanyName, AgencyName = @AgencyName, @IdNo = IdNo, Password = @Password, UserType = @UserType WHERE UserID = @UserID";
-
+                string query = @"
+    UPDATE TB_Users
+    SET User_Name = @User_Name,
+        Mobile_no = @Mobile_no,
+        Comapny_Name = @Comapny_Name,
+        AgencyName = @AgencyName,
+        IdNo = @IdNo,
+        Password = @Password
+    WHERE User_ID = @User_ID";
                 SqlCommand cmd = new SqlCommand(query, connection);
 
                 cmd.Parameters.AddWithValue("@UserName", user.UserName);
@@ -157,7 +218,19 @@ namespace Motwane.UVSS.DAL.Repositories
             {
                 con.Open();
 
-                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM dbo.Users", con);
+                string query = @"
+            SELECT 
+                User_ID,
+                User_Name,
+                Mobile_no,
+                Comapny_Name,
+                AgencyName,
+                IdNo,
+                user_status
+            FROM TB_Users
+            WHERE ISNULL(user_status, 'Active') = 'Active'";
+
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
@@ -171,9 +244,12 @@ namespace Motwane.UVSS.DAL.Repositories
             {
                 con.Open();
 
-                SqlDataAdapter da =
-                    new SqlDataAdapter("SELECT * FROM dbo.deleted_user_history", con);
+                string query = @"
+            SELECT *
+            FROM TB_Users
+            WHERE user_status = 'Inactive'";
 
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
@@ -187,11 +263,14 @@ namespace Motwane.UVSS.DAL.Repositories
             {
                 con.Open();
 
-                string query =
-                    @"SELECT LoginTime, LogoutTime FROM user_login_log WHERE UserID = @UserID ORDER BY LoginTime DESC";
+                string query = @"
+            SELECT Logged_in, Logged_out
+            FROM TB_User_Login_log
+            WHERE User_ID = @User_ID
+            ORDER BY Logged_in DESC";
 
                 SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@UserID", userId);
+                cmd.Parameters.AddWithValue("@User_ID", userId);
 
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable logTable = new DataTable();
@@ -200,39 +279,21 @@ namespace Motwane.UVSS.DAL.Repositories
                 return logTable;
             }
         }
-
         public void DeleteUser(string userId, string userName, string idNo)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
 
-                using (SqlTransaction transaction = con.BeginTransaction())
+                string query = @"
+            UPDATE TB_Users
+            SET user_status = 'Inactive'
+            WHERE User_ID = @User_ID";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    string insertQuery =
-                        @"INSERT INTO deleted_user_history (UserName, UserID, IdNo, DeletedDate)
-                          VALUES (@UserName, @UserID, @IdNo, GETDATE())";
-
-                    SqlCommand insertCmd =
-                        new SqlCommand(insertQuery, con, transaction);
-
-                    insertCmd.Parameters.AddWithValue("@UserName", userName);
-                    insertCmd.Parameters.AddWithValue("@UserID", userId);
-                    insertCmd.Parameters.AddWithValue("@IdNo", idNo);
-
-                    insertCmd.ExecuteNonQuery();
-
-                    string deleteQuery =
-                        "DELETE FROM dbo.Users WHERE UserID = @UserID";
-
-                    SqlCommand deleteCmd =
-                        new SqlCommand(deleteQuery, con, transaction);
-
-                    deleteCmd.Parameters.AddWithValue("@UserID", userId);
-
-                    deleteCmd.ExecuteNonQuery();
-
-                    transaction.Commit();
+                    cmd.Parameters.AddWithValue("@User_ID", userId);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

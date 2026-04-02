@@ -17,7 +17,7 @@ namespace Motwane.UVSS.Presentation
 {
     public partial class App : System.Windows.Application
     {
-        string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;";
+        string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=Motwane_UVSS;Integrated Security=True;";
         public const string HardwareMode = "Test";
         public string LoggedInUserID { get; set; }
 
@@ -39,7 +39,7 @@ namespace Motwane.UVSS.Presentation
 
             Services = ServiceProvider;
 
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = ServiceProvider.GetRequiredService<Menu_screen>();
             mainWindow.Show();
             var mediaService = new MediaFolderService();
             mediaService.EnsureStructure();

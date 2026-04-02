@@ -18,8 +18,8 @@
                 <TextBlock Foreground="#007ACC" Text="Login" FontSize="40" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
 
                 <!-- User ID -->
-                <TextBlock Text="User ID" Margin="20,10,0,5" FontSize="18" Foreground="#007ACC" FontWeight="SemiBold"/>
-                <TextBox x:Name="txtUserID" Margin="20,0,20,0" Height="30" FontSize="18" />
+                <TextBlock Text="User Name" Margin="20,10,0,5" FontSize="18" Foreground="#007ACC" FontWeight="SemiBold"/>
+                <TextBox x:Name="txtUserName" Margin="20,0,20,0" Height="30" FontSize="18" />
 
                 <!-- Password -->
                 <TextBlock Text="Password" Margin="20,25,0,5" FontSize="18" Foreground="#007ACC" FontWeight="SemiBold"/>

@@ -10,27 +10,134 @@
         Width="1920"
         WindowState="Maximized"
         Icon="/Resources/logo-motwane-90x90.ico">
+
     <Grid>
         <Image Source="/Resources/MUVSS.png" Stretch="Fill"/>
 
-        <Border CornerRadius="20" 
-                Background="White" 
+        <Border CornerRadius="20"
+                Background="White"
                 Padding="20"
                 VerticalAlignment="Center"
-                Margin="30,20" 
+                Margin="30,20"
                 MaxHeight="950">
 
             <StackPanel Orientation="Vertical">
-                <TextBlock Foreground="#007ACC" Text="Video Management" FontSize="60" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
 
-                <Grid x:Name="report_grid" Margin="10" Height="auto" Visibility="Visible" >
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="600" >
-                        <DataGrid x:Name="VideoDataGrid" Foreground="#007ACC" AutoGenerateColumns="True" SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True" />
+                <!-- TITLE -->
+                <TextBlock Foreground="#007ACC"
+                           Text="Video Management"
+                           FontSize="60"
+                           FontWeight="Bold"
+                           Margin="0,0,0,20"
+                           HorizontalAlignment="Center"/>
+
+                <!-- FILTER GRID (ADDED SAME AS REPORT MANAGEMENT) -->
+                <Grid Margin="10,10,10,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Filter:"
+                               VerticalAlignment="Center"
+                               Grid.Column="0"/>
+
+                    <ComboBox x:Name="videoFilterTypeComboBox"
+                              Grid.Column="1"
+                              Margin="5"
+                              SelectionChanged="VideoFilterTypeComboBox_SelectionChanged"/>
+
+                    <TextBlock x:Name="videoFromTextBlock"
+                               Text="From:"
+                               Visibility="Collapsed"
+                               VerticalAlignment="Center"
+                               Grid.Column="2"/>
+
+                    <DatePicker x:Name="videoFromDatePicker"
+                                Grid.Column="3"
+                                Margin="5"/>
+
+                    <TextBlock x:Name="videoToTextBlock"
+                               Text="To:"
+                               Visibility="Collapsed"
+                               VerticalAlignment="Center"
+                               Grid.Column="4"/>
+
+                    <DatePicker x:Name="videoToDatePicker"
+                                Grid.Column="5"
+                                Margin="5"/>
+
+                    <TextBlock Text="Username:"
+                               Grid.Column="6"
+                               VerticalAlignment="Center"/>
+
+                    <ComboBox x:Name="videoUsernameComboBox"
+                              Grid.Column="7"
+                              Margin="5"/>
+
+                    <TextBlock Text="Numberplate:"
+                               Grid.Column="8"
+                               VerticalAlignment="Center"/>
+
+                    <TextBox x:Name="videoNumberplateTextBox"
+                             Grid.Column="9"
+                             Margin="5"/>
+
+                    <Button x:Name="BtnVideoSearch"
+                            Grid.Column="10"
+                            Content="Search"
+                            Click="BtnVideoSearch_Click"
+                            Width="70"
+                            Margin="20,5,5,5"
+                            Background="#007ACC"
+                            Foreground="White"
+                            FontWeight="Bold"/>
+
+                    <Button x:Name="BtnVideoClear"
+                            Grid.Column="11"
+                            Content="Clear"
+                            Click="BtnVideoClear_Click"
+                            Width="70"
+                            Margin="20,5,5,5"
+                            Background="#007ACC"
+                            Foreground="White"
+                            FontWeight="Bold"/>
+                </Grid>
+
+                <!-- REPORT GRID (UNCHANGED) -->
+                <Grid x:Name="report_grid"
+                      Margin="10"
+                      Height="Auto"
+                      Visibility="Visible">
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Height="600">
+                        <DataGrid x:Name="VideoDataGrid"
+                                  Foreground="#007ACC"
+                                  AutoGenerateColumns="True"
+                                  SelectionMode="Single"
+                                  SelectionUnit="FullRow"
+                                  IsReadOnly="True"/>
                     </ScrollViewer>
                 </Grid>
 
-                <Grid x:Name="video_grid" Height="auto" Visibility="Collapsed">
+                <!-- VIDEO GRID (UNCHANGED) -->
+                <Grid x:Name="video_grid"
+                      Height="Auto"
+                      Visibility="Collapsed">
+
                     <StackPanel Orientation="Vertical">
+
                         <Grid Height="300">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -38,51 +145,168 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <MediaElement x:Name="media1" LoadedBehavior="Manual" Grid.Column="0" Margin="5" />
-                            <MediaElement x:Name="media2" LoadedBehavior="Manual" Grid.Column="1" Margin="5"/>
-                            <MediaElement x:Name="media3" LoadedBehavior="Manual" Grid.Column="2" Margin="5"/>
+                            <MediaElement x:Name="media1"
+                                          LoadedBehavior="Manual"
+                                          Grid.Column="0"
+                                          Margin="5"/>
+
+                            <MediaElement x:Name="media2"
+                                          LoadedBehavior="Manual"
+                                          Grid.Column="1"
+                                          Margin="5"/>
+
+                            <MediaElement x:Name="media3"
+                                          LoadedBehavior="Manual"
+                                          Grid.Column="2"
+                                          Margin="5"/>
                         </Grid>
-                        <Grid Height="150" Margin="0,20,0,0">
+
+                        <Grid Height="150"
+                              Margin="0,20,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Orientation="Vertical" Grid.Column="0" Margin="50,0,0,0" VerticalAlignment="Center">
+                            <StackPanel Orientation="Vertical"
+                                        Grid.Column="0"
+                                        Margin="50,0,0,0"
+                                        VerticalAlignment="Center">
+
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Vehicle No :" FontSize="25" FontWeight="Bold" Foreground="#007ACC" />
-                                    <TextBlock x:Name="txtVehicleNumber" FontSize="25" FontWeight="Bold" Margin="20,0,0,0" Foreground="#007ACC"/>
+                                    <TextBlock Text="Vehicle No :"
+                                               FontSize="25"
+                                               FontWeight="Bold"
+                                               Foreground="#007ACC"/>
+                                    <TextBlock x:Name="txtVehicleNumber"
+                                               FontSize="25"
+                                               FontWeight="Bold"
+                                               Margin="20,0,0,0"
+                                               Foreground="#007ACC"/>
                                 </StackPanel>
+
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Entry Date :" FontSize="25" FontWeight="Bold" Foreground="#007ACC" />
-                                    <TextBlock x:Name="txtDate" FontSize="25" FontWeight="Bold" Margin="20,0,0,0" Foreground="#007ACC"/>
+                                    <TextBlock Text="Entry Date :"
+                                               FontSize="25"
+                                               FontWeight="Bold"
+                                               Foreground="#007ACC"/>
+                                    <TextBlock x:Name="txtDate"
+                                               FontSize="25"
+                                               FontWeight="Bold"
+                                               Margin="20,0,0,0"
+                                               Foreground="#007ACC"/>
                                 </StackPanel>
+
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Entry Time :" FontSize="25" FontWeight="Bold" Foreground="#007ACC" />
-                                    <TextBlock x:Name="txtTime" FontSize="25" FontWeight="Bold" Margin="20,0,0,0" Foreground="#007ACC"/>
+                                    <TextBlock Text="Entry Time :"
+                                               FontSize="25"
+                                               FontWeight="Bold"
+                                               Foreground="#007ACC"/>
+                                    <TextBlock x:Name="txtTime"
+                                               FontSize="25"
+                                               FontWeight="Bold"
+                                               Margin="20,0,0,0"
+                                               Foreground="#007ACC"/>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                            <Button Content="Play" Width="150" Height="60" Margin="5" FontSize="25" Click="Play_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
-                            <Button Content="Pause" Width="150" Height="60" Margin="5" FontSize="25" Click="Pause_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
-                            <Button Content="Fast" Width="150" Height="60" Margin="5" FontSize="25" Click="Fast_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
-                            <Button Content="Slow" Width="150" Height="60" Margin="5" FontSize="25" Click="Slow_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
-                            <Button Content="Replay" Width="150" Height="60" Margin="5" FontSize="25" Click="Replay_Click" Background="#007ACC" Foreground="White" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,20,0,0">
+
+                            <Button Content="Play"
+                                    Width="150"
+                                    Height="60"
+                                    Margin="5"
+                                    FontSize="25"
+                                    Click="Play_Click"
+                                    Background="#007ACC"
+                                    Foreground="White"
+                                    FontWeight="Bold"/>
+
+                            <Button Content="Pause"
+                                    Width="150"
+                                    Height="60"
+                                    Margin="5"
+                                    FontSize="25"
+                                    Click="Pause_Click"
+                                    Background="#007ACC"
+                                    Foreground="White"
+                                    FontWeight="Bold"/>
+
+                            <Button Content="Fast"
+                                    Width="150"
+                                    Height="60"
+                                    Margin="5"
+                                    FontSize="25"
+                                    Click="Fast_Click"
+                                    Background="#007ACC"
+                                    Foreground="White"
+                                    FontWeight="Bold"/>
+
+                            <Button Content="Slow"
+                                    Width="150"
+                                    Height="60"
+                                    Margin="5"
+                                    FontSize="25"
+                                    Click="Slow_Click"
+                                    Background="#007ACC"
+                                    Foreground="White"
+                                    FontWeight="Bold"/>
+
+                            <Button Content="Replay"
+                                    Width="150"
+                                    Height="60"
+                                    Margin="5"
+                                    FontSize="25"
+                                    Click="Replay_Click"
+                                    Background="#007ACC"
+                                    Foreground="White"
+                                    FontWeight="Bold"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
 
-                <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Right">
-                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
-                        <Button Content="Show" x:Name="show_btn" Click="show_btn_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+                <!-- BOTTOM BUTTONS (UNCHANGED) -->
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Right">
+
+                    <Border Margin="10"
+                            BorderBrush="#007ACC"
+                            BorderThickness="3"
+                            CornerRadius="10"
+                            Background="#007ACC">
+                        <Button Content="Show"
+                                x:Name="show_btn"
+                                Click="show_btn_Click"
+                                FontSize="35"
+                                Foreground="White"
+                                Background="Transparent"
+                                Margin="5"
+                                BorderThickness="0"
+                                FontWeight="SemiBold"/>
                     </Border>
-                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
-                        <Button Content="Exit" x:Name="Exit_button" Click="Exit_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
+
+                    <Border Margin="10"
+                            BorderBrush="#007ACC"
+                            BorderThickness="3"
+                            CornerRadius="10"
+                            Background="#007ACC">
+                        <Button Content="Exit"
+                                x:Name="Exit_button"
+                                Click="Exit_button_Click"
+                                FontSize="35"
+                                Foreground="White"
+                                Background="Transparent"
+                                Margin="5"
+                                BorderThickness="0"
+                                FontWeight="SemiBold"/>
                     </Border>
                 </StackPanel>
+
             </StackPanel>
         </Border>
     </Grid>

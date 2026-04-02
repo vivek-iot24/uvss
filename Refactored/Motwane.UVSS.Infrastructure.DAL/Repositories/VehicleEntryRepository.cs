@@ -4,35 +4,69 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Motwane.UVSS.Application.ComputerVision;
 
 namespace Motwane.UVSS.DAL.Repositories
 {
     public class VehicleEntryRepository : IVehicleEntryRepository
     {
-
         private readonly string _connectionString;
-       
+
         public VehicleEntryRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
-
-        public int GetTotalRowCount(DateTime? from, DateTime? to, string user, string plate)
+        public int GetTotalRowCount(
+    DateTime? from,
+    DateTime? to,
+    string user,
+    string plate)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(@"SELECT COUNT(*) FROM vehicle_entry_log
-                WHERE   (@FromDate IS NULL OR entry_date >= @FromDate)
-                AND (@ToDate IS NULL OR entry_date < @ToDate)
-                AND (@Username IS NULL OR username = @Username)
-                AND (@Numberplate IS NULL OR numberplate LIKE '%' + @Numberplate + '%')", conn))
             {
-                cmd.Parameters.AddWithValue("@FromDate", (object)from ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ToDate", (object)to ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@Username", (object)user ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@Numberplate", (object)plate ?? DBNull.Value);
+                string query = @"
+            SELECT COUNT(*)
+            FROM TB_Vehicle_Entry_Log V
+            INNER JOIN TB_Users U
+                ON V.User_ID = U.User_ID
+            WHERE
+                (@FromDate IS NULL OR V.Entry_Date >= @FromDate)
+                AND (@ToDate IS NULL OR V.Entry_Date <= @ToDate)
+                AND (@Username IS NULL OR U.User_Name = @Username)
+                AND (@Numberplate IS NULL OR V.Vehicle_Registration_No LIKE '%' + @Numberplate + '%')";
 
-                conn.Open();
-                return (int)cmd.ExecuteScalar();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@FromDate", (object)from ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ToDate", (object)to ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Username", (object)user ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Numberplate", (object)plate ?? DBNull.Value);
+
+                    conn.Open();
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+        private int GetUserIdByUserName(
+            SqlConnection conn,
+            SqlTransaction transaction,
+            string username)
+        {
+            string query = @"
+                SELECT User_ID
+                FROM TB_Users
+                WHERE User_Name = @User_Name";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn, transaction))
+            {
+                cmd.Parameters.AddWithValue("@User_Name", username);
+
+                object result = cmd.ExecuteScalar();
+
+                if (result == null)
+                    throw new Exception("User not found.");
+
+                return Convert.ToInt32(result);
             }
         }
 
@@ -42,7 +76,9 @@ namespace Motwane.UVSS.DAL.Repositories
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand(
-                "SELECT DISTINCT username FROM vehicle_entry_log", conn))
+                @"SELECT DISTINCT U.User_Name
+                  FROM TB_Vehicle_Entry_Log V
+                  INNER JOIN TB_Users U ON V.User_ID = U.User_ID", conn))
             {
                 conn.Open();
 
@@ -63,36 +99,59 @@ namespace Motwane.UVSS.DAL.Repositories
             string plate)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand("sp_GetVehicleEntryLogs", conn))
             {
-                cmd.CommandType = CommandType.StoredProcedure;
+                string query = @"
+                    SELECT
+                        U.User_Name,
+                        V.Entry_Date,
+                        V.Entry_time,
+                        V.AIC_Status,
+                        V.Remark,
+                        V.Vehicle_Registration_No,
+                        M.Underside_image_path,
+                        M.Driver_image_path,
+                        M.ANPR_image_path
+                    FROM TB_Vehicle_Entry_Log V
+                    INNER JOIN TB_Users U
+                        ON V.User_ID = U.User_ID
+                    LEFT JOIN TB_Vehicle_Entry_Media M
+                        ON V.V_Entry_ID = M.V_Entry_ID
+                    WHERE
+                        (@FromDate IS NULL OR V.Entry_Date >= @FromDate)
+                        AND (@ToDate IS NULL OR V.Entry_Date <= @ToDate)
+                        AND (@Username IS NULL OR U.User_Name = @Username)
+                        AND (@Numberplate IS NULL OR V.Vehicle_Registration_No LIKE '%' + @Numberplate + '%')
+                    ORDER BY V.Entry_time DESC";
 
-                cmd.Parameters.AddWithValue("@FromDate", (object)from ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ToDate", (object)to ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@Username", (object)user ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@Numberplate", (object)plate ?? DBNull.Value);
-
-                conn.Open();
-
-                int sr = 0;
-
-                using (SqlDataReader r = cmd.ExecuteReader())
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    while (r.Read())
+                    cmd.Parameters.AddWithValue("@FromDate", (object)from ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ToDate", (object)to ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Username", (object)user ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Numberplate", (object)plate ?? DBNull.Value);
+
+                    conn.Open();
+
+                    int sr = 0;
+
+                    using (SqlDataReader r = cmd.ExecuteReader())
                     {
-                        yield return new VehicleEntry
+                        while (r.Read())
                         {
-                            SrNo = ++sr,
-                            Username = r["username"] as string,
-                            EntryDate = r["entry_date"] as DateTime?,
-                            EntryTime = r["entry_time"] as TimeSpan?,
-                            Status = r["status"] as string,
-                            Remark = r["remark"] as string,
-                            Numberplate = r["numberplate"] as string,
-                            UndersideImagePath = r["underside_image"] as string,
-                            DriverImagePath = r["driver_cam_image"] as string,
-                            AnprImagePath = r["anpr_image"] as string
-                        };
+                            yield return new VehicleEntry
+                            {
+                                SrNo = ++sr,
+                                Username = r["User_Name"]?.ToString(),
+                                EntryDate = r["Entry_Date"] as DateTime?,
+                                EntryTime = r["Entry_time"] as DateTime?,
+                                Status = r["AIC_Status"]?.ToString(),
+                                Remark = r["Remark"]?.ToString(),
+                                Numberplate = r["Vehicle_Registration_No"]?.ToString(),
+                                UndersideImagePath = r["Underside_image_path"]?.ToString(),
+                                DriverImagePath = r["Driver_image_path"]?.ToString(),
+                                AnprImagePath = r["ANPR_image_path"]?.ToString()
+                            };
+                        }
                     }
                 }
             }
@@ -104,94 +163,135 @@ namespace Motwane.UVSS.DAL.Repositories
             {
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand(
-                    $"Select Top(1) [remark] from vehicle_entry_log where [numberplate]= '{numberplate}' order by Concat(entry_date,[entry_time]) desc",
-                    conn
-                );
+                string query = @"
+                    SELECT TOP 1 Remark
+                    FROM TB_Vehicle_Entry_Log
+                    WHERE Vehicle_Registration_No = @Vehicle_Registration_No
+                    ORDER BY Entry_time DESC";
 
-                SqlDataAdapter adpt = new SqlDataAdapter(cmd);
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Vehicle_Registration_No", numberplate);
 
-                cmd.ExecuteNonQuery();
+                    object result = cmd.ExecuteScalar();
 
-                DataTable dt = new DataTable();
-                adpt.Fill(dt);
-
-                if (dt.Rows.Count == 0)
-                    return null;
-
-                return dt.Rows[0][0].ToString();
+                    return result?.ToString();
+                }
             }
         }
 
         public void InsertVehicleEntry(
-      string username,
-      DateTime entryDate,
-      TimeSpan entryTime,
-      string status,
-      string remark,
-      string numberplate,
-      string undersideImage,
-      string driverCamImage,
-      string anprImage
-  )
+        string username,
+        DateTime entryDate,
+        TimeSpan entryTime,
+        string status,
+        string remark,
+        string numberplate,
+        string undersideImage,
+        string driverCamImage,
+        string anprImage,
+        string videoCam1,
+        string videoCam2,
+        string videoCam3)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                string query = @"
-        INSERT INTO vehicle_entry_log 
-        (username, entry_date, entry_time, status, remark, numberplate, underside_image, driver_cam_image, anpr_image)
-        VALUES 
-        (@username, @entry_date, @entry_time, @status, @remark, @numberplate, @underside_image, @driver_cam_image, @anpr_image)";
+                conn.Open();
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlTransaction transaction = conn.BeginTransaction())
                 {
-                    cmd.Parameters.AddWithValue("@username", username);
-                    cmd.Parameters.AddWithValue("@entry_date", entryDate);
-                    cmd.Parameters.AddWithValue("@entry_time", entryTime);
-                    cmd.Parameters.AddWithValue("@status", status);
-                    cmd.Parameters.AddWithValue("@remark", remark);
-                    cmd.Parameters.AddWithValue("@numberplate", numberplate);
-                    cmd.Parameters.AddWithValue("@underside_image", (object)undersideImage ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@driver_cam_image", (object)driverCamImage ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@anpr_image", (object)anprImage ?? DBNull.Value);
+                    try
+                    {
+                        // STEP 1: username -> User_ID
+                        int userId = GetUserIdByUserName(conn, transaction, username);
 
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
+                        // STEP 2: insert main log
+                        string logQuery = @"
+                    INSERT INTO TB_Vehicle_Entry_Log
+                    (
+                        User_ID,
+                        Entry_Date,
+                        Entry_time,
+                        AIC_Status,
+                        Remark,
+                        Vehicle_Registration_No
+                    )
+                    OUTPUT INSERTED.V_Entry_ID
+                    VALUES
+                    (
+                        @User_ID,
+                        @Entry_Date,
+                        @Entry_time,
+                        @AIC_Status,
+                        @Remark,
+                        @Vehicle_Registration_No
+                    )";
+
+                        int entryId;
+
+                        using (SqlCommand cmd = new SqlCommand(logQuery, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@User_ID", userId);
+                            cmd.Parameters.AddWithValue("@Entry_Date", entryDate);
+                            cmd.Parameters.AddWithValue("@Entry_time", entryDate.Date + entryTime);
+                            cmd.Parameters.AddWithValue("@AIC_Status", status);
+                            cmd.Parameters.AddWithValue("@Remark", remark);
+                            cmd.Parameters.AddWithValue("@Vehicle_Registration_No", numberplate);
+
+                            entryId = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
+                        // STEP 3: insert media row using generated V_Entry_ID
+                        string mediaQuery = @"
+                    INSERT INTO TB_Vehicle_Entry_Media
+                    (
+                        V_Entry_ID,
+                        Vehicle_Registration_No,
+                        Underside_image_path,
+                        Driver_image_path,
+                        ANPR_image_path,
+                        Video_Cam1,
+                        Video_Cam2,
+                        Video_Cam3
+                    )
+                    VALUES
+                    (
+                        @V_Entry_ID,
+                        @Vehicle_Registration_No,
+                        @Underside_image_path,
+                        @Driver_image_path,
+                        @ANPR_image_path,
+                        @Video_Cam1,
+                        @Video_Cam2,
+                        @Video_Cam3
+                    )";
+
+                        using (SqlCommand cmd = new SqlCommand(mediaQuery, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@V_Entry_ID", entryId);
+                            cmd.Parameters.AddWithValue("@Vehicle_Registration_No", numberplate);
+                            cmd.Parameters.AddWithValue("@Underside_image_path", (object)undersideImage ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("@Driver_image_path", (object)driverCamImage ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ANPR_image_path", (object)anprImage ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("@Video_Cam1", (object)videoCam1 ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("@Video_Cam2", (object)videoCam2 ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("@Video_Cam3", (object)videoCam3 ?? DBNull.Value);
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // STEP 4: commit both tables
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
             }
         }
 
-        public void InsertVideoManagementRecord(
-            
-            string vehicleNumber,
-            string video1,
-            string video2,
-            string video3,
-          string vehicleImage
-        )
-        {
-            using (var conn = new SqlConnection(_connectionString))
-            {
-                string query = @"INSERT INTO video_management_table
-                (vehicle_number, capture_date, capture_time,
-                 video1_path, video2_path, video3_path, vehicle_image)
-                VALUES (@vehicle_number, @date, @time,
-                        @video1, @video2, @video3, @image)";
 
-                using (var cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@vehicle_number", vehicleNumber);
-                    cmd.Parameters.AddWithValue("@date", DateTime.Now.Date);
-                    cmd.Parameters.AddWithValue("@time", DateTime.Now.TimeOfDay);
-                    cmd.Parameters.AddWithValue("@video1", video1);
-                    cmd.Parameters.AddWithValue("@video2", video2);
-                    cmd.Parameters.AddWithValue("@video3", video3);
-                    cmd.Parameters.AddWithValue("@image", (object)vehicleImage ?? DBNull.Value);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
     }
 }

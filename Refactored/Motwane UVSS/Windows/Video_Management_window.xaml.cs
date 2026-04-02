@@ -24,6 +24,47 @@ namespace Motwane.UVSS.Presentation.Windows
             Loaded += Window_Loaded;
         }
 
+
+        private void VideoFilterTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (videoFilterTypeComboBox.SelectedItem == null)
+                return;
+
+            string selectedFilter = videoFilterTypeComboBox.SelectedItem.ToString();
+
+            bool isDateRange = selectedFilter == "Date Range";
+
+            videoFromTextBlock.Visibility = isDateRange ? Visibility.Visible : Visibility.Collapsed;
+            videoToTextBlock.Visibility = isDateRange ? Visibility.Visible : Visibility.Collapsed;
+
+            videoFromDatePicker.Visibility = isDateRange ? Visibility.Visible : Visibility.Visible;
+            videoToDatePicker.Visibility = isDateRange ? Visibility.Visible : Visibility.Visible;
+        }
+
+        private void BtnVideoSearch_Click(object sender, RoutedEventArgs e)
+        {
+            string filterType = videoFilterTypeComboBox.Text;
+            DateTime? fromDate = videoFromDatePicker.SelectedDate;
+            DateTime? toDate = videoToDatePicker.SelectedDate;
+            string username = videoUsernameComboBox.Text;
+            string numberplate = videoNumberplateTextBox.Text;
+
+            MessageBox.Show(
+                $"Search Clicked\nFilter: {filterType}\nFrom: {fromDate}\nTo: {toDate}\nUsername: {username}\nNumberplate: {numberplate}"
+            );
+
+            // Add DB filter logic here later
+        }
+
+        private void BtnVideoClear_Click(object sender, RoutedEventArgs e)
+        {
+            videoFilterTypeComboBox.SelectedIndex = -1;
+            videoFromDatePicker.SelectedDate = null;
+            videoToDatePicker.SelectedDate = null;
+            videoUsernameComboBox.SelectedIndex = -1;
+            videoNumberplateTextBox.Clear();
+        }
+
         private void LoadVideoData()
         {
             List<VideoRecord> data = videoRepository.GetAllVideos();

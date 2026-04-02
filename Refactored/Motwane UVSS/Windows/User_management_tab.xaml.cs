@@ -31,8 +31,8 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             if (UserDataGrid.SelectedItem is DataRowView rowView)
             {
-                string userId = rowView["UserID"].ToString();
-                string userName = rowView["UserName"].ToString();
+                string userId = rowView["User_ID"].ToString();
+                string userName = rowView["User_Name"].ToString();
 
                 MessageBox.Show($"Selected User ID: {userId}\nName: {userName}");
             }
@@ -130,7 +130,7 @@ namespace Motwane.UVSS.Presentation.Windows
                     MobileNo = MobNo.Text,
                     CompanyName = CompName.Text,
                     AgencyName = Agencyname.Text,
-                    UserID = UserId.Text,
+                  
                     Password = Password.Text,
                     UserType = new_user_tab_user_type.Text
                 };
@@ -144,7 +144,7 @@ namespace Motwane.UVSS.Presentation.Windows
                 MobNo.Clear();
                 CompName.Clear();
                 Agencyname.Clear();
-                UserId.Clear();
+                
                 Password.Clear();
                 ConfPassword.Clear();
             }
@@ -218,20 +218,21 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             if (UserDataGrid.SelectedItem is DataRowView rowView)
             {
-                string userId = rowView["UserID"].ToString();
-                string userName = rowView["UserName"].ToString();
+                string userId = rowView["User_ID"].ToString();
+                string userName = rowView["User_Name"].ToString();
                 string idNo = rowView["IdNo"].ToString();
 
                 var result = MessageBox.Show(
-                    $"Are you sure you want to delete user ID: {userId}?",
-                    "Confirm Delete",
+                    $"Are you sure you want to deactivate user ID: {userId}?",
+                    "Confirm Deactivate",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
 
                 if (result == MessageBoxResult.Yes)
                 {
                     userService.DeleteUser(userId, userName, idNo);
-                    MessageBox.Show("User deleted successfully.");
+
+                    MessageBox.Show("User deactivated successfully.");
 
                     DataTable dt = userService.GetAllUsers();
                     UserDataGrid.ItemsSource = dt.DefaultView;

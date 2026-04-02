@@ -33,17 +33,19 @@ namespace Motwane.UVSS.Application.Services
             return _repository.GetLastVehicleRemark(numberplate);
         }
 
-        // ✅ UPDATED: IMAGE PATHS INSTEAD OF BYTE[]
         public void SaveVehicleEntry(
-            string username,
-            DateTime entryDate,
-            TimeSpan entryTime,
-            string status,
-            string remark,
-            string numberplate,
-            string undersideImagePath,
-            string driverImagePath,
-            string anprImagePath)
+     string username,
+     DateTime entryDate,
+     TimeSpan entryTime,
+     string status,
+     string remark,
+     string numberplate,
+     string undersideImagePath,
+     string driverImagePath,
+     string anprImagePath,
+     string videoCam1,
+     string videoCam2,
+     string videoCam3)
         {
             _repository.InsertVehicleEntry(
                 username,
@@ -54,25 +56,10 @@ namespace Motwane.UVSS.Application.Services
                 numberplate,
                 undersideImagePath,
                 driverImagePath,
-                anprImagePath
-            );
-        }
-
-        // ✅ UPDATED: IMAGE PATH INSTEAD OF BYTE[]
-        public void SaveVideoRecord(
-            string vehicleNumber,
-            string video1,
-            string video2,
-            string video3,
-            string vehicleImagePath)
-        {
-            _repository.InsertVideoManagementRecord(
-                vehicleNumber,
-                video1,
-                video2,
-                video3,
-                vehicleImagePath
-            );
+                anprImagePath,
+                videoCam1,
+                videoCam2,
+                videoCam3);
         }
     }
 }
