@@ -123,6 +123,35 @@ namespace Motwane.UVSS.Presentation.Windows
 
             try
             {
+                // Map selected UserType to ID if needed
+                int userTypeId = 0;
+                string userTypeText = "";
+
+                if (new_user_tab_user_type.SelectedItem != null)
+                {
+                    ComboBoxItem selectedItem = (ComboBoxItem)new_user_tab_user_type.SelectedItem;
+                    userTypeText = selectedItem.Content.ToString();
+
+                    // Example mapping: Operator=1, Admin=2, Maintenance=3
+                    switch (userTypeText)
+                    {
+                        case "Operator":
+                            userTypeId = 2;
+                            break;
+                        case "Admin":
+                            userTypeId = 1;
+                            break;
+                        case "Service":
+                            userTypeId = 3;
+                            break;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a User Type!");
+                    return;
+                }
+
                 User user = new User
                 {
                     UserName = UserName.Text,
@@ -130,23 +159,24 @@ namespace Motwane.UVSS.Presentation.Windows
                     MobileNo = MobNo.Text,
                     CompanyName = CompName.Text,
                     AgencyName = Agencyname.Text,
-                  
                     Password = Password.Text,
-                    UserType = new_user_tab_user_type.Text
+                    UserType = userTypeText,   // Save text if your DB stores string
+                    Usertype_ID = userTypeId    // Optional: save numeric ID if needed
                 };
 
                 userService.InsertUser(user);
 
                 MessageBox.Show("Data inserted successfully!");
 
+                // Clear fields
                 UserName.Clear();
                 Idno.Clear();
                 MobNo.Clear();
                 CompName.Clear();
                 Agencyname.Clear();
-                
                 Password.Clear();
                 ConfPassword.Clear();
+                new_user_tab_user_type.SelectedIndex = -1; // Reset ComboBox
             }
             catch (Exception ex)
             {

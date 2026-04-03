@@ -21,11 +21,15 @@ namespace Motwane.UVSS.Presentation
 
         public App()
         {
-            ConnectionString = File.ReadAllText(
-                Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    "Resources",
-                    "dbconfig.txt"));
+            string projectPath = Path.GetFullPath( Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\.."));
+
+            string resourcePath = Path.Combine(
+                projectPath,
+
+                "Resources",
+                "dbconfig.txt");
+
+            ConnectionString = File.ReadAllText(resourcePath);
         }
         public const string HardwareMode = "Test";
         public string LoggedInUserID { get; set; }

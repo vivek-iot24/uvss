@@ -95,7 +95,7 @@ namespace Motwane.UVSS.DAL.Repositories
 
                 string query = @"
             INSERT INTO TB_Users
-            (
+            (Usertype_ID,
                 User_Name,
                 Mobile_no,
                 Comapny_Name,
@@ -106,6 +106,7 @@ namespace Motwane.UVSS.DAL.Repositories
             )
             VALUES
             (
+                @Usertype_ID,
                 @User_Name,
                 @Mobile_no,
                 @Comapny_Name,
@@ -116,7 +117,7 @@ namespace Motwane.UVSS.DAL.Repositories
             )";
 
                 SqlCommand cmd = new SqlCommand(query, connection);
-
+                cmd.Parameters.AddWithValue("@Usertype_ID", user.Usertype_ID);
                 cmd.Parameters.AddWithValue("@User_Name", user.UserName);
                 cmd.Parameters.AddWithValue("@Mobile_no", user.MobileNo);
                 cmd.Parameters.AddWithValue("@Comapny_Name", user.CompanyName);
