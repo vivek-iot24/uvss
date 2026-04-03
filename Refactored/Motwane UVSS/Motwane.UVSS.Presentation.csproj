@@ -578,7 +578,9 @@
       <Name>Motwane.UVSS.Infrastructure.HAL</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\dbconfig.txt" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\logo-motwane-90x90.ico" />
     <Resource Include="Resources\MUVSS.png" />

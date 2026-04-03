@@ -1,0 +1,1 @@
+Server=(localdb)\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;
