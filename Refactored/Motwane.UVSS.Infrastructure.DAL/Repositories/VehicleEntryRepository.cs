@@ -28,7 +28,7 @@ namespace Motwane.UVSS.DAL.Repositories
             SELECT COUNT(*)
             FROM TB_Vehicle_Entry_Log V
             INNER JOIN TB_Users U
-                ON V.User_ID = U.User_ID
+                ON V.User_UUID = U.User_UUID
             WHERE
                 (@FromDate IS NULL OR V.Entry_Date >= @FromDate)
                 AND (@ToDate IS NULL OR V.Entry_Date <= @ToDate)
@@ -53,7 +53,7 @@ namespace Motwane.UVSS.DAL.Repositories
             string username)
         {
             string query = @"
-                SELECT User_ID
+                SELECT User_UUID
                 FROM TB_Users
                 WHERE User_Name = @User_Name";
 
@@ -209,7 +209,7 @@ namespace Motwane.UVSS.DAL.Repositories
                         string logQuery = @"
                     INSERT INTO TB_Vehicle_Entry_Log
                     (
-                        User_ID,
+                        User_UUID,
                         Entry_Date,
                         Entry_time,
                         AIC_Status,
@@ -219,7 +219,7 @@ namespace Motwane.UVSS.DAL.Repositories
                     OUTPUT INSERTED.V_Entry_ID
                     VALUES
                     (
-                        @User_ID,
+                        @User_UUID,
                         @Entry_Date,
                         @Entry_time,
                         @AIC_Status,
@@ -231,7 +231,7 @@ namespace Motwane.UVSS.DAL.Repositories
 
                         using (SqlCommand cmd = new SqlCommand(logQuery, conn, transaction))
                         {
-                            cmd.Parameters.AddWithValue("@User_ID", userId);
+                            cmd.Parameters.AddWithValue("@User_UUID", userId);
                             cmd.Parameters.AddWithValue("@Entry_Date", entryDate);
                             cmd.Parameters.AddWithValue("@Entry_time", entryTime);
                             cmd.Parameters.AddWithValue("@AIC_Status", status);
@@ -245,7 +245,7 @@ namespace Motwane.UVSS.DAL.Repositories
                         string mediaQuery = @"
                     INSERT INTO TB_Vehicle_Entry_Media
                     (
-                        V_Entry_ID,
+                        V_Entry_UUID,
                         Vehicle_Registration_No,
                         Underside_image_path,
                         Driver_image_path,
@@ -256,7 +256,7 @@ namespace Motwane.UVSS.DAL.Repositories
                     )
                     VALUES
                     (
-                        @V_Entry_ID,
+                        @V_Entry_UUID,
                         @Vehicle_Registration_No,
                         @Underside_image_path,
                         @Driver_image_path,
@@ -268,7 +268,7 @@ namespace Motwane.UVSS.DAL.Repositories
 
                         using (SqlCommand cmd = new SqlCommand(mediaQuery, conn, transaction))
                         {
-                            cmd.Parameters.AddWithValue("@V_Entry_ID", entryId);
+                            cmd.Parameters.AddWithValue("@V_Entry_UUID", entryId);
                             cmd.Parameters.AddWithValue("@Vehicle_Registration_No", numberplate);
                             cmd.Parameters.AddWithValue("@Underside_image_path", (object)undersideImage ?? DBNull.Value);
                             cmd.Parameters.AddWithValue("@Driver_image_path", (object)driverCamImage ?? DBNull.Value);

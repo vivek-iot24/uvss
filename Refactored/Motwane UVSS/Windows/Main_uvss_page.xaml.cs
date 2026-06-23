@@ -1029,7 +1029,7 @@ namespace Motwane.UVSS.Presentation.Windows
             selectedRemark = "PASS"; // just mark status
 
             MessageBox.Show("Marked as PASS");
-
+            SaveVehicleEntryOnStop();
             logo_textbox.Text = "";
             Numberplate_number_box.Text = "";
 
@@ -1058,7 +1058,7 @@ namespace Motwane.UVSS.Presentation.Windows
         private void HoldOption_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as System.Windows.Controls.Primitives.ToggleButton;
-
+            
             if (btn != null)
             {
                 selectedRemark = btn.Content.ToString();
@@ -1090,6 +1090,7 @@ namespace Motwane.UVSS.Presentation.Windows
         private void HOLD_BTN_Click(object sender, RoutedEventArgs e)
         {
             HoldPopup.IsOpen = true;
+            SaveVehicleEntryOnStop();
         }
         private void CreatePanoramicImage_2(string[] imageFiles)
         {

@@ -70,32 +70,36 @@ namespace Motwane.UVSS.DAL.Repositories
 
 
         // Insert Login Log
-        public void InsertLoginLog(string userName, Guid machineUUID, DateTime loginTime)
+        public void InsertLoginLog(string userName,Guid machineUUID, DateTime loginTime)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
                 Guid userUUID = GetUserUUIDByUserName(connection, userName);
+                Guid mmachineUUID = GetMachineUUID(connection);
 
                 string query = @"
-                INSERT INTO TB_User_Login_log
-                (
-                    User_UUID,
-                    Machine_UUID,
-                    Logged_in
-                )
-                VALUES
-                (
-                    @User_UUID,
-                    @Machine_UUID,
-                    @Logged_in
-                )";
+        INSERT INTO TB_User_Login_log
+        (
+            User_Login_UUID,
+            User_UUID,
+            Machine_UUID,
+            Logged_in
+        )
+        VALUES
+        (
+            @User_Login_UUID,
+            @User_UUID,
+            @Machine_UUID,
+            @Logged_in
+        )";
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
+                    cmd.Parameters.AddWithValue("@User_Login_UUID", Guid.NewGuid());
                     cmd.Parameters.AddWithValue("@User_UUID", userUUID);
-                    cmd.Parameters.AddWithValue("@Machine_UUID", machineUUID);
+                    cmd.Parameters.AddWithValue("@Machine_UUID", mmachineUUID);
                     cmd.Parameters.AddWithValue("@Logged_in", loginTime);
 
                     cmd.ExecuteNonQuery();
@@ -341,7 +345,24 @@ namespace Motwane.UVSS.DAL.Repositories
                 }
             }
         }
+        public Guid GetMachineUUID(SqlConnection connection)
+        {
+            string query = @"
+        SELECT TOP 1 Machine_UUID
+        FROM TB_Machine_UVSS";
 
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                object result = cmd.ExecuteScalar();
+
+                if (result == null || result == DBNull.Value)
+                {
+                    throw new Exception("No machine found in TB_Machine_UVSS");
+                }
+
+                return (Guid)result;
+            }
+        }
 
         // Soft Delete User
         public void DeleteUser(Guid userUUID, string userName, string idNo)
