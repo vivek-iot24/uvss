@@ -15,7 +15,7 @@ namespace Motwane.UVSS.Application.DTOs
         public string NumberPlate { get; set; }
 
         public DateTime EntryDate { get; set; }
-        public TimeSpan EntryTime { get; set; }
+        public DateTime EntryTime { get; set; }
 
         public byte[] UndersideImage { get; set; }
         public byte[] DriverImage { get; set; }

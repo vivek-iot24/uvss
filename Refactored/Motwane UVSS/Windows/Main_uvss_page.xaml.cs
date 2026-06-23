@@ -8,6 +8,7 @@ using Motwane.UVSS.Application.ComputerVision;
 using Motwane.UVSS.Application.Services;
 using Motwane.UVSS.Presentation;
 using Motwane.UVSS.Presentation.Windows;
+using Motwane.UVSS.ViewModels;
 using Onvif.Core.Client;
 using Onvif.Core.Client.Media;
 using Onvif.IP;
@@ -57,7 +58,7 @@ namespace Motwane.UVSS.Presentation.Windows
         private readonly AnprEngine _anprEngine;
         private readonly VehicleEntryService _vehicleEntryService;
         private Underside_cam_class Underside_cameraHandler;
-
+    //    private readonly MediaFolderService _mediaFolderService;
         #region using this to communicate with ir sensor
 
         private SerialPort serialPort;
@@ -292,7 +293,6 @@ namespace Motwane.UVSS.Presentation.Windows
                             Dispatcher.InvokeAsync(() => StopAllRecordingsSafe());
                             Underside_cameraHandler.StopAcquisition();
                             fgyh();
-                            SaveVehicleEntryOnStop();
                         }
                     });
                 }
@@ -331,7 +331,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
                 DateTime now = DateTime.Now;
                 DateTime entryDate = now.Date;
-                TimeSpan entryTime = now.TimeOfDay;
+                DateTime entryTime = DateTime.Now;
 
                 // ✅ BASE PATH
                 string baseFolder = @"D:\UVSS_MEDIA\Entry Media";

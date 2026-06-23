@@ -123,8 +123,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
             try
             {
-                // Map selected UserType to ID if needed
-                int userTypeId = 0;
+                Guid userTypeUUID = Guid.Empty;
                 string userTypeText = "";
 
                 if (new_user_tab_user_type.SelectedItem != null)
@@ -136,13 +135,13 @@ namespace Motwane.UVSS.Presentation.Windows
                     switch (userTypeText)
                     {
                         case "Operator":
-                            userTypeId = 2;
+                             userTypeUUID = Guid.Parse("57F131DB-D7B1-445E-BD91-5CB602BC848B");
                             break;
                         case "Admin":
-                            userTypeId = 1;
+                            userTypeUUID = Guid.Parse("D0357D48-854E-4EC3-8001-E711C9436E50");          
                             break;
                         case "Service":
-                            userTypeId = 3;
+                            userTypeUUID = Guid.Parse("93F797F1-E258-4F26-BBC0-78653A6EE3F2");
                             break;
                     }
                 }
@@ -160,8 +159,8 @@ namespace Motwane.UVSS.Presentation.Windows
                     CompanyName = CompName.Text,
                     AgencyName = Agencyname.Text,
                     Password = Password.Text,
-                    UserType = userTypeText,   // Save text if your DB stores string
-                    Usertype_ID = userTypeId    // Optional: save numeric ID if needed
+                    UserType = userTypeText,   
+                    Usertype_UUID = userTypeUUID        
                 };
 
                 userService.InsertUser(user);
@@ -194,7 +193,7 @@ namespace Motwane.UVSS.Presentation.Windows
                 return;
             }
 
-            var user = userService.GetUserById(userId);
+            var user = userService.GetUserById(new System.Guid(userId));
 
             if (user == null)
             {
@@ -207,7 +206,7 @@ namespace Motwane.UVSS.Presentation.Windows
             MobNo_1.Text = user.MobileNo;
             CompName_1.Text = user.CompanyName;
             Agencyname_1.Text = user.AgencyName;
-            UserId_1.Text = user.UserID;
+            UserId_1.Text = user.UserUUID.ToString();
             Password_1.Text = user.Password;
             ConfPassword_1.Text = user.Password;
             new_user_tab_user_type_1.Text = user.UserType;
@@ -228,7 +227,7 @@ namespace Motwane.UVSS.Presentation.Windows
                 MobileNo = MobNo_1.Text,
                 CompanyName = CompName_1.Text,
                 AgencyName = Agencyname_1.Text,
-                UserID = UserId_1.Text,
+                UserUUID = new System.Guid(UserId_1.Text),
                 Password = Password_1.Text,
                 UserType = new_user_tab_user_type_1.Text
             };
@@ -248,7 +247,7 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             if (UserDataGrid.SelectedItem is DataRowView rowView)
             {
-                string userId = rowView["User_ID"].ToString();
+                string userId = rowView["User_  UUID"].ToString();
                 string userName = rowView["User_Name"].ToString();
                 string idNo = rowView["IdNo"].ToString();
 
@@ -260,7 +259,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    userService.DeleteUser(userId, userName, idNo);
+                    userService.DeleteUser(new System.Guid(userId), userName, idNo);
 
                     MessageBox.Show("User deactivated successfully.");
 
@@ -286,7 +285,7 @@ namespace Motwane.UVSS.Presentation.Windows
                 return;
             }
 
-            DataTable dt = userService.GetUserLoginLog(userId);
+            DataTable dt = userService.GetUserLoginLog(new System.Guid(userId));
 
             if (dt.Rows.Count == 0)
             {

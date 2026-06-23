@@ -47,7 +47,7 @@ namespace Motwane.UVSS.Presentation.ViewModels
                 Remark = Remark,
                 NumberPlate = NumberPlate,
                 EntryDate = now.Date,
-                EntryTime = now.TimeOfDay,
+                EntryTime = now.Date,
 
                 UndersideImage = _imageService.GetUndersideImage(),
                 DriverImage = _imageService.GetDriverImage(),

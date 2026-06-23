@@ -1,1 +1,1 @@
-Server=(localdb)\MSSQLLocalDB;Database=UVSS_USER_DETAILS;Integrated Security=True;
+Server=(localdb)\MSSQLLocalDB;Database=Motwane_UVSS;Integrated Security=True;

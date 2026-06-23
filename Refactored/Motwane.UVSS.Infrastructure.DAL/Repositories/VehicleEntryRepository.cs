@@ -183,7 +183,7 @@ namespace Motwane.UVSS.DAL.Repositories
         public void InsertVehicleEntry(
         string username,
         DateTime entryDate,
-        TimeSpan entryTime,
+        DateTime entryTime,
         string status,
         string remark,
         string numberplate,
@@ -233,7 +233,7 @@ namespace Motwane.UVSS.DAL.Repositories
                         {
                             cmd.Parameters.AddWithValue("@User_ID", userId);
                             cmd.Parameters.AddWithValue("@Entry_Date", entryDate);
-                            cmd.Parameters.AddWithValue("@Entry_time", entryDate.Date + entryTime);
+                            cmd.Parameters.AddWithValue("@Entry_time", entryTime);
                             cmd.Parameters.AddWithValue("@AIC_Status", status);
                             cmd.Parameters.AddWithValue("@Remark", remark);
                             cmd.Parameters.AddWithValue("@Vehicle_Registration_No", numberplate);

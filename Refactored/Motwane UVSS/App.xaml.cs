@@ -52,7 +52,7 @@ namespace Motwane.UVSS.Presentation
 
             Services = ServiceProvider;
 
-            var mainWindow = ServiceProvider.GetRequiredService<Menu_screen>();
+            var mainWindow = ServiceProvider.GetRequiredService<Main_uvss_page>();
             mainWindow.Show();
             var mediaService = new MediaFolderService();
             mediaService.EnsureStructure();

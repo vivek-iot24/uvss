@@ -48,9 +48,11 @@ namespace Motwane.UVSS.Presentation.Windows
 
                 if (count > 0)
                 {
-                    // Insert login log only after successful login
-                    _authenticationService.InsertLoginLog(userName, DateTime.Now);
-
+                    _authenticationService.InsertLoginLog(
+     userName,
+     Guid.NewGuid(),
+     DateTime.Now
+ );
                     Self_daignosis selfDiagnosis = new Self_daignosis();
                     selfDiagnosis.Show();
 

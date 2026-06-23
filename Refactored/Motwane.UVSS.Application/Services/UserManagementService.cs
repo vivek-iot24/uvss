@@ -18,9 +18,9 @@ namespace Motwane.UVSS.Application.Services
             userRepository.InsertUser(user);
         }
 
-        public User GetUserById(string userId)
+        public User GetUserById(System.Guid userUUID)
         {
-            return userRepository.GetUserById(userId);
+            return userRepository.GetUserById(userUUID);
         }
 
         public void UpdateUser(User user)
@@ -38,14 +38,14 @@ namespace Motwane.UVSS.Application.Services
             return userRepository.GetDeletedUserHistory();
         }
 
-        public DataTable GetUserLoginLog(string userId)
+        public DataTable GetUserLoginLog(System.Guid userUUID)
         {
-            return userRepository.GetUserLoginLog(userId);
+            return userRepository.GetUserLoginLog(userUUID);
         }
 
-        public void DeleteUser(string userId, string userName, string idNo)
+        public void DeleteUser(System.Guid userUUID, string userName, string idNo)
         {
-            userRepository.DeleteUser(userId, userName, idNo);
+            userRepository.DeleteUser(userUUID, userName, idNo);
         }
     }
 }

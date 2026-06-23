@@ -4,7 +4,7 @@ namespace Motwane.UVSS.Domain.Entities
 {
     public class User
     {
-        public string UserID { get; set; }
+        public Guid UserUUID { get; set; }
 
         public string UserName { get; set; }
 
@@ -13,7 +13,7 @@ namespace Motwane.UVSS.Domain.Entities
         public string CompanyName { get; set; }
 
         public string AgencyName { get; set; }
-
+        public string IsActive { get; set; }
         public string IdNo { get; set; }
 
         public string Password { get; set; }
@@ -21,7 +21,7 @@ namespace Motwane.UVSS.Domain.Entities
         public string UserType { get; set; }
 
         // DB relation columns
-        public int Usertype_ID { get; set; }
+        public Guid Usertype_UUID { get; set; }
 
         public int Authentication_ID { get; set; }
 

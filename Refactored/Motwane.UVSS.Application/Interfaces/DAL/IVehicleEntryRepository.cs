@@ -25,7 +25,7 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
         void InsertVehicleEntry(
       string username,
       DateTime entryDate,
-      TimeSpan entryTime,
+      DateTime entryTime,
       string status,
       string remark,
       string numberplate,

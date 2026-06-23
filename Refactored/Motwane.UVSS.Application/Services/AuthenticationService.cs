@@ -17,9 +17,9 @@ namespace Motwane.UVSS.Application.Services
             return _userRepository.ValidateUser(userId, password, userType);
         }
 
-        public void InsertLoginLog(string userId, DateTime loginTime)
+        public void InsertLoginLog(string userName, Guid machineUUID, DateTime loginTime)
         {
-            _userRepository.InsertLoginLog(userId, loginTime);
+            _userRepository.InsertLoginLog(userName, machineUUID, loginTime);
         }
 
         public void UpdateLogoutLog(string UserName, DateTime logoutTime)

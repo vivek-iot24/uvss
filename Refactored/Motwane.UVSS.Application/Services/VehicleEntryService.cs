@@ -36,7 +36,7 @@ namespace Motwane.UVSS.Application.Services
         public void SaveVehicleEntry(
      string username,
      DateTime entryDate,
-     TimeSpan entryTime,
+     DateTime entryTime,
      string status,
      string remark,
      string numberplate,
