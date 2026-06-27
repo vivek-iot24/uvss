@@ -16,7 +16,7 @@ namespace Motwane.UVSS.DAL.Repositories
         }
 
 
-        // Validate User Login
+        
         public int ValidateUser(string userName, string password, string userType)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -70,7 +70,7 @@ namespace Motwane.UVSS.DAL.Repositories
 
 
         // Insert Login Log
-        public void InsertLoginLog(string userName,Guid machineUUID, DateTime loginTime)
+        public void InsertLoginLog(string userName, Guid machineUUID, DateTime loginTime)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -106,7 +106,7 @@ namespace Motwane.UVSS.DAL.Repositories
                 }
             }
         }
-        // Update Logout Log
+        
         public void UpdateLogoutLog(string userName, DateTime logoutTime)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -142,7 +142,8 @@ namespace Motwane.UVSS.DAL.Repositories
                 string query = @"
                 INSERT INTO TB_Users
                 (
-                    Usertype_UUID,
+        
+                   Usertype_UUID,
                     User_Name,
                     Mobile_no,
                     Comapny_Name,
@@ -180,7 +181,7 @@ namespace Motwane.UVSS.DAL.Repositories
 
 
         // Get User Details by UUID
-        public User GetUserById(Guid userUUID)
+        public User GetUserByName(string userName)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -189,11 +190,11 @@ namespace Motwane.UVSS.DAL.Repositories
                 string query = @"
                 SELECT *
                 FROM TB_Users
-                WHERE User_UUID = @User_UUID";
+                WHERE User_Name = @User_Name";
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    cmd.Parameters.AddWithValue("@User_UUID", userUUID);
+                    cmd.Parameters.AddWithValue("@User_Name", userName);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -316,32 +317,36 @@ namespace Motwane.UVSS.DAL.Repositories
             }
         }
         // Get User Login History
-        public DataTable GetUserLoginLog(Guid userUUID)
+        public DataTable GetUserLoginLog(string username)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
                 string query = @"
-                SELECT 
-                    User_Login_UUID,
-                    Machine_UUID,
-                    Logged_in,
-                    Logged_out
-                FROM TB_User_Login_log
-                WHERE User_UUID = @User_UUID
-                ORDER BY Logged_in DESC";
+SELECT
+    L.User_Login_UUID,
+   
+    L.Logged_in,
+    L.Logged_out
+FROM TB_User_Login_log L
+INNER JOIN TB_Users U
+    ON L.User_UUID = U.User_UUID
+WHERE U.User_Name = @UserName
+ORDER BY L.Logged_in DESC";
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    cmd.Parameters.AddWithValue("@User_UUID", userUUID);
+                    cmd.Parameters.AddWithValue("@UserName", username);
+
+                    DataTable dt = new DataTable();
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                     {
-                        DataTable dt = new DataTable();
                         adapter.Fill(dt);
-                        return dt;
                     }
+
+                    return dt;
                 }
             }
         }

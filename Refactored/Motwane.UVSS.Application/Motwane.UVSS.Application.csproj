@@ -134,6 +134,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\SessionManager.cs" />
     <Compile Include="ComputerVision\AnprEngine.cs" />
     <Compile Include="ComputerVision\Class1.cs" />
     <Compile Include="ComputerVision\ComputerVisionResult.cs" />

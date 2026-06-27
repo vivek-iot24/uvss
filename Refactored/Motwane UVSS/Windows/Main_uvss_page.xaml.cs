@@ -221,30 +221,21 @@ namespace Motwane.UVSS.Presentation.Windows
 
 
 
-                //ReceivedDataTextBlock.Text = "Listening...";
+                
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Serial communication failed: {ex.Message}", "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            //// ADD THIS LINE: Capture the initial hardcoded image as our first "master copy".
-            //if (Sticked_image.Source != null)
-            //{
-            //    _originalBitmap = Sticked_image.Source as BitmapSource;
-            //}
-
-            // This code creates the "master copy" of the image for your sliders to use.
-
-            // Step 1: Safety check to make sure the hardcoded image was loaded.
+          
             if (Sticked_image.Source is BitmapSource bitmapSource)
             {
-                // Step 2: Get the image's dimensions and format details.
+                
                 width = bitmapSource.PixelWidth;
                 height = bitmapSource.PixelHeight;
                 stride = width * (bitmapSource.Format.BitsPerPixel / 8);
 
-                // Step 3: Create the byte array and copy the pixel data into it.
                 originalPixels = new byte[height * stride];
                 bitmapSource.CopyPixels(originalPixels, stride, 0);
             }
@@ -304,18 +295,123 @@ namespace Motwane.UVSS.Presentation.Windows
             }
         }
 
+        //        private void SaveVehicleEntryOnStop()
+        //        {
+        //            try
+        //            {
+        //                string username = username_textbox.Text;
+        //                if (string.IsNullOrWhiteSpace(username))
+        //                {
+        //                    MessageBox.Show("Username is required.");
+        //                    return;
+        //                }
+
+
+        //                string status = "AUTO";
+
+        //                if (!string.IsNullOrEmpty(selectedRemark))
+        //                {
+        //                    if (selectedRemark.StartsWith("HOLD"))
+        //                        status = "HOLD";
+        //                    else if (selectedRemark == "PASS")
+        //                        status = "PASS";
+        //                }
+
+        //                string remark = selectedRemark;
+        //                string numberplate = Numberplate_number_box.Text;
+        //                if (string.IsNullOrWhiteSpace(numberplate) ||
+        //             numberplate.Contains("Detection failed"))
+        //                {
+        //                    numberplate = null;
+        //                }
+        //                DateTime now = DateTime.Now;
+        //                DateTime entryDate = now.Date;
+        //                DateTime entryTime = DateTime.Now;
+
+
+        //                string baseFolder = @"D:\UVSS_MEDIA\Entry Media";
+        //                string dateFolder = now.ToString("yyyy-MM-dd");
+
+
+        //                string safeNumberplate = CleanFileName(numberplate);
+
+        //                if (string.IsNullOrWhiteSpace(safeNumberplate))
+        //                {
+        //                    safeNumberplate = "UNKNOWN";
+        //                }
+
+        //                string timestamp = now.ToString("yyyyMMdd_HHmmss");
+
+
+        //                string vehicleFolder = System.IO.Path.Combine(baseFolder, dateFolder, safeNumberplate);
+
+
+        //                Directory.CreateDirectory(vehicleFolder);
+
+
+
+
+        //                string undersidePath = SaveImageToFolder(
+        //    Sticked_image,
+        //    vehicleFolder,
+        //    $"{safeNumberplate}_{timestamp}_underside.jpg"
+        //);
+
+        //                string driverPath = SaveImageToFolder(
+        //                    Driver_image,
+        //                    vehicleFolder,
+        //                    $"{safeNumberplate}_{timestamp}_driver.jpg"
+        //                );
+
+        //                string anprPath = SaveImageToFolder(
+        //                    Anpr_image,
+        //                    vehicleFolder,
+        //                    $"{safeNumberplate}_{timestamp}_anpr.jpg"
+        //                );
+
+        //                string cam1 = System.IO.Path.Combine(pinhole_came_path, "camera1.mp4");
+        //                string cam2 = System.IO.Path.Combine(pinhole_came_path, "camera2.mp4");
+        //                string cam3 = System.IO.Path.Combine(pinhole_came_path, "camera3.mp4");
+
+
+        //                _vehicleEntryService.SaveVehicleEntry(
+        //     username,
+        //     entryDate,
+        //     entryTime,
+        //     status,
+        //     remark,
+        //     numberplate,
+        //     undersidePath,
+        //     driverPath,
+        //     anprPath,
+        //     cam1,
+        //     cam2,
+        //     cam3
+        // );
+
+
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                MessageBox.Show("Save failed: " + ex.Message);
+        //            }
+
+        //            selectedRemark = "";
+        //        }
+
         private void SaveVehicleEntryOnStop()
         {
             try
             {
                 string username = username_textbox.Text;
+
                 if (string.IsNullOrWhiteSpace(username))
                 {
                     MessageBox.Show("Username is required.");
                     return;
                 }
 
-                // ✅ STATUS LOGIC
+                // Status Logic
                 string status = "AUTO";
 
                 if (!string.IsNullOrEmpty(selectedRemark))
@@ -329,75 +425,116 @@ namespace Motwane.UVSS.Presentation.Windows
                 string remark = selectedRemark;
                 string numberplate = Numberplate_number_box.Text;
 
+                if (string.IsNullOrWhiteSpace(numberplate) ||
+                    numberplate.Contains("Detection failed"))
+                {
+                    numberplate = null;
+                }
+
                 DateTime now = DateTime.Now;
                 DateTime entryDate = now.Date;
-                DateTime entryTime = DateTime.Now;
+                DateTime entryTime = now;
 
-                // ✅ BASE PATH
-                string baseFolder = @"D:\UVSS_MEDIA\Entry Media";
-                string dateFolder = now.ToString("yyyy-MM-dd");
+              
+                MediaFolderService mediaService = new MediaFolderService();
+                mediaService.EnsureStructure();
 
-                // ✅ SANITIZE NUMBER PLATE (VERY IMPORTANT)
                 string safeNumberplate = CleanFileName(numberplate);
 
                 if (string.IsNullOrWhiteSpace(safeNumberplate))
-                    safeNumberplate = "UNKNOWN_" + now.Ticks;
+                    safeNumberplate = "UNKNOWN";
 
-                string vehicleFolder =System.IO.Path.Combine(baseFolder, dateFolder, safeNumberplate);
+                string timestamp = now.ToString("yyyyMMdd_HHmmss");
 
-                // ✅ CREATE DIRECTORY (handles nested automatically)
-                Directory.CreateDirectory(vehicleFolder);
+                string anprFolder =
+                    mediaService.GetTodayPath("Entry Media", "ANPR Images");
 
-                // ✅ UNIQUE FILE NAMES (avoid overwrite)
-                string timestamp = now.ToString("HHmmss");
+                string driverFolder =
+                    mediaService.GetTodayPath("Entry Media", "Driver Images");
 
-                string undersidePath = SaveImageToFolder(
-                    Sticked_image,
-                    vehicleFolder,
-                    $"underside_{timestamp}.jpg"
+                string undersideFolder =
+                    mediaService.GetTodayPath("Entry Media", "Underside Images");
+
+             
+                string anprPath = SaveImageToFolder(
+                    Anpr_image,
+                    anprFolder,
+                    $"{safeNumberplate}_{timestamp}.jpg"
                 );
 
                 string driverPath = SaveImageToFolder(
                     Driver_image,
-                    vehicleFolder,
-                    $"driver_{timestamp}.jpg"
+                    driverFolder,
+                    $"{safeNumberplate}_{timestamp}.jpg"
                 );
 
-                string anprPath = SaveImageToFolder(
-                    Anpr_image,
-                    vehicleFolder,
-                    $"anpr_{timestamp}.jpg"
+                string undersidePath = SaveImageToFolder(
+                    Sticked_image,
+                    undersideFolder,
+                    $"{safeNumberplate}_{timestamp}.jpg"
                 );
 
-                // ✅ VIDEO PATHS
-                string cam1 =System.IO.Path.Combine(pinhole_came_path, "camera1.mp4");
-                string cam2 =System.IO.Path.Combine(pinhole_came_path, "camera2.mp4");
-                string cam3 =System.IO.Path.Combine(pinhole_came_path, "camera3.mp4");
+                
+                string cam1Folder =
+                    mediaService.GetTodayPath("Entry Media", "Video Camera1");
 
-                // ✅ SAVE ENTRY (STORE PATHS IN DB)
+                string cam2Folder =
+                    mediaService.GetTodayPath("Entry Media", "Video Camera2");
+
+                string cam3Folder =
+                    mediaService.GetTodayPath("Entry Media", "Video Camera3");
+
+                string cam1Path =System.IO. Path.Combine(
+                    cam1Folder,
+                    $"{safeNumberplate}_{timestamp}.mp4"
+                );
+
+                string cam2Path = System.IO.Path.Combine(
+                    cam2Folder,
+                    $"{safeNumberplate}_{timestamp}.mp4"
+                );
+
+                string cam3Path = System.IO.Path.Combine(
+                    cam3Folder,
+                    $"{safeNumberplate}_{timestamp}.mp4"
+                );
+
+                
+                string sourceCam1 = System.IO.Path.Combine(pinhole_came_path, "camera1.mp4");
+                string sourceCam2 = System.IO.Path.Combine(pinhole_came_path, "camera2.mp4");
+                string sourceCam3 = System.IO.Path.Combine(pinhole_came_path, "camera3.mp4");
+
+            
+                if (File.Exists(sourceCam1))
+                    File.Copy(sourceCam1, cam1Path, true);
+
+                if (File.Exists(sourceCam2))
+                    File.Copy(sourceCam2, cam2Path, true);
+
+                if (File.Exists(sourceCam3))
+                    File.Copy(sourceCam3, cam3Path, true);
+
+       
                 _vehicleEntryService.SaveVehicleEntry(
-     username,
-     entryDate,
-     entryTime,
-     status,
-     remark,
-     numberplate,
-     undersidePath,
-     driverPath,
-     anprPath,
-     cam1,
-     cam2,
-     cam3
- );
-
-
+                    username,
+                    entryDate,
+                    entryTime,
+                    status,
+                    remark,
+                    numberplate,
+                    undersidePath,
+                    driverPath,
+                    anprPath,
+                    cam1Path,
+                    cam2Path,
+                    cam3Path
+                );
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Save failed: " + ex.Message);
             }
 
-            // ✅ RESET STATE
             selectedRemark = "";
         }
         private string CleanFileName(string input)
@@ -417,7 +554,7 @@ namespace Motwane.UVSS.Presentation.Windows
                 var handler = new HttpClientHandler
                 {
                     Credentials = new NetworkCredential(username, password),
-                    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true // For HTTPS without valid cert
+                    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true 
                 };
 
                 var client = new HttpClient(handler);
@@ -431,7 +568,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
                 var imageBytes = await response.Content.ReadAsByteArrayAsync();
 
-                // Load image into WPF Image control
+              
                 var ms = new MemoryStream(imageBytes);
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
@@ -440,7 +577,7 @@ namespace Motwane.UVSS.Presentation.Windows
                 bitmap.EndInit();
                 bitmap.Freeze();
 
-                Anpr_image.Source = bitmap; // Assuming you have an Image control named imgSnapshot
+                Anpr_image.Source = bitmap; 
 
                 StartNumberPlateRecognitionThread();
             }

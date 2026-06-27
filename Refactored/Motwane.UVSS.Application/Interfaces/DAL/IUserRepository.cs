@@ -14,7 +14,7 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
 
         void InsertUser(User user);
 
-        User GetUserById(Guid userUUID);
+        User GetUserByName(string userName);
 
 
         void UpdateUser(User user);
@@ -23,7 +23,7 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
 
         DataTable GetDeletedUserHistory();
 
-        DataTable GetUserLoginLog(Guid userUUID);
+        DataTable GetUserLoginLog(string username);
 
 
         void DeleteUser(Guid userUUID, string userName, string idNo);

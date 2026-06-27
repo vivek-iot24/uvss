@@ -31,7 +31,7 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             if (UserDataGrid.SelectedItem is DataRowView rowView)
             {
-                string userId = rowView["User_ID"].ToString();
+                string userId = rowView["User_UUID"].ToString();
                 string userName = rowView["User_Name"].ToString();
 
                 MessageBox.Show($"Selected User ID: {userId}\nName: {userName}");
@@ -185,28 +185,27 @@ namespace Motwane.UVSS.Presentation.Windows
 
         private void search_button_Click(object sender, RoutedEventArgs e)
         {
-            string userId = UserId_1.Text.Trim();
+            string userName = Username_1.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(userName))
             {
-                MessageBox.Show("Please enter User ID to search.");
+                MessageBox.Show("Please enter User Name to search.");
                 return;
             }
 
-            var user = userService.GetUserById(new System.Guid(userId));
-
+            var user = userService.GetUserByName(userName);
             if (user == null)
             {
                 MessageBox.Show("User not found.");
                 return;
             }
 
-            UserName_1.Text = user.UserName;
+            Username_1.Text = user.UserName;
             Idno_1.Text = user.IdNo;
             MobNo_1.Text = user.MobileNo;
             CompName_1.Text = user.CompanyName;
             Agencyname_1.Text = user.AgencyName;
-            UserId_1.Text = user.UserUUID.ToString();
+           
             Password_1.Text = user.Password;
             ConfPassword_1.Text = user.Password;
             new_user_tab_user_type_1.Text = user.UserType;
@@ -222,12 +221,12 @@ namespace Motwane.UVSS.Presentation.Windows
 
             User user = new User
             {
-                UserName = UserName_1.Text,
+                UserName = Username_1.Text,
                 IdNo = Idno_1.Text,
                 MobileNo = MobNo_1.Text,
                 CompanyName = CompName_1.Text,
                 AgencyName = Agencyname_1.Text,
-                UserUUID = new System.Guid(UserId_1.Text),
+             //   UserUUID = new System.Guid(UserId_1.Text),
                 Password = Password_1.Text,
                 UserType = new_user_tab_user_type_1.Text
             };
@@ -277,15 +276,15 @@ namespace Motwane.UVSS.Presentation.Windows
 
         private void search_btn_logbook_Click(object sender, RoutedEventArgs e)
         {
-            string userId = LogUserIdTextBox.Text.Trim();
+            string username = LogUserIdTextBox.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(username))
             {
-                MessageBox.Show("Please enter a UserID.");
+                MessageBox.Show("Please enter a User Name.");
                 return;
             }
 
-            DataTable dt = userService.GetUserLoginLog(new System.Guid(userId));
+            DataTable dt = userService.GetUserLoginLog(username);
 
             if (dt.Rows.Count == 0)
             {

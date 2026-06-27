@@ -22,6 +22,7 @@ namespace Motwane.UVSS.DAL.Repositories
     string user,
     string plate)
         {
+
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 string query = @"
@@ -47,15 +48,15 @@ namespace Motwane.UVSS.DAL.Repositories
                 }
             }
         }
-        private int GetUserIdByUserName(
-            SqlConnection conn,
-            SqlTransaction transaction,
-            string username)
+        private Guid GetUserIdByUserName(
+     SqlConnection conn,
+     SqlTransaction transaction,
+     string username)
         {
             string query = @"
-                SELECT User_UUID
-                FROM TB_Users
-                WHERE User_Name = @User_Name";
+        SELECT User_UUID
+        FROM TB_Users
+        WHERE User_Name = @User_Name";
 
             using (SqlCommand cmd = new SqlCommand(query, conn, transaction))
             {
@@ -66,7 +67,7 @@ namespace Motwane.UVSS.DAL.Repositories
                 if (result == null)
                     throw new Exception("User not found.");
 
-                return Convert.ToInt32(result);
+                return (Guid)result;
             }
         }
 
@@ -92,14 +93,55 @@ namespace Motwane.UVSS.DAL.Repositories
             return users;
         }
 
+        public Guid GetMachineUUID(SqlConnection connection)
+        {
+            string query = @"
+        SELECT TOP 1 Machine_UUID
+        FROM TB_Machine_UVSS";
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                object result = cmd.ExecuteScalar();
+
+                if (result == null || result == DBNull.Value)
+                {
+                    throw new Exception("No machine found in TB_Machine_UVSS");
+                }
+
+                return (Guid)result;
+            }
+        }
+        public Guid GetGateUUID(SqlConnection connection)
+        {
+            string query = @"
+        SELECT TOP 1 Gate_UUID
+        FROM tb_gates";
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                object result = cmd.ExecuteScalar();
+
+                if (result == null || result == DBNull.Value)
+                {
+                    throw new Exception("No machine found in TB_Machine_UVSS");
+                }
+
+                return (Guid)result;
+            }
+        }
+        
         public IEnumerable<VehicleEntry> GetVehicleEntryLogs(
             DateTime? from,
             DateTime? to,
             string user,
             string plate)
         {
+         
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
+
+
+            
                 string query = @"
                     SELECT
                         U.User_Name,
@@ -179,6 +221,27 @@ namespace Motwane.UVSS.DAL.Repositories
                 }
             }
         }
+        public Guid GetUserUUIDByUserName(SqlConnection connection, string userName)
+        {
+            string query = @"
+                SELECT User_UUID
+                FROM TB_Users
+                WHERE User_Name = @User_Name";
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@User_Name", userName);
+
+                object result = cmd.ExecuteScalar();
+
+                if (result == null || result == DBNull.Value)
+                {
+                    throw new Exception("User not found: " + userName);
+                }
+
+                return (Guid)result;
+            }
+        }
 
         public void InsertVehicleEntry(
         string username,
@@ -197,51 +260,62 @@ namespace Motwane.UVSS.DAL.Repositories
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-
+                Guid mmachineUUID = GetMachineUUID(conn);
+                Guid GateUUID = GetGateUUID(conn);
+                Guid ventryUUID;
+                Guid userUUID = GetUserUUIDByUserName(conn, username);
                 using (SqlTransaction transaction = conn.BeginTransaction())
                 {
                     try
                     {
-                        // STEP 1: username -> User_ID
-                        int userId = GetUserIdByUserName(conn, transaction, username);
-
-                        // STEP 2: insert main log
+                       
+                      
+                      
                         string logQuery = @"
-                    INSERT INTO TB_Vehicle_Entry_Log
-                    (
-                        User_UUID,
-                        Entry_Date,
-                        Entry_time,
-                        AIC_Status,
-                        Remark,
-                        Vehicle_Registration_No
-                    )
-                    OUTPUT INSERTED.V_Entry_ID
-                    VALUES
-                    (
-                        @User_UUID,
-                        @Entry_Date,
-                        @Entry_time,
-                        @AIC_Status,
-                        @Remark,
-                        @Vehicle_Registration_No
-                    )";
+INSERT INTO TB_Vehicle_Entry_Log
+(
+  
+    User_UUID,
+Machine_UUID,
+    Entry_Date,
+    Entry_time,
+    AIC_Status,
+    Remark,
+Gate_UUID,
+    Vehicle_Registration_No
+)
+OUTPUT INSERTED.V_Entry_UUID
+VALUES
+(
+  
+    @User_UUID,
+@Machine_UUID, 
+    @Entry_Date,
+    @Entry_time,
+    @AIC_Status,
+    @Remark,
+@Gate_UUID,
+    @Vehicle_Registration_No
+)";
 
-                        int entryId;
+                 
 
                         using (SqlCommand cmd = new SqlCommand(logQuery, conn, transaction))
                         {
-                            cmd.Parameters.AddWithValue("@User_UUID", userId);
+                        
+                            cmd.Parameters.AddWithValue("@User_UUID", userUUID);
+                            cmd.Parameters.AddWithValue("@Machine_UUID", mmachineUUID);
                             cmd.Parameters.AddWithValue("@Entry_Date", entryDate);
                             cmd.Parameters.AddWithValue("@Entry_time", entryTime);
                             cmd.Parameters.AddWithValue("@AIC_Status", status);
                             cmd.Parameters.AddWithValue("@Remark", remark);
-                            cmd.Parameters.AddWithValue("@Vehicle_Registration_No", numberplate);
+                            cmd.Parameters.AddWithValue("@Gate_UUID", GateUUID);
+                            cmd.Parameters.AddWithValue("@Vehicle_Registration_No", string.IsNullOrWhiteSpace(numberplate) ? (object)DBNull.Value : numberplate);
 
-                            entryId = Convert.ToInt32(cmd.ExecuteScalar());
+                            ventryUUID = (Guid)cmd.ExecuteScalar();
                         }
 
-                        // STEP 3: insert media row using generated V_Entry_ID
+                        
                         string mediaQuery = @"
                     INSERT INTO TB_Vehicle_Entry_Media
                     (
@@ -268,8 +342,9 @@ namespace Motwane.UVSS.DAL.Repositories
 
                         using (SqlCommand cmd = new SqlCommand(mediaQuery, conn, transaction))
                         {
-                            cmd.Parameters.AddWithValue("@V_Entry_UUID", entryId);
-                            cmd.Parameters.AddWithValue("@Vehicle_Registration_No", numberplate);
+                            cmd.Parameters.AddWithValue("@V_Entry_UUID", ventryUUID);
+                            cmd.Parameters.AddWithValue("@Vehicle_Registration_No", string.IsNullOrWhiteSpace(numberplate) ? (object)DBNull.Value : numberplate);
+
                             cmd.Parameters.AddWithValue("@Underside_image_path", (object)undersideImage ?? DBNull.Value);
                             cmd.Parameters.AddWithValue("@Driver_image_path", (object)driverCamImage ?? DBNull.Value);
                             cmd.Parameters.AddWithValue("@ANPR_image_path", (object)anprImage ?? DBNull.Value);
@@ -280,7 +355,6 @@ namespace Motwane.UVSS.DAL.Repositories
                             cmd.ExecuteNonQuery();
                         }
 
-                        // STEP 4: commit both tables
                         transaction.Commit();
                     }
                     catch

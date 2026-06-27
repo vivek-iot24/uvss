@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Motwane.UVSS.Application.Common;
 using Motwane.UVSS.Application.Interfaces.HAL;
 using Motwane.UVSS.Application.Services;
 using System;
@@ -14,8 +15,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
         public string USERNAME = string.Empty;
 
-        public MainWindow(
-            AuthenticationService authenticationService,
+        public MainWindow(AuthenticationService authenticationService,
             IFileSystemService fileSystemService)
         {
             InitializeComponent();
@@ -61,7 +61,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
                     ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
                         .LoggedInUSERTYPE = userType;
-
+                   
                     this.Close();
                 }
                 else
