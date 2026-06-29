@@ -147,6 +147,7 @@
     <Compile Include="Interfaces\HAL\IAicComparisonService.cs" />
     <Compile Include="Interfaces\HAL\ICameraService.cs" />
     <Compile Include="Interfaces\HAL\IFileSystemService.cs" />
+    <Compile Include="Interfaces\HAL\ISelfDiagnosisService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\UserManagementService.cs" />

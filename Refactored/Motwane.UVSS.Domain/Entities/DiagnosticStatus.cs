@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Motwane.UVSS.Domain.Entities
 {
-    internal class DiagnosticStatus
+    public class DiagnosticStatus
     {
+        public string ComponentName { get; set; }
+
+        public bool IsHealthy { get; set; }
+
+        public string Message { get; set; }
+
+        public DateTime CheckedTime { get; set; }
     }
 }

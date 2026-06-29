@@ -5,67 +5,401 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Motwane.UVSS"
         mc:Ignorable="d"
-        Title="Motwane Under Vehical Scanning System-AreaScan" Height="1100" Width="1920" WindowState="Maximized" Icon="/Resources/logo-motwane-90x90.ico">
+        Title="Motwane Under Vehical Scanning System-AreaScan"
+        Height="1100"
+        Width="1920"
+        WindowState="Maximized"
+        Icon="/Resources/logo-motwane-90x90.ico">
 
     <Grid>
-        <Image Source="/Resources/MUVSS.png" Stretch="Fill"/>
 
-        <Border CornerRadius="20" 
-                Background="White" 
+        <Image Source="/Resources/MUVSS.png"
+               Stretch="Fill"/>
+
+        <Border CornerRadius="20"
+                Background="White"
                 Padding="30"
-                HorizontalAlignment="Center" 
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                MaxWidth="1400"
-                MaxHeight="850">
+                Width="1450"
+                Height="900">
 
-            <StackPanel Orientation="Vertical">
-                <TextBlock Foreground="#007ACC" Text="Self Diagnostic" FontSize="60" FontWeight="Bold" Margin="0,0,0,30" HorizontalAlignment="Center"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-                <StackPanel x:Name="self_daigno_information_stack" Orientation="Vertical" HorizontalAlignment="Left" Margin="20">
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <TextBlock FontSize="40" Text="Area Scanning Camera : " TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                        <TextBlock x:Name="area_scan_StatusTextBlock" FontSize="40" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
+                <StackPanel>
+
+                    <!-- Title -->
+
+                    <TextBlock Text="Self Diagnostic"
+                               Foreground="#007ACC"
+                               FontSize="60"
+                               FontWeight="Bold"
+                               Margin="0,0,0,25"
+                               HorizontalAlignment="Center"/>
+
+                    <!-- Existing Diagnostics -->
+
+                    <StackPanel x:Name="self_daigno_information_stack"
+                                Orientation="Vertical"
+                                Margin="20">
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="Area Scanning Camera : "
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                            <TextBlock x:Name="area_scan_StatusTextBlock"
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="ANPR Camera : "
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                            <TextBlock x:Name="ANPR_StatusTextBlock"
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="Driver Camera : "
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                            <TextBlock x:Name="Driver_StatusTextBlock"
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="Video Camera 1 : "
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                            <TextBlock x:Name="Video_1_scan_StatusTextBlock"
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="Video Camera 2 : "
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                            <TextBlock x:Name="Video_2_scan_StatusTextBlock"
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="Video Camera 3 : "
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                            <TextBlock x:Name="Video_3_scan_StatusTextBlock"
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="COM3 : "
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                            <TextBlock x:Name="com_scan_StatusTextBlock"
+                                       FontSize="30"
+                                       FontWeight="SemiBold"
+                                       Foreground="#007ACC"/>
+                        </StackPanel>
+
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <TextBlock FontSize="40" Text="ANPR Camera : " TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                        <TextBlock x:Name="ANPR_StatusTextBlock" FontSize="40" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
+
+
+                    <!-- Camera Diagnostics -->
+
+                    <TextBlock Text="Camera Diagnostics"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               Foreground="#007ACC"
+                               Margin="20"/>
+
+                    <UniformGrid Columns="3">
+
+                        <!-- Camera 1 -->
+
+                        <Border Margin="10"
+                                CornerRadius="12"
+                                BorderBrush="#007ACC"
+                                BorderThickness="2"
+                                Background="#F5F7FA">
+
+                            <StackPanel Margin="10">
+
+                                <TextBlock Text="Area Scan Camera"
+                                           FontSize="20"
+                                           FontWeight="Bold"/>
+
+                                <Border Height="160"
+                                        Margin="0,10"
+                                        CornerRadius="8"
+                                        Background="Black">
+
+                                    <Image x:Name="AreaScanImage"
+                                           Stretch="UniformToFill"/>
+
+                                </Border>
+
+                                <TextBlock x:Name="AreaScanIPText" FontSize="16"/>
+
+                                <TextBlock Text="Connected"
+                                           Foreground="Green"
+                                           FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+
+                        <!-- Camera 2 -->
+
+                        <Border Margin="10"
+                                CornerRadius="12"
+                                BorderBrush="#007ACC"
+                                BorderThickness="2"
+                                Background="#F5F7FA">
+
+                            <StackPanel Margin="10">
+
+                                <TextBlock Text="ANPR Camera"
+                                           FontSize="20"
+                                           FontWeight="Bold"/>
+
+                                <Border Height="160"
+                                        Margin="0,10"
+                                        CornerRadius="8"
+                                        Background="Black">
+
+                                    <Image x:Name="AnprImage"
+                                           Stretch="UniformToFill"/>
+
+                                </Border>
+
+                                <TextBlock x:Name="AnprIPText" FontSize="16"/>
+
+                                <TextBlock Text="Connected"
+                                           Foreground="Green"
+                                           FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+
+                        <!-- Camera 3 -->
+
+                        <Border Margin="10"
+                                CornerRadius="12"
+                                BorderBrush="#007ACC"
+                                BorderThickness="2"
+                                Background="#F5F7FA">
+
+                            <StackPanel Margin="10">
+
+                                <TextBlock Text="Driver Camera"
+                                           FontSize="20"
+                                           FontWeight="Bold"/>
+
+                                <Border Height="160"
+                                        Margin="0,10"
+                                        CornerRadius="8"
+                                        Background="Black">
+
+                                    <Image x:Name="DriverImage"
+                                           Stretch="UniformToFill"/>
+
+                                </Border>
+
+                                <TextBlock x:Name="DriverIPText"  FontSize="16"/>
+
+                                <TextBlock Text="Connected"
+                                           Foreground="Green"
+                                           FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                    </UniformGrid>
+
+
+                    <!-- Sensors -->
+
+                    <!-- Sensor Diagnostics -->
+
+                    <TextBlock Text="Sensor Diagnostics"
+           FontSize="30"
+           FontWeight="Bold"
+           Foreground="#007ACC"
+           Margin="20"/>
+
+                    <UniformGrid Columns="3"
+             Margin="20">
+
+                        <!-- Sensor 1 -->
+
+                        <Border Background="#F5F7FA"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            CornerRadius="10"
+            Margin="10"
+            Padding="20">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Sensor 1"
+               FontSize="20"
+               FontWeight="Bold"/>
+
+                                <ToggleButton x:Name="Sensor1Toggle"
+                  Width="90"
+                  Height="35"/>
+
+                                <TextBlock x:Name="Sensor1Status"
+               Text="OFF"
+               FontWeight="Bold"
+               FontSize="16"
+               HorizontalAlignment="Center"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+
+                        <!-- Sensor 2 -->
+
+                        <Border Background="#F5F7FA"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            CornerRadius="10"
+            Margin="10"
+            Padding="20">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Sensor 2"
+               FontWeight="Bold"/>
+
+                                <ToggleButton x:Name="Sensor2Toggle"/>
+
+                                <TextBlock x:Name="Sensor2Status"
+               Text="OFF"
+               FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+
+                        <!-- Pneumatic -->
+
+                        <Border Background="#F5F7FA"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            CornerRadius="10"
+            Margin="10"
+            Padding="20">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Pneumatic"
+               FontWeight="Bold"/>
+
+                                <ToggleButton x:Name="PneumaticToggle"/>
+
+                                <TextBlock x:Name="PneumaticStatus"
+               Text="OFF"
+               FontWeight="Bold"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                    </UniformGrid>
+
+                    <!-- Loader -->
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,25">
+
+                        <ProgressBar x:Name="LoaderBar"
+                                     Width="220"
+                                     Height="20"
+                                     IsIndeterminate="True"
+                                     Visibility="Collapsed"/>
+
+                        <TextBlock x:Name="LoadingText"
+                                   Text="Checking..."
+                                   Margin="10,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Visibility="Collapsed"
+                                   Foreground="#007ACC"/>
+
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <TextBlock FontSize="40" Text="Driver Camera : " TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                        <TextBlock x:Name="Driver_StatusTextBlock" FontSize="40" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
+
+
+                    <!-- Buttons -->
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="0,20">
+
+                        <Border Margin="10"
+                                Background="#007ACC"
+                                CornerRadius="10">
+
+                            <Button x:Name="Print_btn"
+                                    Content="Print"
+                                    Click="Print_btn_Click"
+                                    FontSize="35"
+                                    Margin="5"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    Foreground="White"/>
+
+                        </Border>
+
+                        <Border Margin="10"
+                                Background="#007ACC"
+                                CornerRadius="10">
+
+                            <Button x:Name="Exit_button"
+                                    Content="Exit"
+                                    Click="Exit_button_Click"
+                                    FontSize="35"
+                                    Margin="5"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    Foreground="White"/>
+
+                        </Border>
+
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <TextBlock FontSize="40" Text="Video Camera 1 : " TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                        <TextBlock x:Name="Video_1_scan_StatusTextBlock" FontSize="40" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <TextBlock FontSize="40" Text="Video Camera 2 : " TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                        <TextBlock x:Name="Video_2_scan_StatusTextBlock" FontSize="40" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <TextBlock FontSize="40" Text="Video Camera 3 : " TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                        <TextBlock x:Name="Video_3_scan_StatusTextBlock" FontSize="40" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <TextBlock FontSize="40" Text="Com 3 : " TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                        <TextBlock x:Name="com_scan_StatusTextBlock" FontSize="40" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#007ACC"/>
-                    </StackPanel>
+
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <ProgressBar x:Name="LoaderBar" Width="200" Height="20" IsIndeterminate="True" Visibility="Collapsed"/>
-                    <TextBlock x:Name="LoadingText" Text="Checking..." Margin="10,0,0,0" VerticalAlignment="Center" Visibility="Collapsed" FontSize="16" Foreground="#007ACC"/>
-                </StackPanel>
+            </ScrollViewer>
 
-                <StackPanel Orientation="Horizontal" Margin="0,50,0,0" HorizontalAlignment="Right">
-                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
-                        <Button Content="Print" x:Name="Print_btn" Click="Print_btn_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
-                    </Border>
-                    <Border Margin="10" BorderBrush="#007ACC" BorderThickness="3" CornerRadius="10" Background="#007ACC">
-                        <Button Content="Exit" x:Name="Exit_button" Click="Exit_button_Click" FontSize="35" Foreground="White" Background="Transparent" Margin="5" BorderThickness="0" FontWeight="SemiBold"/>
-                    </Border>
-                </StackPanel>
-            </StackPanel>
         </Border>
+
     </Grid>
+
 </Window>

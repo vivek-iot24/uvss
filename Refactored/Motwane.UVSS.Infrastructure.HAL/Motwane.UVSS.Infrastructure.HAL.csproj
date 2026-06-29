@@ -165,6 +165,7 @@
     <Compile Include="ExternalServices\FileSystemService.cs" />
     <Compile Include="Hardware\DiagnosticService.cs" />
     <Compile Include="ImageService.cs" />
+    <Compile Include="Interfaces\ICameraHealthService.cs" />
     <Compile Include="Interfaces\IImageService.cs" />
     <Compile Include="Interfaces\ISensorService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

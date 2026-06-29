@@ -23,7 +23,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
         private const string serialPortName = "COM4";
 
-        // Compatibility constructor (keeps existing code working)
+        
         public Self_daignosis() : this(
             ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
             .ServiceProvider
