@@ -159,9 +159,11 @@
 
                                 <TextBlock x:Name="AreaScanIPText" FontSize="16"/>
 
-                                <TextBlock Text="Connected"
-                                           Foreground="Green"
-                                           FontWeight="Bold"/>
+                                <TextBlock x:Name="AreaScanConnectionText"
+           Text="OFFLINE"
+           Foreground="Red"
+           FontWeight="Bold"
+           FontSize="16"/>
 
                             </StackPanel>
 
@@ -194,9 +196,11 @@
 
                                 <TextBlock x:Name="AnprIPText" FontSize="16"/>
 
-                                <TextBlock Text="Connected"
-                                           Foreground="Green"
-                                           FontWeight="Bold"/>
+                                <TextBlock x:Name="AnprConnectionText"
+           Text="OFFLINE"
+           Foreground="Red"
+           FontWeight="Bold"
+           FontSize="16"/>
 
                             </StackPanel>
 
@@ -229,9 +233,11 @@
 
                                 <TextBlock x:Name="DriverIPText"  FontSize="16"/>
 
-                                <TextBlock Text="Connected"
-                                           Foreground="Green"
-                                           FontWeight="Bold"/>
+                                <TextBlock x:Name="DriverConnectionText"
+           Text="OFFLINE"
+           Foreground="Red"
+           FontWeight="Bold"
+           FontSize="16"/>
 
                             </StackPanel>
 
@@ -295,13 +301,18 @@
                             <StackPanel>
 
                                 <TextBlock Text="Sensor 2"
-               FontWeight="Bold"/>
+                   FontSize="20"
+    FontWeight="Bold"/>
 
-                                <ToggleButton x:Name="Sensor2Toggle"/>
+                                <ToggleButton x:Name="Sensor2Toggle"
+                                                    Width="90"
+      Height="35"/>
 
                                 <TextBlock x:Name="Sensor2Status"
-               Text="OFF"
-               FontWeight="Bold"/>
+                  Text="OFF"
+                  FontWeight="Bold"
+                  FontSize="16"
+                  HorizontalAlignment="Center"/>
 
                             </StackPanel>
 
@@ -320,13 +331,18 @@
                             <StackPanel>
 
                                 <TextBlock Text="Pneumatic"
-               FontWeight="Bold"/>
+                               FontSize="20"
+                               FontWeight="Bold"/>
 
-                                <ToggleButton x:Name="PneumaticToggle"/>
+                                <ToggleButton x:Name="PneumaticToggle"  Width="90"
+ Height="35"/>
 
                                 <TextBlock x:Name="PneumaticStatus"
-               Text="OFF"
-               FontWeight="Bold"/>
+      Text="OFF"
+      FontWeight="Bold"
+      FontSize="16"
+      HorizontalAlignment="Center"/>
+
 
                             </StackPanel>
 

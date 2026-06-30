@@ -1,4 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using System.Diagnostics;
+using LibVLCSharp.Shared;
+using Microsoft.Win32;
+using OpenCvSharp;
+using OpenCvSharp.WpfExtensions;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System;
@@ -9,6 +13,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,12 +21,9 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using OpenCvSharp;
-using OpenCvSharp.WpfExtensions;
-using System.Threading;
-using LibVLCSharp.Shared;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Motwane.UVSS
 {
@@ -30,18 +32,32 @@ namespace Motwane.UVSS
     /// </summary>
     public partial class Self_daignostic_window : System.Windows.Window
     {
+        private static string[] ipAddresses = new string[]
+        {
+            "192.168.4.56",
+            "192.168.4.57",
+            "192.168.4.58",
+            "192.168.4.59",
+            "192.168.4.60",
+            "169.254.0.1"
+        };
         public Self_daignostic_window()
         {
             InitializeComponent();
 
             StartAreaScanCamera();
-
             StartAnprCamera();
-
             StartDriverCamera();
 
-            RunDiagnostics();
+            diagnosticTimer = new DispatcherTimer();
+            diagnosticTimer.Interval = TimeSpan.FromSeconds(1);
+            diagnosticTimer.Tick += DiagnosticTimer_Tick;
+            diagnosticTimer.Start();
+
+            _ = RunDiagnostics();
         }
+
+        private DispatcherTimer diagnosticTimer;
         private Underside_cam_class1 undersideCamera;
 
         private VideoCapture anpr_capture;
@@ -57,14 +73,23 @@ namespace Motwane.UVSS
 
         private readonly string driver_rtspUrl =
             "rtsp://admin:sefthS$2702@192.168.4.57:554/video/live?channel=1&subtype=0";
-        private async void RunDiagnostics()
+        private async Task RunDiagnostics()
         {
             LoaderBar.Visibility = Visibility.Visible;
             LoadingText.Visibility = Visibility.Visible;
+            await UpdatePingStatus("192.168.4.58", Video_1_scan_StatusTextBlock);
+            await UpdatePingStatus("192.168.4.59", Video_2_scan_StatusTextBlock);
+            await UpdatePingStatus("192.168.4.60", Video_3_scan_StatusTextBlock);
+            await UpdatePingStatus("169.254.0.1", area_scan_StatusTextBlock);
+            await UpdatePingStatus("192.168.4.56", ANPR_StatusTextBlock);
+            await UpdatePingStatus("192.168.4.57", Driver_StatusTextBlock);
+            string serialStatus = await Task.Run(() => CheckSerialPort("COM4")) ? "OK" : "FAIL";
 
-            bool area =
-                undersideCamera != null &&
-                undersideCamera.IsCapturing;
+            com_scan_StatusTextBlock.Text = $"COM4 : {serialStatus}";
+            com_scan_StatusTextBlock.Foreground =
+                serialStatus == "OK" ? Brushes.Green : Brushes.Red;
+
+     
 
             bool anpr =
                 anpr_capture != null &&
@@ -74,75 +99,48 @@ namespace Motwane.UVSS
                 driver_capture != null &&
                 driver_capture.IsOpened();
 
-            bool serial =
-                await Task.Run(() =>
-                    CheckSerialPort("COM4"));
+            LoaderBar.Visibility = Visibility.Collapsed;
+            LoadingText.Visibility = Visibility.Collapsed;
+        }
+        private bool _isRunning;
 
+        private async void DiagnosticTimer_Tick(object sender, EventArgs e)
+        {
+            if (_isRunning)
+                return;
 
+            try
+            {
+                _isRunning = true;
+                await RunDiagnostics();
+            }
+            finally
+            {
+                _isRunning = false;
+            }
+        }
 
-            area_scan_StatusTextBlock.Text =
-                area ? "ONLINE" : "OFFLINE";
+        private async Task UpdatePingStatus(string ip, TextBlock textBlock)
+        {
+            bool connected = await PingDevice(ip);
 
-            ANPR_StatusTextBlock.Text =
-                anpr ? "ONLINE" : "OFFLINE";
-
-            Driver_StatusTextBlock.Text =
-                driver ? "ONLINE" : "OFFLINE";
-
-            com_scan_StatusTextBlock.Text =
-                serial ? "ONLINE" : "OFFLINE";
-
-
-
-            area_scan_StatusTextBlock.Foreground =
-                area ? Brushes.Green : Brushes.Red;
-
-            ANPR_StatusTextBlock.Foreground =
-                anpr ? Brushes.Green : Brushes.Red;
-
-            Driver_StatusTextBlock.Foreground =
-                driver ? Brushes.Green : Brushes.Red;
-
-            com_scan_StatusTextBlock.Foreground =
-                serial ? Brushes.Green : Brushes.Red;
-
-
-
-            AreaScanIPText.Text =
-                "IP : 169.254.0.1";
-
-            AnprIPText.Text =
-                "IP : 192.168.4.56";
-
-            DriverIPText.Text =
-                "IP : 192.168.4.57";
-
-
-
-            UpdateSensorStatus();
-
-
-
-            LoaderBar.Visibility =
-                Visibility.Collapsed;
-
-            LoadingText.Visibility =
-                Visibility.Collapsed;
+            textBlock.Text = $"{ip} : {(connected ? "OK" : "FAIL")}";
+            textBlock.Foreground = connected ? Brushes.Green : Brushes.Red;
         }
         protected override void OnClosed(EventArgs e)
-        {
-            anpr_isStreaming = false;
+{
+    anpr_isStreaming = false;
 
-            driver_isStreaming = false;
+    driver_isStreaming = false;
 
-            anpr_capture?.Release();
+    anpr_capture?.Release();
 
-            driver_capture?.Release();
+    driver_capture?.Release();
 
-            undersideCamera?.StopAcquisition();
+    undersideCamera?.StopAcquisition();
 
-            base.OnClosed(e);
-        }
+    base.OnClosed(e);
+}
         private void UpdateSensorStatus()
         {
             bool sensor1 = true;
@@ -192,18 +190,29 @@ namespace Motwane.UVSS
 
                 undersideCamera.OnNewFrame += bitmap =>
                 {
-                    Dispatcher.Invoke(() =>
+                    Dispatcher.BeginInvoke(new Action(() =>
                     {
                         AreaScanImage.Source = bitmap;
-                    });
+
+                        AreaScanConnectionText.Text = "CONNECTED";
+
+                        AreaScanConnectionText.Foreground =
+                            Brushes.Green;
+                    }));
                 };
 
-                string result =
-                    undersideCamera.InitCamera();
+                string result = undersideCamera.InitCamera();
 
                 if (result != null)
-                    MessageBox.Show(result);
+                {
+                    AreaScanConnectionText.Text =
+                        "NOT CONNECTED";
 
+                    AreaScanConnectionText.Foreground =
+                        Brushes.Red;
+
+                    MessageBox.Show(result);
+                }
                 if (!undersideCamera.IsCapturing)
                     undersideCamera.StartAcquisition();
             }
@@ -238,51 +247,63 @@ namespace Motwane.UVSS
                         VideoCaptureAPIs.FFMPEG);
                 if (!anpr_capture.IsOpened())
                 {
-                    Dispatcher.Invoke(() =>
+                    Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        ANPR_StatusTextBlock.Text = "OFFLINE";
-                        ANPR_StatusTextBlock.Foreground = Brushes.Red;
-                    });
+                        AnprConnectionText.Text =
+                            "NOT CONNECTED";
+
+                        AnprConnectionText.Foreground =
+                            Brushes.Red;
+
+                        AnprImage.Source = null;
+                    }));
 
                     anpr_isStreaming = false;
+
                     return;
                 }
 
-                Mat frame = new Mat();
-
-                while (anpr_isStreaming)
+                using (Mat frame = new Mat())
                 {
-                    bool ok =
-                        anpr_capture.Read(frame);
-
-                    if (ok && !frame.Empty())
+                    while (anpr_isStreaming)
                     {
+                        bool ok =
+                            anpr_capture.Read(frame);
 
-                        BitmapSource bmp =
-                            BitmapSourceConverter
-                                .ToBitmapSource(frame);
-
-                        bmp.Freeze();
-
-                        Dispatcher.Invoke(() =>
+                        if (ok && !frame.Empty())
                         {
-                            ANPR_StatusTextBlock.Text = "ONLINE";
-                            ANPR_StatusTextBlock.Foreground = Brushes.Green;
 
-                            AnprImage.Source = bmp;
-                        });
-                    }
-                    else
-                    {
-                        Thread.Sleep(100);
+                            BitmapSource bmp =
+                                BitmapSourceConverter
+                                    .ToBitmapSource(frame);
+
+                            bmp.Freeze();
+
+                            Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                AnprConnectionText.Text =
+                                    "CONNECTED";
+
+                                AnprConnectionText.Foreground =
+                                    Brushes.Green;
+
+                                AnprImage.Source = bmp;
+                            }));
+                        }
+                        else
+                        {
+                            Thread.Sleep(100);
+                        }
                     }
                 }
 
+              
+
                 anpr_capture.Release();
             }
-            catch
+            catch (Exception ex)
             {
-
+                Debug.WriteLine(ex);
             }
         }
         private void StartDriverCamera()
@@ -312,41 +333,59 @@ namespace Motwane.UVSS
 
                 if (!driver_capture.IsOpened())
                 {
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        DriverConnectionText.Text =
+                            "NOT CONNECTED";
+
+                        DriverConnectionText.Foreground =
+                            Brushes.Red;
+
+                        DriverImage.Source = null;
+                    }));
+
                     driver_isStreaming = false;
+
                     return;
                 }
-
-                Mat frame = new Mat();
-
-                while (driver_isStreaming)
+                using (Mat frame = new Mat())
                 {
-                    bool ok =
-                        driver_capture.Read(frame);
-
-                    if (ok && !frame.Empty())
+                    while (driver_isStreaming)
                     {
-                        BitmapSource bmp =
-                            BitmapSourceConverter
-                                .ToBitmapSource(frame);
+                        bool ok =
+                            driver_capture.Read(frame);
 
-                        bmp.Freeze();
-
-                        Dispatcher.Invoke(() =>
+                        if (ok && !frame.Empty())
                         {
-                            DriverImage.Source = bmp;
-                        });
+                            BitmapSource bmp =
+                                BitmapSourceConverter
+                                    .ToBitmapSource(frame);
+
+                            bmp.Freeze();
+
+                            Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                DriverConnectionText.Text =
+                                    "CONNECTED";
+
+                                DriverConnectionText.Foreground =
+                                    Brushes.Green;
+
+                                DriverImage.Source = bmp;
+                            }));
+                        }
+                        else
+                        {
+                            Thread.Sleep(100);
+                        }
                     }
-                    else
-                    {
-                        Thread.Sleep(100);
-                    }
+
+                    driver_capture.Release();
                 }
-
-                driver_capture.Release();
             }
-            catch
+            catch (Exception ex)
             {
-
+                Debug.WriteLine(ex);
             }
         }
         
