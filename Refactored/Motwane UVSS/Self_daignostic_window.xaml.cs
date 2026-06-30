@@ -41,8 +41,10 @@ namespace Motwane.UVSS
             "192.168.4.60",
             "169.254.0.1"
         };
+
         public Self_daignostic_window()
         {
+
             InitializeComponent();
 
             StartAreaScanCamera();
@@ -81,11 +83,11 @@ namespace Motwane.UVSS
             await UpdatePingStatus("192.168.4.59", Video_2_scan_StatusTextBlock);
             await UpdatePingStatus("192.168.4.60", Video_3_scan_StatusTextBlock);
             await UpdatePingStatus("169.254.0.1", area_scan_StatusTextBlock);
-            await UpdatePingStatus("192.168.4.56", ANPR_StatusTextBlock);
-            await UpdatePingStatus("192.168.4.57", Driver_StatusTextBlock);
+            await UpdatePingStatus("192.168.4.57", ANPR_StatusTextBlock);
+            await UpdatePingStatus("192.168.4.56", Driver_StatusTextBlock);
             string serialStatus = await Task.Run(() => CheckSerialPort("COM4")) ? "OK" : "FAIL";
 
-            com_scan_StatusTextBlock.Text = $"COM4 : {serialStatus}";
+            com_scan_StatusTextBlock.Text = $"{serialStatus}";
             com_scan_StatusTextBlock.Foreground =
                 serialStatus == "OK" ? Brushes.Green : Brushes.Red;
 
@@ -182,45 +184,85 @@ namespace Motwane.UVSS
                     ? Brushes.Green
                     : Brushes.Red;
         }
+
+        private void UpdateAreaScanImage(BitmapSource bitmap)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                AreaScanImage.Source = bitmap;
+
+                AreaScanConnectionText.Text = "CONNECTED";
+
+                AreaScanConnectionText.Foreground =
+                    Brushes.Green;
+            }));
+        }
+     
         private void StartAreaScanCamera()
         {
             try
             {
                 undersideCamera = new Underside_cam_class1();
 
-                undersideCamera.OnNewFrame += bitmap =>
-                {
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        AreaScanImage.Source = bitmap;
-
-                        AreaScanConnectionText.Text = "CONNECTED";
-
-                        AreaScanConnectionText.Foreground =
-                            Brushes.Green;
-                    }));
-                };
+                undersideCamera.OnNewFrame += UpdateAreaScanImage;
 
                 string result = undersideCamera.InitCamera();
 
                 if (result != null)
                 {
-                    AreaScanConnectionText.Text =
-                        "NOT CONNECTED";
-
-                    AreaScanConnectionText.Foreground =
-                        Brushes.Red;
-
                     MessageBox.Show(result);
+                    return;
                 }
+
                 if (!undersideCamera.IsCapturing)
+                {
                     undersideCamera.StartAcquisition();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
+        //private void StartAreaScanCamera()
+        //{
+        //    try
+        //    {
+        //        undersideCamera = new Underside_cam_class1();
+
+        //        undersideCamera.OnNewFrame += bitmap =>
+        //        {
+        //            Dispatcher.BeginInvoke(new Action(() =>
+        //            {
+        //                AreaScanImage.Source = bitmap;
+
+        //                AreaScanConnectionText.Text = "CONNECTED";
+
+        //                AreaScanConnectionText.Foreground =
+        //                    Brushes.Green;
+        //            }));
+        //        };
+
+        //        string result = undersideCamera.InitCamera();
+
+        //        if (result != null)
+        //        {
+        //            AreaScanConnectionText.Text =
+        //                "NOT CONNECTED";
+
+        //            AreaScanConnectionText.Foreground =
+        //                Brushes.Red;
+
+        //            MessageBox.Show(result);
+        //        }
+        //        if (!undersideCamera.IsCapturing)
+        //            undersideCamera.StartAcquisition();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //    }
+        //}
         private void StartAnprCamera()
         {
             if (anpr_isStreaming)
@@ -441,7 +483,7 @@ namespace Motwane.UVSS
         {
             Menu_screen menu_Screen = new Menu_screen();
             menu_Screen.Show();
-
+            undersideCamera?.StopAcquisition();
             this.Close();
         }
 

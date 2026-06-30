@@ -110,7 +110,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="0,5">
-                            <TextBlock Text="COM3 : "
+                            <TextBlock Text="Control Interface Port : "
                                        FontSize="30"
                                        FontWeight="SemiBold"
                                        Foreground="#007ACC"/>
@@ -319,6 +319,16 @@
                         </Border>
 
 
+                       
+                    </UniformGrid>
+                    <TextBlock Text="Actuator Diagnostics"
+           FontSize="30"
+           FontWeight="Bold"
+           Foreground="#007ACC"
+           Margin="20"/>
+
+                    <UniformGrid Columns="3" Margin="20">
+
                         <!-- Pneumatic -->
 
                         <Border Background="#F5F7FA"
@@ -331,25 +341,85 @@
                             <StackPanel>
 
                                 <TextBlock Text="Pneumatic"
-                               FontSize="20"
-                               FontWeight="Bold"/>
+                       FontSize="20"
+                       FontWeight="Bold"/>
 
-                                <ToggleButton x:Name="PneumaticToggle"  Width="90"
- Height="35"/>
+                                <ToggleButton x:Name="PneumaticToggle"
+                          Width="90"
+                          Height="35"
+                          IsEnabled="False"/>
 
                                 <TextBlock x:Name="PneumaticStatus"
-      Text="OFF"
-      FontWeight="Bold"
-      FontSize="16"
-      HorizontalAlignment="Center"/>
+                       Text="OFF"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
 
+                            </StackPanel>
+
+                        </Border>
+
+                        <!-- LED 1 -->
+
+                        <Border Background="#F5F7FA"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            CornerRadius="10"
+            Margin="10"
+            Padding="20">
+
+                            <StackPanel>
+
+                                <TextBlock Text="LED 1"
+                       FontSize="20"
+                       FontWeight="Bold"/>
+
+                                <ToggleButton x:Name="LED1Toggle"
+                          Width="90"
+                          Height="35"
+                          IsEnabled="False"/>
+
+                                <TextBlock x:Name="LED1Status"
+                       Text="OFF"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <!-- LED 2 -->
+
+                        <Border Background="#F5F7FA"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            CornerRadius="10"
+            Margin="10"
+            Padding="20">
+
+                            <StackPanel>
+
+                                <TextBlock Text="LED 2"
+                       FontSize="20"
+                       FontWeight="Bold"/>
+
+                                <ToggleButton x:Name="LED2Toggle"
+                          Width="90"
+                          Height="35"
+                          IsEnabled="False"/>
+
+                                <TextBlock x:Name="LED2Status"
+                       Text="OFF"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
 
                             </StackPanel>
 
                         </Border>
 
                     </UniformGrid>
-
                     <!-- Loader -->
 
                     <StackPanel Orientation="Horizontal"
