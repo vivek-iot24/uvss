@@ -345,12 +345,14 @@
                        FontWeight="Bold"/>
 
                                 <ToggleButton x:Name="PneumaticToggle"
-                          Width="90"
-                          Height="35"
-                          IsEnabled="False"/>
+              Width="90"
+              Height="35"
+             
+              Checked="PneumaticToggle_Checked"
+              Unchecked="PneumaticToggle_Unchecked"/>
 
                                 <TextBlock x:Name="PneumaticStatus"
-                       Text="OFF"
+                      Text="OFF"
                        FontSize="16"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"/>
@@ -375,9 +377,10 @@
                        FontWeight="Bold"/>
 
                                 <ToggleButton x:Name="LED1Toggle"
-                          Width="90"
-                          Height="35"
-                          IsEnabled="False"/>
+              Width="90"
+              Height="35"
+              Checked="LED1Toggle_Checked"
+              Unchecked="LED1Toggle_Unchecked"/>
 
                                 <TextBlock x:Name="LED1Status"
                        Text="OFF"
@@ -405,10 +408,10 @@
                        FontWeight="Bold"/>
 
                                 <ToggleButton x:Name="LED2Toggle"
-                          Width="90"
-                          Height="35"
-                          IsEnabled="False"/>
-
+              Width="90"
+              Height="35"
+              Checked="LED2Toggle_Checked"
+              Unchecked="LED2Toggle_Unchecked"/>
                                 <TextBlock x:Name="LED2Status"
                        Text="OFF"
                        FontSize="16"

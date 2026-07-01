@@ -87,11 +87,11 @@ namespace Motwane.UVSS
             await UpdatePingStatus("192.168.4.56", Driver_StatusTextBlock);
             string serialStatus = await Task.Run(() => CheckSerialPort("COM4")) ? "OK" : "FAIL";
 
-            com_scan_StatusTextBlock.Text = $"{serialStatus}";
+            com_scan_StatusTextBlock.Text = $"Control Interface Port : {serialStatus}";
             com_scan_StatusTextBlock.Foreground =
                 serialStatus == "OK" ? Brushes.Green : Brushes.Red;
 
-     
+
 
             bool anpr =
                 anpr_capture != null &&
@@ -130,19 +130,19 @@ namespace Motwane.UVSS
             textBlock.Foreground = connected ? Brushes.Green : Brushes.Red;
         }
         protected override void OnClosed(EventArgs e)
-{
-    anpr_isStreaming = false;
+        {
+            anpr_isStreaming = false;
 
-    driver_isStreaming = false;
+            driver_isStreaming = false;
 
-    anpr_capture?.Release();
+            anpr_capture?.Release();
 
-    driver_capture?.Release();
+            driver_capture?.Release();
 
-    undersideCamera?.StopAcquisition();
+            undersideCamera?.StopAcquisition();
 
-    base.OnClosed(e);
-}
+            base.OnClosed(e);
+        }
         private void UpdateSensorStatus()
         {
             bool sensor1 = true;
@@ -184,7 +184,41 @@ namespace Motwane.UVSS
                     ? Brushes.Green
                     : Brushes.Red;
         }
+        private void PneumaticToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            PneumaticToggle.Content = "ON";
+            PneumaticStatus.Text = "ON";
+        }
 
+        private void PneumaticToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            PneumaticToggle.Content = "OFF";
+            PneumaticStatus.Text = "OFF";
+        }
+
+        private void LED1Toggle_Checked(object sender, RoutedEventArgs e)
+        {
+            LED1Toggle.Content = "ON";
+            LED1Status.Text = "ON";
+        }
+
+        private void LED1Toggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            LED1Toggle.Content = "OFF";
+            LED1Status.Text = "OFF";
+        }
+
+        private void LED2Toggle_Checked(object sender, RoutedEventArgs e)
+        {
+            LED2Toggle.Content = "ON";
+            LED2Status.Text = "ON";
+        }
+
+        private void LED2Toggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            LED2Toggle.Content = "OFF";
+            LED2Status.Text = "OFF";
+        }
         private void UpdateAreaScanImage(BitmapSource bitmap)
         {
             Dispatcher.BeginInvoke(new Action(() =>
@@ -197,7 +231,7 @@ namespace Motwane.UVSS
                     Brushes.Green;
             }));
         }
-     
+
         private void StartAreaScanCamera()
         {
             try
@@ -339,7 +373,7 @@ namespace Motwane.UVSS
                     }
                 }
 
-              
+
 
                 anpr_capture.Release();
             }
@@ -430,7 +464,7 @@ namespace Motwane.UVSS
                 Debug.WriteLine(ex);
             }
         }
-        
+
         private async Task<bool> PingDevice(string ip)
         {
             try
@@ -498,14 +532,14 @@ namespace Motwane.UVSS
             if (saveFileDialog.ShowDialog() != true)
                 return;
 
-            // 1. Render StackPanel to bitmap
+
             var rtb = new RenderTargetBitmap(
                 (int)self_daigno_information_stack.ActualWidth,
                 (int)self_daigno_information_stack.ActualHeight,
                 96, 96, PixelFormats.Pbgra32);
             rtb.Render(self_daigno_information_stack);
 
-            // 2. Save as PNG to memory stream
+
             using (MemoryStream imageStream = new MemoryStream())
             {
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
@@ -513,7 +547,7 @@ namespace Motwane.UVSS
                 encoder.Save(imageStream);
                 imageStream.Position = 0; // Rewind
 
-                // 3. Create PDF and add image
+
                 PdfDocument pdf = new PdfDocument();
                 PdfPage page = pdf.AddPage();
 
@@ -521,18 +555,17 @@ namespace Motwane.UVSS
                 {
                     XImage img = XImage.FromStream(imageStream);
 
-                    // Adjust page size to image size
+
                     page.Width = img.PixelWidth * 72 / 96;
                     page.Height = img.PixelHeight * 72 / 96;
 
                     gfx.DrawImage(img, 0, 0, page.Width, page.Height);
                 }
 
-                // 4. Save PDF to selected file
+
                 pdf.Save(saveFileDialog.FileName);
                 MessageBox.Show("PDF saved to: " + saveFileDialog.FileName);
             }
-
         }
     }
 }

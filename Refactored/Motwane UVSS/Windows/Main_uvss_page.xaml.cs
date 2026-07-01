@@ -52,13 +52,11 @@ namespace Motwane.UVSS.Presentation.Windows
     public partial class Main_uvss_page : System.Windows.Window
     {
 
-        // private BitmapSource _originalBitmap;   // THIS NEW VARIABLE will hold the clean, original version of the current image.
 
         private DispatcherTimer timer;
         private readonly AnprEngine _anprEngine;
         private readonly VehicleEntryService _vehicleEntryService;
         private Underside_cam_class Underside_cameraHandler;
-    //    private readonly MediaFolderService _mediaFolderService;
         #region using this to communicate with ir sensor
 
         private SerialPort serialPort;
@@ -70,12 +68,11 @@ namespace Motwane.UVSS.Presentation.Windows
 
         private const string basefolder_to_save_pinhole_videos = @"D:\uvss\under_vehicle_video_center";
 
-        // ── 2) CAMERA CREDENTIALS & IP LIST ───────────────────────────────────────
 
         private const string CameraUser = "admin";
         private const string CameraPass = "sefthS$2702";
 
-        //    Add or remove as many IPs as you want here:
+      
         private readonly string[] CameraIPs =
         {
             "192.168.4.58",
@@ -86,17 +83,13 @@ namespace Motwane.UVSS.Presentation.Windows
 
         private readonly List<string> RtspUrls = new List<string>();
 
-        // ── 4) ONE MediaPlayer / Media per camera ─────────────────────────────────
-        private readonly List<LibVLCSharp.Shared.MediaPlayer> _mediaPlayers = new List<LibVLCSharp.Shared.MediaPlayer>();
+              private readonly List<LibVLCSharp.Shared.MediaPlayer> _mediaPlayers = new List<LibVLCSharp.Shared.MediaPlayer>();
         private readonly List<LibVLCSharp.Shared.Media> _medias = new List<LibVLCSharp.Shared.Media>();
 
-        // ── 5) OUTPUT FILEPATHS (camera1.mp4, camera2.mp4, …) ────────────────────
+     
         private readonly List<string> _outputPaths = new List<string>();
+                private LibVLC _libVLC;
 
-        // ── 6) LibVLC CORE OBJECT ──────────────────────────────────────────────────
-        private LibVLC _libVLC;
-
-        // ── 7) TRACK WHETHER RECORDING HAS STARTED ─────────────────────────────────
         private bool _isRecordingAll = false;
 
         #endregion
@@ -149,8 +142,7 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromSeconds(1) // Update every second
-            };
+                Interval = TimeSpan.FromSeconds(1)             };
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -197,11 +189,11 @@ namespace Motwane.UVSS.Presentation.Windows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             load();
-            // numberplate_image.MaxWidth = numberplate_image.Width;
+           
             numberplate_image.MaxHeight = 40;
-            //MessageBox.Show(mainwindow_class.USERID);
+           
             username_textbox.Text = ((App)System.Windows.Application.Current).LoggedInUserID;
-            //usertype_textbox.Text = ((App)System.Windows.Application.Current).LoggedInUSERTYPE;
+          
 
             try
             {
@@ -295,110 +287,7 @@ namespace Motwane.UVSS.Presentation.Windows
             }
         }
 
-        //        private void SaveVehicleEntryOnStop()
-        //        {
-        //            try
-        //            {
-        //                string username = username_textbox.Text;
-        //                if (string.IsNullOrWhiteSpace(username))
-        //                {
-        //                    MessageBox.Show("Username is required.");
-        //                    return;
-        //                }
-
-
-        //                string status = "AUTO";
-
-        //                if (!string.IsNullOrEmpty(selectedRemark))
-        //                {
-        //                    if (selectedRemark.StartsWith("HOLD"))
-        //                        status = "HOLD";
-        //                    else if (selectedRemark == "PASS")
-        //                        status = "PASS";
-        //                }
-
-        //                string remark = selectedRemark;
-        //                string numberplate = Numberplate_number_box.Text;
-        //                if (string.IsNullOrWhiteSpace(numberplate) ||
-        //             numberplate.Contains("Detection failed"))
-        //                {
-        //                    numberplate = null;
-        //                }
-        //                DateTime now = DateTime.Now;
-        //                DateTime entryDate = now.Date;
-        //                DateTime entryTime = DateTime.Now;
-
-
-        //                string baseFolder = @"D:\UVSS_MEDIA\Entry Media";
-        //                string dateFolder = now.ToString("yyyy-MM-dd");
-
-
-        //                string safeNumberplate = CleanFileName(numberplate);
-
-        //                if (string.IsNullOrWhiteSpace(safeNumberplate))
-        //                {
-        //                    safeNumberplate = "UNKNOWN";
-        //                }
-
-        //                string timestamp = now.ToString("yyyyMMdd_HHmmss");
-
-
-        //                string vehicleFolder = System.IO.Path.Combine(baseFolder, dateFolder, safeNumberplate);
-
-
-        //                Directory.CreateDirectory(vehicleFolder);
-
-
-
-
-        //                string undersidePath = SaveImageToFolder(
-        //    Sticked_image,
-        //    vehicleFolder,
-        //    $"{safeNumberplate}_{timestamp}_underside.jpg"
-        //);
-
-        //                string driverPath = SaveImageToFolder(
-        //                    Driver_image,
-        //                    vehicleFolder,
-        //                    $"{safeNumberplate}_{timestamp}_driver.jpg"
-        //                );
-
-        //                string anprPath = SaveImageToFolder(
-        //                    Anpr_image,
-        //                    vehicleFolder,
-        //                    $"{safeNumberplate}_{timestamp}_anpr.jpg"
-        //                );
-
-        //                string cam1 = System.IO.Path.Combine(pinhole_came_path, "camera1.mp4");
-        //                string cam2 = System.IO.Path.Combine(pinhole_came_path, "camera2.mp4");
-        //                string cam3 = System.IO.Path.Combine(pinhole_came_path, "camera3.mp4");
-
-
-        //                _vehicleEntryService.SaveVehicleEntry(
-        //     username,
-        //     entryDate,
-        //     entryTime,
-        //     status,
-        //     remark,
-        //     numberplate,
-        //     undersidePath,
-        //     driverPath,
-        //     anprPath,
-        //     cam1,
-        //     cam2,
-        //     cam3
-        // );
-
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show("Save failed: " + ex.Message);
-        //            }
-
-        //            selectedRemark = "";
-        //        }
-
+       
         private void SaveVehicleEntryOnStop()
         {
             try
@@ -411,7 +300,7 @@ namespace Motwane.UVSS.Presentation.Windows
                     return;
                 }
 
-                // Status Logic
+                
                 string status = "AUTO";
 
                 if (!string.IsNullOrEmpty(selectedRemark))
@@ -654,21 +543,21 @@ namespace Motwane.UVSS.Presentation.Windows
             {
                 for (int c = 0; c < 3; c++) // R, G, B
                 {
-                    // Normalize to 0-1 range
+                   
                     double color = originalPixels[i + c] / 255.0;
 
-                    // Apply contrast (centered around 0.5)
+                    
                     color -= 0.5;
                     color *= contrast;
                     color += 0.5;
 
-                    // Apply brightness
+                 
                     color *= brightness;
 
                     adjustedPixels[i + c] = Clamp(color * 255);
                 }
 
-                adjustedPixels[i + 3] = originalPixels[i + 3]; // Alpha
+                adjustedPixels[i + 3] = originalPixels[i + 3]; 
             }
 
             WriteableBitmap adjustedBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgra32, null);
@@ -692,7 +581,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
             byte[] contrastBrightnessPixels = new byte[originalPixels.Length];
 
-            // Step 1: Apply Brightness and Contrast first
+         
             for (int i = 0; i < originalPixels.Length; i += 4)
             {
                 for (int c = 0; c < 3; c++) // R, G, B
@@ -707,10 +596,10 @@ namespace Motwane.UVSS.Presentation.Windows
                 contrastBrightnessPixels[i + 3] = originalPixels[i + 3]; // A
             }
 
-            // Step 2: Apply sharpness (skip if sharpness = 0)
+          
             byte[] finalPixels = sharpness == 0 ? contrastBrightnessPixels : ApplySharpening(contrastBrightnessPixels, sharpness);
 
-            // Write back to image
+            
             WriteableBitmap adjustedBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgra32, null);
             adjustedBitmap.WritePixels(new Int32Rect(0, 0, width, height), finalPixels, stride, 0);
             Sticked_image.Source = adjustedBitmap;
@@ -751,7 +640,7 @@ namespace Motwane.UVSS.Presentation.Windows
             string DriverImage = "D:\\muvss_name.png";
             string logoImage = "D:\\muvss_name.png";
 
-            // This line loads the new image and puts it in the display frame.
+            
             Sticked_image.Source = LoadImageUnlocked(MainImage);
             Driver_image.Source = LoadImageUnlocked(DriverImage);
             Anpr_image.Source = LoadImageUnlocked(Anprimage);
@@ -771,7 +660,7 @@ namespace Motwane.UVSS.Presentation.Windows
             int kernelSize = 3;
             int radius = kernelSize / 2;
 
-            // Sharpen kernel (classic with user strength)
+            
             double[,] kernel = {
         { 0, -1,  0 },
         { -1, 4 + sharpness, -1 },
@@ -857,13 +746,13 @@ namespace Motwane.UVSS.Presentation.Windows
         private OpenCvSharp.VideoCapture driver_capture;
         private bool driver_isStreaming = false;
         private Thread driver_cameraThread;
-        private volatile bool showImage = false; // make it accessible from outside
+        private volatile bool showImage = false; 
 
         private void StartdriverCamera()
         {
             try
             {
-                Cv2.SetNumThreads(0); // Optional: avoid threading issues
+                Cv2.SetNumThreads(0); 
                 driver_capture = new OpenCvSharp.VideoCapture(drivercam_rtspUrl, VideoCaptureAPIs.FFMPEG);
 
                 if (!driver_capture.IsOpened())
@@ -881,7 +770,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
                     if (readSuccess && !frame.Empty())
                     {
-                        if (showImage) // only show frame when flag is true
+                        if (showImage) 
                         {
                             var bitmap = BitmapSourceConverter.ToBitmapSource(frame);
                             bitmap.Freeze();
@@ -891,12 +780,12 @@ namespace Motwane.UVSS.Presentation.Windows
                                 Driver_image.Source = bitmap;
                             });
 
-                            showImage = false; // reset flag after showing one frame
+                            showImage = false; 
                         }
                     }
                     else
                     {
-                        Thread.Sleep(100); // wait and try again
+                        Thread.Sleep(100); 
                     }
                 }
 
@@ -921,7 +810,7 @@ namespace Motwane.UVSS.Presentation.Windows
                 if (!cap.IsOpened())
                     return false;
 
-                Thread.Sleep(200); // allow buffer to fill
+                Thread.Sleep(200);
 
                 var frame = new OpenCvSharp.Mat();
                 cap.Read(frame);
@@ -942,9 +831,9 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             string cameraIp = "192.168.4.57";
             string username = "admin";
-            string password = "sefthS$2702"; // encode if needed ($ → %24)
+            string password = "sefthS$2702"; 
 
-            // Create Media client
+           
             var mediaClient = await OnvifClientFactory.CreateMediaClientAsync(
             $"http://{cameraIp}/onvif/device_service",
             username,
@@ -954,13 +843,13 @@ namespace Motwane.UVSS.Presentation.Windows
 
 
             var profilesResponse = await mediaClient.GetProfilesAsync();
-            var profile = profilesResponse.Profiles[0]; // use first available profile
+            var profile = profilesResponse.Profiles[0]; 
 
-            // Get snapshot URI
+           
             var snapshotUri = await mediaClient.GetSnapshotUriAsync(profile.token);
             Console.WriteLine("Snapshot URI: " + snapshotUri.Uri);
 
-            // Download snapshot
+         
             using (var httpClient = new HttpClient(new HttpClientHandler
             {
                 Credentials = new System.Net.NetworkCredential(username, password)
@@ -1002,7 +891,7 @@ namespace Motwane.UVSS.Presentation.Windows
             load();
         }
 
-        private void try_btn_Click(object sender, RoutedEventArgs e)   //  just to try // For driver camera
+        private void try_btn_Click(object sender, RoutedEventArgs e)   
         {
             string folderPath = @"D:\uvss\underside image";
             ProcessImagesFromFolder(folderPath);
@@ -1012,20 +901,14 @@ namespace Motwane.UVSS.Presentation.Windows
 
         public void ProcessImagesFromFolder(string folderPath)
         {
-            // Ensure the folder exists
+         
             if (Directory.Exists(folderPath))
             {
-                // Get all image files in the folder (you can filter by specific file extensions)
+             
                 string[] imageFiles = Directory.GetFiles(folderPath, "*.jpg");
-
-                // Call the original method with the list of image files
-                // CreatePanoramicImage_Fast_2(imageFiles);
-
+                            
                 CallPanoramaWhenReady();
-
-
-
-                //  CreatePanoramicImage_Pro(imageFiles);
+                              
             }
             else
             {
@@ -1035,13 +918,13 @@ namespace Motwane.UVSS.Presentation.Windows
 
         private async void CallPanoramaWhenReady()
         {
-            // Wait until recognition is done
+           
             while (!isRecognitionCompleted)
             {
-                await Task.Delay(200); // wait 200ms and check again
+                await Task.Delay(200);
             }
 
-            // Once done, call method
+           
             try
             {
                 string[] imageFiles = Directory.GetFiles(@"D:\uvss\underside image", "*.jpg");
@@ -1056,13 +939,13 @@ namespace Motwane.UVSS.Presentation.Windows
             }
             catch (Exception ex)
             {
-                MessageBox.Show("❌ Error in stitching: " + ex.Message);
+                MessageBox.Show(" Error in stitching: " + ex.Message);
             }
         }
 
         public void LoadImageWithoutLocking(string imagePath, System.Windows.Controls.Image imageControl)
         {
-            // Load image into memory
+            
             BitmapImage bitmap = new BitmapImage();
             using (FileStream stream = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
