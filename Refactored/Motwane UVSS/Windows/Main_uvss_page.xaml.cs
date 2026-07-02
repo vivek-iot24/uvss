@@ -2218,7 +2218,7 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             string connectionString = MainWindow.connectionString;
 
-            // Convert WPF Image to byte[]
+          
             byte[] imageData = null;
             if (Sticked_image.Source != null)
             {
@@ -2237,7 +2237,7 @@ namespace Motwane.UVSS.Presentation.Windows
 
             using (var conn = new SqlConnection(connectionString))
             {
-                string query = @"INSERT INTO video_management_table
+                string query = @"INSERT INTO video_management_table                                    
             (vehicle_number, capture_date, capture_time,
              video1_path, video2_path, video3_path, vehicle_image)
             VALUES (@vehicle_number, @date, @time,
@@ -2312,7 +2312,7 @@ namespace Motwane.UVSS.Presentation.Windows
                         Anpr_image.Source = LoadImageUnlocked(Anprimage);
                         numberplate_image.Source = LoadImageUnlocked(NumberPlateImage);
 
-                        // THE FIX: This single line updates the master copy with the new image's data.
+                     
                         UpdateOriginalPixels();
 
                         // Optional but recommended: Reset sliders for the new image.
@@ -2468,13 +2468,13 @@ namespace Motwane.UVSS.Presentation.Windows
                     conn.Open();
 
                     // CHANGE 1: Update the SQL query to also select entry_date and entry_time
-                    string query = @"SELECT TOP 1 underside_image, entry_date, entry_time 
-                             FROM vehicle_entry_log 
-                             WHERE numberplate = @numberplate ORDER BY sr_no DESC";
+                    string query = @"SELECT TOP 1 underside_image, Entry_Date, Entry_time 
+                             FROM TB_Vehicle_Entry_Log 
+                             WHERE Vehicle_Registration_No = @Vehicle_Registration_No ORDER BY sr_no DESC";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@numberplate", numberplate);
+                        cmd.Parameters.AddWithValue("@Vehicle_Registration_No", numberplate);
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
@@ -2482,18 +2482,18 @@ namespace Motwane.UVSS.Presentation.Windows
                                 byte[] imageData = (byte[])reader["underside_image"];
                                 File.WriteAllBytes(dbImagePath, imageData);
 
-                                // CHANGE 2: Read the new date and time columns from the database
+                              
                                 DateTime date = (DateTime)reader["entry_date"];
                                 TimeSpan time = (TimeSpan)reader["entry_time"];
 
-                                // Format the date and time into a nice string
+                               
                                 string timestampInfo = $"Date: {date:yyyy-MM-dd}   Time: {time:hh\\:mm\\:ss}";
 
-                                // --- FINAL INTEGRATION ---
+                            
                                 var app = (App)System.Windows.Application.Current;
                                 AicViewerWindow viewer = app.ServiceProvider.GetRequiredService<AicViewerWindow>();
 
-                                // CHANGE 3: Pass the new timestamp string to the viewer window
+                               
                                 viewer.LoadAndCompareImages(sourceImagePath, dbImagePath, timestampInfo);
 
                                 viewer.ShowDialog();

@@ -246,7 +246,7 @@ namespace Motwane.UVSS.Presentation.Windows
         {
             if (UserDataGrid.SelectedItem is DataRowView rowView)
             {
-                string userId = rowView["User_  UUID"].ToString();
+                string userId = rowView["User_UUID"].ToString();
                 string userName = rowView["User_Name"].ToString();
                 string idNo = rowView["IdNo"].ToString();
 

@@ -44,9 +44,9 @@ namespace Motwane.UVSS
 
         public Self_daignostic_window()
         {
-
+           
             InitializeComponent();
-
+          
             StartAreaScanCamera();
             StartAnprCamera();
             StartDriverCamera();
@@ -55,17 +55,21 @@ namespace Motwane.UVSS
             diagnosticTimer.Interval = TimeSpan.FromSeconds(1);
             diagnosticTimer.Tick += DiagnosticTimer_Tick;
             diagnosticTimer.Start();
-
+           
             _ = RunDiagnostics();
-        }
 
+            InitializeSerialPort();
+
+
+        }
+       
         private DispatcherTimer diagnosticTimer;
         private Underside_cam_class1 undersideCamera;
 
         private VideoCapture anpr_capture;
         private bool anpr_isStreaming;
         private Thread anpr_cameraThread;
-
+        private SerialPort serialPort;
         private VideoCapture driver_capture;
         private bool driver_isStreaming;
         private Thread driver_cameraThread;
@@ -85,7 +89,7 @@ namespace Motwane.UVSS
             await UpdatePingStatus("169.254.0.1", area_scan_StatusTextBlock);
             await UpdatePingStatus("192.168.4.57", ANPR_StatusTextBlock);
             await UpdatePingStatus("192.168.4.56", Driver_StatusTextBlock);
-            string serialStatus = await Task.Run(() => CheckSerialPort("COM4")) ? "OK" : "FAIL";
+            string serialStatus = CheckSerialPort() ? "OK" : "FAIL";
 
             com_scan_StatusTextBlock.Text = $"Control Interface Port : {serialStatus}";
             com_scan_StatusTextBlock.Foreground =
@@ -101,11 +105,10 @@ namespace Motwane.UVSS
                 driver_capture != null &&
                 driver_capture.IsOpened();
 
-            LoaderBar.Visibility = Visibility.Collapsed;
-            LoadingText.Visibility = Visibility.Collapsed;
+           
         }
         private bool _isRunning;
-
+       
         private async void DiagnosticTimer_Tick(object sender, EventArgs e)
         {
             if (_isRunning)
@@ -121,6 +124,49 @@ namespace Motwane.UVSS
                 _isRunning = false;
             }
         }
+        private void InitializeSerialPort()
+        {
+            try
+            {
+                serialPort = new SerialPort();
+
+                serialPort.PortName = "COM4";
+                serialPort.BaudRate = 9600;     
+                serialPort.DataBits = 8;
+                serialPort.Parity = Parity.None;
+                serialPort.StopBits = StopBits.One;
+                serialPort.Handshake = Handshake.None;
+
+               // serialPort.DataReceived += SerialPort_DataReceived;
+
+                serialPort.Open();
+
+                MessageBox.Show("Connected to COM4");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to connect to COM4.\n\n" + ex.Message);
+            }
+        }
+        private void SendCommand(string command)
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                serialPort.Write(command + "\r\n");   // Remove \r\n if not required
+            }
+        }
+
+
+        //private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        //{
+        //    string response = serialPort.ReadExisting();
+
+        //    Dispatcher.Invoke(() =>
+        //    {
+        //        txtReceive.AppendText(response + Environment.NewLine);
+        //    });
+        //}
+
 
         private async Task UpdatePingStatus(string ip, TextBlock textBlock)
         {
@@ -140,6 +186,11 @@ namespace Motwane.UVSS
             driver_capture?.Release();
 
             undersideCamera?.StopAcquisition();
+
+           
+
+            if (serialPort != null && serialPort.IsOpen)
+                serialPort.Close();
 
             base.OnClosed(e);
         }
@@ -188,37 +239,45 @@ namespace Motwane.UVSS
         {
             PneumaticToggle.Content = "ON";
             PneumaticStatus.Text = "ON";
+            SendCommand("PON");
         }
 
         private void PneumaticToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             PneumaticToggle.Content = "OFF";
             PneumaticStatus.Text = "OFF";
+            SendCommand("POFF");
         }
 
         private void LED1Toggle_Checked(object sender, RoutedEventArgs e)
         {
             LED1Toggle.Content = "ON";
             LED1Status.Text = "ON";
+            SendCommand("LEDON");
         }
 
         private void LED1Toggle_Unchecked(object sender, RoutedEventArgs e)
         {
             LED1Toggle.Content = "OFF";
             LED1Status.Text = "OFF";
+            SendCommand("LEDOFF");
         }
 
         private void LED2Toggle_Checked(object sender, RoutedEventArgs e)
         {
             LED2Toggle.Content = "ON";
             LED2Status.Text = "ON";
+            SendCommand("LED2ON");
         }
 
         private void LED2Toggle_Unchecked(object sender, RoutedEventArgs e)
         {
             LED2Toggle.Content = "OFF";
             LED2Status.Text = "OFF";
+            SendCommand("LED2OFF");
         }
+     
+      
         private void UpdateAreaScanImage(BitmapSource bitmap)
         {
             Dispatcher.BeginInvoke(new Action(() =>
@@ -481,36 +540,9 @@ namespace Motwane.UVSS
             }
         }
 
-        private bool CheckSerialPort(string portName)
+        private bool CheckSerialPort()
         {
-            try
-            {
-                using (SerialPort serialPort = new SerialPort
-                {
-                    PortName = portName,
-                    BaudRate = 9600,
-                    Parity = Parity.None,
-                    DataBits = 8,
-                    StopBits = StopBits.One,
-                    Handshake = Handshake.None,
-                    Encoding = Encoding.ASCII,
-                    ReadTimeout = 500,
-                    WriteTimeout = 500
-                })
-                {
-                    serialPort.Open();
-                    if (serialPort.IsOpen)
-                    {
-                        serialPort.Close();
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
-            return false;
+            return serialPort != null && serialPort.IsOpen;
         }
 
         private void Exit_button_Click(object sender, RoutedEventArgs e)
