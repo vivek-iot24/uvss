@@ -1,6 +1,8 @@
-﻿using System;
-using System.Data;
+﻿using Motwane.UVSS.Application.Services;
+using Motwane.UVSS.Domain;
 using Motwane.UVSS.Domain.Entities;
+using System;
+using System.Data;
 
 namespace Motwane.UVSS.Application.Interfaces.DAL
 {
@@ -9,7 +11,7 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
         int ValidateUser(string userId, string password, string userType);
 
         void InsertLoginLog(string userName, Guid machineUUID, DateTime loginTime);
-
+       
         void UpdateLogoutLog(string UserName, DateTime logoutTime);
 
         void InsertUser(User user);
@@ -24,8 +26,7 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
         DataTable GetDeletedUserHistory();
 
         DataTable GetUserLoginLog(string username);
-
-
+        Authentication LoadPermissions(Guid userTypeUUID);
         void DeleteUser(Guid userUUID, string userName, string idNo);
     }
 }

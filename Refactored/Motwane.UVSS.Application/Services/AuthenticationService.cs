@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Motwane.UVSS.Application.Common;
 using Motwane.UVSS.Application.Interfaces.DAL;
+using Motwane.UVSS.Domain;
+using System;
 
 namespace Motwane.UVSS.Application.Services
 {
@@ -21,7 +23,10 @@ namespace Motwane.UVSS.Application.Services
         {
             _userRepository.InsertLoginLog(userName, machineUUID, loginTime);
         }
-
+        public Authentication LoadPermissions(Guid userTypeUUID)
+        {
+            return _userRepository.LoadPermissions(userTypeUUID);
+        }
         public void UpdateLogoutLog(string UserName, DateTime logoutTime)
         {
             _userRepository.UpdateLogoutLog(UserName, logoutTime);

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Motwane.UVSS.Application.Interfaces.DAL;
+using Motwane.UVSS.Domain;
+using Motwane.UVSS.Domain.Entities;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using Motwane.UVSS.Application.Interfaces.DAL;
-using Motwane.UVSS.Domain.Entities;
 
 namespace Motwane.UVSS.DAL.Repositories
 {
@@ -15,8 +16,43 @@ namespace Motwane.UVSS.DAL.Repositories
             this.connectionString = connectionString;
         }
 
+        public Authentication LoadPermissions(Guid userTypeUUID)
+        {
+            Authentication auth = new Authentication();
 
-        
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand(
+                    @"SELECT User_Settings,
+                     Application_settings,
+                     Diagnosis,
+                     camera_settings,
+                     Reports,
+                     Menu,
+                     Aic
+              FROM TB_Authentication
+              WHERE Usertype_UUID=@UsertypeUUID", con);
+
+                cmd.Parameters.AddWithValue("@UsertypeUUID", userTypeUUID);
+
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.Read())
+                {
+                    auth.User_Settings = Convert.ToInt32(dr["User_Settings"]);
+                    auth.Application_settings = Convert.ToInt32(dr["Application_settings"]);
+                    auth.Diagnosis = Convert.ToInt32(dr["Diagnosis"]);
+                    auth.Camera_settings = Convert.ToInt32(dr["camera_settings"]);
+                    auth.Reports = Convert.ToInt32(dr["Reports"]);
+                    auth.Menu = Convert.ToInt32(dr["Menu"]);
+                    auth.Aic = Convert.ToInt32(dr["Aic"]);
+                }
+            }
+
+            return auth;
+        }
         public int ValidateUser(string userName, string password, string userType)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))

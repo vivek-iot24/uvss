@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication.cs" />
     <Compile Include="Entities\DiagnosticStatus.cs" />
     <Compile Include="Entities\VehicleEntry.cs" />
     <Compile Include="Entities\VideoRecord.cs" />
