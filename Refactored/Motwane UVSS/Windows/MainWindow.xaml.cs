@@ -2,6 +2,7 @@
 using Motwane.UVSS.Application.Common;
 using Motwane.UVSS.Application.Interfaces.HAL;
 using Motwane.UVSS.Application.Services;
+using Motwane.UVSS.Domain;
 using System;
 using System.Windows;
 
@@ -33,7 +34,6 @@ namespace Motwane.UVSS.Presentation.Windows
                 .ServiceProvider.GetService<IFileSystemService>())
         {
         }
-
         private void Login_btn_Click(object sender, RoutedEventArgs e)
         {
             string userName = txtUserName.Text.Trim();
@@ -48,20 +48,46 @@ namespace Motwane.UVSS.Presentation.Windows
 
                 if (count > 0)
                 {
-                    _authenticationService.InsertLoginLog(
-     userName,
-     Guid.NewGuid(),
-     DateTime.Now
- );
-                    Self_daignosis selfDiagnosis = new Self_daignosis();
-                    selfDiagnosis.Show();
+                    SessionManager.User_UUID =
+                        _authenticationService.GetUserUUIDByUserName(userName);
 
+                    SessionManager.UserType_UUID =
+                        _authenticationService.GetUserTypeUUIDByUserName(userName);
+
+                    SessionManager.Username = userName;
+
+                 
+                    Authentication auth =
+                        _authenticationService.LoadPermissions(SessionManager.UserType_UUID);
+
+                    if (auth != null)
+                    {
+                        SessionManager.User_Settings = auth.User_Settings;
+                        SessionManager.Application_settings = auth.Application_settings;
+                        SessionManager.Diagnosis = auth.Diagnosis;
+                        SessionManager.Camera_settings = auth.Camera_settings;
+                        SessionManager.Reports = auth.Reports;
+                        SessionManager.Menu = auth.Menu;
+                        SessionManager.Aic = auth.Aic;
+                    }
+
+                  
+                    _authenticationService.InsertLoginLog(
+                        userName,
+                        Guid.NewGuid(),
+                        DateTime.Now);
+
+                  
                     ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
                         .LoggedInUserID = userName;
 
                     ((Motwane.UVSS.Presentation.App)System.Windows.Application.Current)
                         .LoggedInUSERTYPE = userType;
-                   
+
+                    // Open next window
+                    Self_daignosis selfDiagnosis = new Self_daignosis();
+                    selfDiagnosis.Show();
+
                     this.Close();
                 }
                 else
@@ -85,7 +111,6 @@ namespace Motwane.UVSS.Presentation.Windows
             txtUserName.Clear();
             txtPassword.Clear();
         }
-
         private void Window_Closed(object sender, EventArgs e)
         {
             try

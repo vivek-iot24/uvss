@@ -103,7 +103,27 @@ namespace Motwane.UVSS.DAL.Repositories
                 return (Guid)result;
             }
         }
+        public Guid GetUserTypeUUIDByUserName(SqlConnection connection, string userName)
+        {
+            string query = @"
+        SELECT Usertype_UUID
+        FROM TB_Users
+        WHERE User_Name = @User_Name";
 
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@User_Name", userName);
+
+                object result = cmd.ExecuteScalar();
+
+                if (result == null || result == DBNull.Value)
+                {
+                    throw new Exception("User type not found for user: " + userName);
+                }
+
+                return (Guid)result;
+            }
+        }
 
         // Insert Login Log
         public void InsertLoginLog(string userName, Guid machineUUID, DateTime loginTime)
@@ -404,8 +424,23 @@ ORDER BY L.Logged_in DESC";
                 return (Guid)result;
             }
         }
+        public Guid GetUserUUIDByUserName(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                return GetUserUUIDByUserName(connection, userName);
+            }
+        }
 
-        // Soft Delete User
+        public Guid GetUserTypeUUIDByUserName(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                return GetUserTypeUUIDByUserName(connection, userName);
+            }
+        }
         public void DeleteUser(Guid userUUID, string userName, string idNo)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))

@@ -3,6 +3,7 @@ using Motwane.UVSS.Domain;
 using Motwane.UVSS.Domain.Entities;
 using System;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace Motwane.UVSS.Application.Interfaces.DAL
 {
@@ -13,7 +14,11 @@ namespace Motwane.UVSS.Application.Interfaces.DAL
         void InsertLoginLog(string userName, Guid machineUUID, DateTime loginTime);
        
         void UpdateLogoutLog(string UserName, DateTime logoutTime);
+        Guid GetUserUUIDByUserName(string userName);
 
+        Guid GetUserTypeUUIDByUserName(string userName);
+
+ 
         void InsertUser(User user);
 
         User GetUserByName(string userName);

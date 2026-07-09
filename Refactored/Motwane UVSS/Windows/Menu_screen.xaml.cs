@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Motwane.UVSS.Application.Common;
 using Motwane.UVSS.Presentation;
 using Motwane.UVSS.Presentation.Windows;
 using System;
@@ -27,6 +28,12 @@ namespace Motwane.UVSS
 
         private void User_management_btn_Click(object sender, RoutedEventArgs e)
         {
+            if (SessionManager.User_Settings == 0)
+            {
+                ShowAccessDenied();
+                return;
+            }
+
             OpenWindow<User_management_tab>();
         }
 
@@ -42,11 +49,23 @@ namespace Motwane.UVSS
 
         private void Report_management_btn_Click(object sender, RoutedEventArgs e)
         {
+            if (SessionManager.Reports == 0)
+            {
+                ShowAccessDenied();
+                return;
+            }
+
             OpenWindow<Report_management_tab>();
         }
 
         private void system_setting_btn_Click(object sender, RoutedEventArgs e)
         {
+            if (SessionManager.Application_settings == 0)
+            {
+                ShowAccessDenied();
+                return;
+            }
+
             OpenWindow<System_settings_page>();
         }
 
@@ -57,6 +76,12 @@ namespace Motwane.UVSS
 
         private void self_daignos_btn_Click(object sender, RoutedEventArgs e)
         {
+            if (SessionManager.Diagnosis == 0)
+            {
+                ShowAccessDenied();
+                return;
+            }
+
             OpenWindow<Self_daignostic_window>();
         }
 
@@ -105,7 +130,14 @@ namespace Motwane.UVSS
 
             System.Threading.Thread.Sleep(5000);
         }
-
+        private void ShowAccessDenied()
+        {
+            MessageBox.Show(
+                "You do not have permission to access this module.",
+                "Access Denied",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         static void ShutdownSystem()
         {
             Process.Start(new ProcessStartInfo("shutdown", "/s /f /t 0")
@@ -114,7 +146,15 @@ namespace Motwane.UVSS
                 UseShellExecute = false
             });
         }
-
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            User_management_btn.IsEnabled = SessionManager.User_Settings == 1;
+            system_setting_btn.IsEnabled = SessionManager.Application_settings == 1;
+            self_daignos_btn.IsEnabled = SessionManager.Diagnosis == 1;
+            Report_management_btn.IsEnabled = SessionManager.Reports == 1;
+            video_management_btn.IsEnabled = SessionManager.Camera_settings == 1;
+        }
+ 
         static void RestartSystem()
         {
             Process.Start(new ProcessStartInfo("shutdown", "/r /f /t 0")

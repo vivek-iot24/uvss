@@ -13,7 +13,20 @@ namespace Motwane.UVSS.Application.Services
         {
             _userRepository = userRepository;
         }
+        public Guid GetUserUUIDByUserName(string userName)
+        {
+            return _userRepository.GetUserUUIDByUserName(userName);
+        }
 
+        public Guid GetUserTypeUUIDByUserName(string userName)
+        {
+            return _userRepository.GetUserTypeUUIDByUserName(userName);
+        }
+
+        public Authentication LoadPermissions(Guid userTypeUUID)
+        {
+            return _userRepository.LoadPermissions(userTypeUUID);
+        }
         public int ValidateUser(string userId, string password, string userType)
         {
             return _userRepository.ValidateUser(userId, password, userType);
@@ -23,10 +36,7 @@ namespace Motwane.UVSS.Application.Services
         {
             _userRepository.InsertLoginLog(userName, machineUUID, loginTime);
         }
-        public Authentication LoadPermissions(Guid userTypeUUID)
-        {
-            return _userRepository.LoadPermissions(userTypeUUID);
-        }
+       
         public void UpdateLogoutLog(string UserName, DateTime logoutTime)
         {
             _userRepository.UpdateLogoutLog(UserName, logoutTime);

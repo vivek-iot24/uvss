@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Motwane.UVSS"
         mc:Ignorable="d"
-        Title="Motwane Under Vehical Scanning System-AreaScan" Height="1100" Width="1920" WindowState="Maximized" Icon="/Resources/logo-motwane-90x90.ico">
+        Title="Motwane Under Vehical Scanning System-AreaScan" Height="1100" Width="1920" WindowState="Maximized" Icon="/Resources/logo-motwane-90x90.ico"
+        Loaded="Window_Loaded">
 
     <Grid>
         <Image Source="/Resources/MUVSS.png" Stretch="Fill"/>
