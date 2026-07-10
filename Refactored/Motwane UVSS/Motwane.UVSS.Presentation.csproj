@@ -411,6 +411,9 @@
     <Compile Include="Form1.Designer.cs" />
     <Compile Include="HCNetSDK.cs" />
     <Compile Include="ViewModels\VehicleEntryLogVM.cs" />
+    <Compile Include="Windows\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Main_uvss_page.xaml.cs">
       <DependentUpon>Main_uvss_page.xaml</DependentUpon>
     </Compile>
@@ -446,6 +449,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AicViewerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -591,6 +598,9 @@
   <ItemGroup>
     <Resource Include="Resources\logo-motwane-90x90.ico" />
     <Resource Include="Resources\MUVSS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Login Screen Light-Z1A.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Data.SqlClient.SNI.6.0.2\build\net462\Microsoft.Data.SqlClient.SNI.targets" Condition="Exists('..\packages\Microsoft.Data.SqlClient.SNI.6.0.2\build\net462\Microsoft.Data.SqlClient.SNI.targets')" />

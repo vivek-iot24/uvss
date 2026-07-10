@@ -13,6 +13,8 @@ using Motwane.UVSS.ViewModels;
 using System;
 using System.Windows;
 using System.IO;
+using System.Web.UI.WebControls;
+using Motwane.UVSS.Windows;
 namespace Motwane.UVSS.Presentation
 {
     public partial class App : System.Windows.Application
@@ -52,7 +54,7 @@ namespace Motwane.UVSS.Presentation
 
             Services = ServiceProvider;
 
-            var mainWindow = ServiceProvider.GetRequiredService<Menu_screen>();
+            var mainWindow = ServiceProvider.GetRequiredService<LoginWindow>();
             mainWindow.Show();
             var mediaService = new MediaFolderService();
             mediaService.EnsureStructure();
@@ -111,8 +113,8 @@ namespace Motwane.UVSS.Presentation
                 services.AddSingleton<Underside_cam_class>();
             }
 
+            services.AddSingleton<LoginWindow>();
 
-            // Windows
             services.AddSingleton<MainWindow>();
             services.AddTransient<Self_daignosis>();
             services.AddTransient<Main_uvss_page>();
