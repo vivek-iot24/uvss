@@ -9,7 +9,8 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
-        Background="White">
+        Background="White"
+          Closed="Window_Closed">
 
     <Window.Resources>
         <!-- Color definitions -->
@@ -29,7 +30,7 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#E5E5E5"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="16,9"/>
+            <Setter Property="Padding" Value="16,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -67,9 +68,8 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="8"
                                 >
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          Margin="{TemplateBinding Padding}"
-                                          VerticalAlignment="Center"/>
+                            <ScrollViewer
+    x:Name="PART_ContentHost"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -85,7 +85,7 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#E5E5E5"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="16,9"/>
+            <Setter Property="Padding" Value="16,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -293,44 +293,31 @@
             <!-- ═══════════════════════════════════════════════
                  USERNAME FIELD
                  ═══════════════════════════════════════════════ -->
-            <Border Canvas.Left="1446" Canvas.Top="508"
-                    Width="379" Height="40"
-                    Background="White"
-                    CornerRadius="8"
-                    BorderBrush="#E5E5E5"
-                    BorderThickness="1">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="2" ShadowDepth="1" Direction="270"/>
-                </Border.Effect>
-                <TextBox x:Name="UsernameField"
-                         Style="{StaticResource InputFieldStyle}"
-                         Text=""
-                         BorderThickness="0"
-                         Background="Transparent">
-                    <!-- Placeholder behaviour via Tag + trigger in code-behind,
-                         or use a custom attached property / adorner. -->
-                    <TextBox.Resources>
-                        <Style TargetType="TextBox" BasedOn="{StaticResource InputFieldStyle}">
-                            <Style.Triggers>
-                                <Trigger Property="Text" Value="">
-                                    <Setter Property="Background">
-                                        <Setter.Value>
-                                            <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                                                <VisualBrush.Visual>
-                                                    <TextBlock Text="User Name"
-                                                               Foreground="#737373"
-                                                               FontFamily="Montserrat"
-                                                               FontSize="14"
-                                                               Margin="16,0,0,0"/>
-                                                </VisualBrush.Visual>
-                                            </VisualBrush>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Resources>
-                </TextBox>
+            <Border
+    Canvas.Left="1446"
+    Canvas.Top="508"
+    Width="379"
+    Height="40"
+    Background="White"
+    CornerRadius="8"
+    BorderBrush="#E5E5E5"
+    BorderThickness="1">
+
+                <Grid>
+                    <TextBox
+        x:Name="UsernameField"
+        Style="{StaticResource InputFieldStyle}"
+        TextChanged="UsernameField_TextChanged"/>
+
+                    <TextBlock
+        x:Name="UsernamePlaceholder"
+        Margin="16,0,0,0"
+        VerticalAlignment="Center"
+        Text="User Name"
+        Foreground="#737373"
+        IsHitTestVisible="False"/>
+                </Grid>
+
             </Border>
 
             <!-- ═══════════════════════════════════════════════
@@ -346,11 +333,13 @@
                     <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="2" ShadowDepth="1" Direction="270"/>
                 </Border.Effect>
                 <Grid>
-                    <PasswordBox x:Name="PasswordField"
-                                 Style="{StaticResource PasswordFieldStyle}"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 Margin="0,0,36,0"/>
+                    <PasswordBox
+    x:Name="PasswordField"
+    PasswordChanged="PasswordField_PasswordChanged"
+    Margin="16,0,0,0"
+    BorderThickness="0"
+    Background="Transparent"
+    VerticalContentAlignment="Center"/>
                     <!-- Placeholder text (hidden once user types — handle in code-behind) -->
                     <TextBlock x:Name="PasswordPlaceholder"
                                Text="Password"
