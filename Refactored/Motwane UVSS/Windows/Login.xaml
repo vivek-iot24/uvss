@@ -31,7 +31,7 @@
             <Setter Property="BorderBrush" Value="#E5E5E5"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="16,0"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+           
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -40,15 +40,16 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="8"
                                >
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          Margin="{TemplateBinding Padding}"
-                                          VerticalAlignment="Center"/>
+                            <ScrollViewer
+    x:Name="PART_ContentHost"
+    Margin="{TemplateBinding Padding}"
+    VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
+       
         <!-- Password field style -->
         <Style x:Key="PasswordFieldStyle" TargetType="PasswordBox">
             <Setter Property="Height" Value="40"/>
@@ -58,7 +59,7 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#E5E5E5"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="16,9"/>
+            <Setter Property="Padding" Value="16,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -293,82 +294,39 @@
             <!-- ═══════════════════════════════════════════════
                  USERNAME FIELD
                  ═══════════════════════════════════════════════ -->
-            <Border
-    Canvas.Left="1446"
-    Canvas.Top="508"
-    Width="379"
-    Height="40"
-    Background="White"
-    CornerRadius="8"
-    BorderBrush="#E5E5E5"
-    BorderThickness="1">
-
+            <Border Canvas.Left="1446" Canvas.Top="508" Width="379" Height="40" Background="White" CornerRadius="8" BorderBrush="#E5E5E5" BorderThickness="1">
                 <Grid>
-                    <TextBox
-        x:Name="UsernameField"
-        Style="{StaticResource InputFieldStyle}"
-        TextChanged="UsernameField_TextChanged"/>
-
-                    <TextBlock
-        x:Name="UsernamePlaceholder"
-        Margin="16,0,0,0"
-        VerticalAlignment="Center"
-        Text="User Name"
-        Foreground="#737373"
-        IsHitTestVisible="False"/>
+                    <TextBox x:Name="UsernameField" Style="{StaticResource InputFieldStyle}" TextChanged="UsernameField_TextChanged"/>
+                    <TextBlock x:Name="UsernamePlaceholder" Margin="16,0,0,0" VerticalAlignment="Center" Text="User Name" Foreground="#737373" IsHitTestVisible="False"/>
                 </Grid>
-
             </Border>
 
             <!-- ═══════════════════════════════════════════════
                  PASSWORD FIELD
                  ═══════════════════════════════════════════════ -->
-            <Border Canvas.Left="1446" Canvas.Top="564"
-                    Width="379" Height="40"
-                    Background="White"
-                    CornerRadius="8"
-                    BorderBrush="#E5E5E5"
-                    BorderThickness="1">
+            <Border Canvas.Left="1446" Canvas.Top="564" Width="379" Height="40" Background="White" CornerRadius="8" BorderBrush="#E5E5E5" BorderThickness="1">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="2" ShadowDepth="1" Direction="270"/>
                 </Border.Effect>
                 <Grid>
-                    <PasswordBox
-    x:Name="PasswordField"
-    PasswordChanged="PasswordField_PasswordChanged"
-    Margin="16,0,0,0"
-    BorderThickness="0"
-    Background="Transparent"
-    VerticalContentAlignment="Center"/>
+                  <PasswordBox x:Name="PasswordField"   Style="{StaticResource PasswordFieldStyle}"    PasswordChanged="PasswordField_PasswordChanged"/>
                     <!-- Placeholder text (hidden once user types — handle in code-behind) -->
-                    <TextBlock x:Name="PasswordPlaceholder"
-                               Text="Password"
-                               Foreground="#737373"
-                               FontFamily="Montserrat"
-                               FontSize="14"
-                               Margin="16,0,0,0"
-                               VerticalAlignment="Center"
-                               IsHitTestVisible="False"/>
+                    <TextBlock x:Name="PasswordPlaceholder" Text="Password" Foreground="#737373" FontFamily="Montserrat" FontSize="14" Margin="16,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
                     <!-- Eye / toggle icon -->
-                    <Button x:Name="TogglePasswordBtn"
-                            Width="20" Height="20"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Margin="0,0,10,0"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            ToolTip="Show / Hide password">
-                        <Path Data="M12,9 A3,3,0,1,1,12,15 A3,3,0,1,1,12,9 M2,12 Q7,4,12,4 Q17,4,22,12 Q17,20,12,20 Q7,20,2,12 Z"
-                              Stroke="#737373"
-                              StrokeThickness="1.2"
-                              Fill="Transparent"
-                              Width="16" Height="16"
-                              Stretch="Uniform"/>
+                    <TextBox x:Name="PasswordTextBox"
+         Visibility="Collapsed"
+         Margin="16,0,35,0"
+         BorderThickness="0"
+         Background="Transparent"
+         FontFamily="Montserrat"
+         FontSize="14"
+         VerticalContentAlignment="Center"
+         Padding="0"/>
+                    <Button x:Name="TogglePasswordBtn" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Show / Hide password" Click="TogglePasswordBtn_Click">
+                        <Path Data="M12,9 A3,3,0,1,1,12,15 A3,3,0,1,1,12,9 M2,12 Q7,4,12,4 Q17,4,22,12 Q17,20,12,20 Q7,20,2,12 Z" Stroke="#737373" StrokeThickness="1.2" Fill="Transparent" Width="16" Height="16" Stretch="Uniform"/>
                     </Button>
                 </Grid>
             </Border>
-
             <!-- ═══════════════════════════════════════════════
                  TYPE DROPDOWN  (Admin / Operator / Service)
                  ═══════════════════════════════════════════════ -->
@@ -401,11 +359,11 @@
                        FontSize="10"
                        Foreground="#389DD2"
                        LineHeight="20"
-                       Cursor="Hand" HorizontalAlignment="Left"  Background="#DEDDE1" VerticalAlignment="Top" Width="95" Height="22">
-                <TextBlock.InputBindings>
+                       HorizontalAlignment="Left"  Background="#DEDDE1" VerticalAlignment="Top" Width="95" Height="22" Cursor="Hand" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown">
+                <!--<TextBlock.InputBindings>
                     <MouseBinding MouseAction="LeftClick"
                                   Command="{Binding ForgotPasswordCommand}"/>
-                </TextBlock.InputBindings>
+                </TextBlock.InputBindings>-->
             </TextBlock>
 
             <!-- ═══════════════════════════════════════════════
@@ -416,7 +374,88 @@
                     Style="{StaticResource SubmitButtonStyle}"
                     Content="Submit"
                     Click="Button_Click"/>
+            <Grid x:Name="ForgotPasswordOverlay"
+      Width="1920"
+      Height="1080"
+      Visibility="Collapsed">
 
+                <!-- Dark transparent background -->
+                <Rectangle Width="1920"
+               Height="1080"
+               Fill="Black"
+               Opacity="0.45"/>
+
+                <!-- Dialog -->
+                <Border Width="520"
+            Height="320"
+            Background="White"
+            CornerRadius="20"
+            Canvas.Left="700"
+            Canvas.Top="340">
+
+                    <Grid Margin="30">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Title -->
+                        <TextBlock Grid.Row="0"
+                       Text="Forgot Password"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="#007AB6"/>
+
+                        <!-- Description -->
+                        <TextBlock Grid.Row="2"
+           Text="Enter your username to reset your password."
+           FontFamily="Montserrat"
+           FontSize="14"
+           FontWeight="Regular"
+           Foreground="#737373"
+           TextWrapping="Wrap"/>
+
+                        <!-- Username -->
+                        <TextBox Grid.Row="4"
+                     x:Name="ForgotUsernameTextBox"
+                     Height="40"
+                     Style="{StaticResource InputFieldStyle}"/>
+
+                        <!-- Buttons -->
+                        <StackPanel Grid.Row="6"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+
+                            <Button x:Name="CancelForgotBtn"
+        Width="120"
+        Height="36"
+        Margin="0,0,10,0"
+        Content="Cancel"
+        Style="{StaticResource SubmitButtonStyle}"
+        Background="#F5F5F5"
+        Foreground="#007AB6"
+        Click="CancelForgotBtn_Click"/>
+
+                            <Button x:Name="ResetPasswordBtn"
+                        Width="120"
+                        Height="36"
+                        Content="Reset"
+                        Style="{StaticResource SubmitButtonStyle}"
+                        Click="ResetPasswordBtn_Click"/>
+
+                        </StackPanel>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
         </Canvas>
     </Viewbox>
 </Window>

@@ -162,5 +162,45 @@ namespace Motwane.UVSS.Windows
             {
             }
         }
+        private bool _showPassword = false;
+        private void TogglePasswordBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (_showPassword)
+            {
+                PasswordField.Password = PasswordTextBox.Text;
+
+                PasswordField.Visibility = Visibility.Visible;
+                PasswordTextBox.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                PasswordTextBox.Text = PasswordField.Password;
+
+                PasswordField.Visibility = Visibility.Collapsed;
+                PasswordTextBox.Visibility = Visibility.Visible;
+            }
+
+            _showPassword = !_showPassword;
+        }
+
+        private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ForgotPasswordOverlay.Visibility = Visibility.Visible;
+        }
+        private void CancelForgotBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ForgotPasswordOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void ResetPasswordBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string username = ForgotUsernameTextBox.Text;
+
+           
+            MessageBox.Show($"Admin will reset the password for {username}");
+
+            ForgotPasswordOverlay.Visibility = Visibility.Collapsed;
+            ForgotUsernameTextBox.Clear();
+        }
     }
 }
