@@ -54,7 +54,7 @@ namespace Motwane.UVSS.Presentation
 
             Services = ServiceProvider;
 
-            var mainWindow = ServiceProvider.GetRequiredService<LoginWindow>();
+            var mainWindow = ServiceProvider.GetRequiredService<Self_daignostic_window>();
             mainWindow.Show();
             var mediaService = new MediaFolderService();
             mediaService.EnsureStructure();
